@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>builtIn</key>
+		<true/>
+		<key>creationDate</key>
+		<date>2011-02-22T19:55:33Z</date>
+		<key>modificationDate</key>
+		<date>2011-02-22T19:55:33Z</date>
+		<key>name</key>
+		<string>Simple Infusion - Medium Body</string>
+		<key>steps</key>
+		<array>
+			<dict>
+				<key>stepOrder</key>
+				<integer>0</integer>
+				<key>decoctTemp</key>
+				<integer>0</integer>
+				<key>decoctThickness</key>
+				<integer>0</integer>
+				<key>name</key>
+				<string>Saccharification rest</string>
+				<key>restStartTemp</key>
+				<integer>153</integer>
+				<key>restStopTemp</key>
+				<integer>153</integer>
+				<key>restTime</key>
+				<integer>60</integer>
+				<key>type</key>
+				<integer>1</integer>
+				<key>stepTime</key>
+				<integer>5</integer>
+			</dict>
+			<dict>
+				<key>stepOrder</key>
+				<integer>1</integer>
+				<key>decoctTemp</key>
+				<integer>0</integer>
+				<key>decoctThickness</key>
+				<integer>0</integer>
+				<key>name</key>
+				<string>Mash out</string>
+				<key>restStartTemp</key>
+				<integer>167</integer>
+				<key>restStopTemp</key>
+				<integer>167</integer>
+				<key>restTime</key>
+				<integer>20</integer>
+				<key>type</key>
+				<integer>1</integer>
+				<key>stepTime</key>
+				<integer>5</integer>
+			</dict>
+		</array>
+	</dict>
+	<dict>
+		<key>builtIn</key>
+		<true/>
+		<key>creationDate</key>
+		<date>2011-02-22T19:55:33Z</date>
+		<key>modificationDate</key>
+		<date>2011-02-22T19:55:33Z</date>
+		<key>name</key>
+		<string>Protein Rest Infusion - Light Body</string>
+		<key>steps</key>
+		<array>
+			<dict>
+				<key>stepOrder</key>
+				<integer>0</integer>
+				<key>decoctTemp</key>
+				<integer>0</integer>
+				<key>decoctThickness</key>
+				<integer>0</integer>
+				<key>name</key>
+				<string>Protein rest</string>
+				<key>restStartTemp</key>
+				<integer>133</integer>
+				<key>restStopTemp</key>
+				<integer>133</integer>
+				<key>restTime</key>
+				<integer>15</integer>
+				<key>type</key>
+				<integer>1</integer>
+				<key>stepTime</key>
+				<integer>5</integer>
+			</dict>
+			<dict>
+				<key>stepOrder</key>
+				<integer>1</integer>
+				<key>decoctTemp</key>
+				<integer>0</integer>
+				<key>decoctThickness</key>
+				<integer>0</integer>
+				<key>name</key>
+				<string>Saccharification rest</string>
+				<key>restStartTemp</key>
+				<integer>150</integer>
+				<key>restStopTemp</key>
+				<integer>150</integer>
+				<key>restTime</key>
+				<integer>75</integer>
+				<key>type</key>
+				<integer>1</integer>
+				<key>stepTime</key>
+				<integer>5</integer>
+			</dict>
+			<dict>
+				<key>stepOrder</key>
+				<integer>2</integer>
+				<key>decoctTemp</key>
+				<integer>0</integer>
+				<key>decoctThickness</key>
+				<integer>0</integer>
+				<key>name</key>
+				<string>Mash out</string>
+				<key>restStartTemp</key>
+				<integer>167</integer>
+				<key>restStopTemp</key>
+				<integer>167</integer>
+				<key>restTime</key>
+				<integer>20</integer>
+				<key>type</key>
+				<integer>1</integer>
+				<key>stepTime</key>
+				<integer>5</integer>
+			</dict>
+		</array>
+	</dict>
+</array>
+</plist>
