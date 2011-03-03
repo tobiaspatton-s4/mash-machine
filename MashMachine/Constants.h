@@ -9,6 +9,6 @@
 
 enum {
 	kMashStepTypeDirectHeat = 0,
-	kMashStepTypeInfusioin = 1,
+	kMashStepTypeInfusion = 1,
 	kMashStepTypeDecoction = 2
 };

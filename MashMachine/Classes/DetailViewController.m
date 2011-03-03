@@ -8,14 +8,24 @@
 
 #import "DetailViewController.h"
 #import "RootViewController.h"
+#import "TableCellFactory.h"
+#import "ViewUtils.h"
+#import "MashStepCell.h"
 
 @interface DetailViewController ()
 @property (nonatomic, retain) UIPopoverController *popoverController;
 - (void)configureView;
-- (UITableViewCell *) getDetailsCellForRow: (int)row;
-- (UITableViewCell *) getStepCellForRow: (int)row;
+- (UITableViewCell *) getDetailsCellForRow:(int) row;
+- (UITableViewCell *) getStepCellForRow:(int) row;
 @end
 
+enum {
+	kEditableTextCellTagGristWeight = 1,
+	kEditableTextCellTagWaterGristRatio,
+	kEditableTextCellTagWaterVolume,
+	kEditableTextCellTagMashTunThermalMass,
+	kEditableTextCellTagGristTemp
+};
 
 enum {
 	kSectionDetails,
@@ -24,14 +34,56 @@ enum {
 
 enum {
 	kRowGristWeight,
-	kRowWaterVolumn,
-	kRowWaterGristRatio
-};
+	kRowGristTemp,
+	kRowWaterVolume,
+	kRowWaterGristRatio,
+	kRowMashTunThermalMass};
 
 @implementation DetailViewController
 
-@synthesize toolbar, popoverController, detailItem, rootViewController, mashSteps, mashStepsTable;
+@synthesize toolbar;
+@synthesize popoverController;
+@synthesize detailItem;
+@synthesize rootViewController;
+@synthesize mashSteps;
+@synthesize mashStepsTable;
+@synthesize gristWeight;
+@synthesize waterGristRatio;
+@synthesize waterVolume;
+@synthesize mashTunThermalMass;
+@synthesize floatFormatter;
+@synthesize gristTemp;
+@synthesize toolbarTitle;
 
+#pragma mark -
+#pragma mark Properties
+
+- (void) setWaterVolume:(NSNumber *) value {
+	[waterVolume autorelease];
+	waterVolume = [value retain];
+
+	if (gristWeight != nil && waterVolume != nil) {
+		waterGristRatio = [[NSNumber numberWithFloat:[waterVolume floatValue] / [gristWeight floatValue]] retain];
+	}
+}
+
+- (void) setWaterGristRatio:(NSNumber *) value {
+	[waterGristRatio autorelease];
+	waterGristRatio = [value retain];
+
+	if (gristWeight != nil && waterGristRatio != nil) {
+		waterVolume = [[NSNumber numberWithFloat:[gristWeight floatValue] * [waterGristRatio floatValue]] retain];
+	}
+}
+
+- (void) setGristWeight:(NSNumber *) value {
+	[gristWeight autorelease];
+	gristWeight = [value retain];
+
+	if (gristWeight != nil && waterGristRatio != nil) {
+		waterVolume = [[NSNumber numberWithFloat:[gristWeight floatValue] * [waterGristRatio floatValue]] retain];
+	}
+}
 
 #pragma mark -
 #pragma mark Object insertion
@@ -62,6 +114,7 @@ enum {
 
 - (void)configureView {
 	// Update the user interface for the detail item.
+	self.toolbarTitle.text = [detailItem valueForKey:@"name"];
 	NSSet *steps = [detailItem valueForKey:@"steps"];
 	NSSortDescriptor *sortDesc = [NSSortDescriptor sortDescriptorWithKey:@"stepOrder" ascending:YES];
 	NSArray *sortedSteps = [steps sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDesc]];
@@ -132,14 +185,38 @@ enum {
    }
  */
 
+- (id) initWithCoder:(NSCoder *) aDecoder {
+	if (self = [super initWithCoder:aDecoder]) {
+		self.gristWeight = [NSNumber numberWithFloat:10.0];
+		self.mashTunThermalMass = [NSNumber numberWithFloat:2.0];
+		self.waterVolume = [NSNumber numberWithFloat:15.0];
+		self.waterGristRatio = [NSNumber numberWithFloat:1.5];
+		self.gristTemp = [NSNumber numberWithFloat:60];
+
+		NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+		[formatter setMaximumFractionDigits:1];
+		[formatter setMinimumFractionDigits:1];
+		self.floatFormatter = formatter;
+		[formatter release];
+	}
+	return self;
+}
+
 - (void)viewDidUnload {
 	// Release any retained subviews of the main view.
 	// e.g. self.myOutlet = nil;
 	self.detailItem = nil;
 	self.mashSteps = nil;
 	self.toolbar = nil;
+	self.toolbarTitle = nil;
 	self.popoverController = nil;
 	self.mashStepsTable = nil;
+	self.gristWeight = nil;
+	self.waterVolume = nil;
+	self.waterGristRatio = nil;
+	self.mashTunThermalMass = nil;
+	self.floatFormatter = nil;
+	self.gristTemp = nil;
 }
 
 #pragma mark -
@@ -155,9 +232,16 @@ enum {
 - (void)dealloc {
 	[popoverController release];
 	[toolbar release];
+	[toolbarTitle release];
 	[detailItem release];
 	[mashSteps release];
 	[mashStepsTable release];
+	[gristWeight release];
+	[waterVolume release];
+	[waterGristRatio release];
+	[mashTunThermalMass release];
+	[floatFormatter release];
+	[gristTemp release];
 
 	[super dealloc];
 }
@@ -165,7 +249,7 @@ enum {
 #pragma mark -
 #pragma mark UITableViewDataSource methods
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+- (NSInteger)numberOfSectionsInTableView:(UITableView *) tableView {
 	if (detailItem == nil) {
 		return 0;
 	}
@@ -177,66 +261,177 @@ enum {
 		return 0;
 	}
 	switch (section) {
-		case kSectionDetails:
-			return 3;
-			break;
-		case kSectionSteps:
-			return [mashSteps count];
-			break;
-		default:
-			return 0;
-			break;
+	case kSectionDetails:
+		return 5;
+		break;
+
+	case kSectionSteps:
+		return [mashSteps count];
+		break;
+
+	default:
+		return 0;
+		break;
 	}
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+- (NSString *)tableView:(UITableView *) tableView titleForHeaderInSection:(NSInteger) section {
 	switch (section) {
-		case kSectionDetails:
-			return @"Details";
-			break;
-		case kSectionSteps:
-			return @"Steps";
-			break;
-		default:
-			return @"";
-			break;
-	}	
+	case kSectionDetails:
+		return @"Details";
+		break;
+
+	case kSectionSteps:
+		return @"Steps";
+		break;
+
+	default:
+		return @"";
+		break;
+	}
 }
 
-- (UITableViewCell *) getDetailsCellForRow: (int)row {
+- (UITableViewCell *) getDetailsCellForRow:(int) row {
 	NSString *const kDetailsTableCellId = @"DetailsTableCellId";
 	UITableViewCell *cell = [mashStepsTable dequeueReusableCellWithIdentifier:kDetailsTableCellId];
+
 	if (cell == nil) {
-		cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:kDetailsTableCellId] autorelease];
+		cell = [TableCellFactory newEditableTextAndUnitsCell];
 	}
-		
-	return cell;	
+
+	cell.selectionStyle = UITableViewCellSelectionStyleNone;
+
+	UILabel *label = (UILabel *)[cell viewWithTag:kEditableTextAndUnitsCellTagLabel];
+	UITextField *textField = (UITextField *)[cell viewWithTag:kEditableTextAndUnitsCelLTagTextField];
+	UILabel *unitsLabel = (UILabel *)[cell viewWithTag:kEditableTextAndUnitsCelLTagUnitsLabel];
+
+	textField.delegate = self;
+	textField.keyboardType = UIKeyboardTypeNumberPad;
+
+	switch (row) {
+	case kRowGristWeight:
+		label.text = @"Grist weight:";
+		textField.text = [floatFormatter stringFromNumber:gristWeight];
+		unitsLabel.text = @"lb";
+		cell.tag = kEditableTextCellTagGristWeight;
+		break;
+
+	case kRowWaterGristRatio:
+		label.text = @"Water/grist ratio:";
+		textField.text = [floatFormatter stringFromNumber:waterGristRatio];
+		unitsLabel.text = @"qt/lb";
+		cell.tag = kEditableTextCellTagWaterGristRatio;
+		break;
+
+	case kRowWaterVolume:
+		label.text = @"Water volume:";
+		textField.text = [floatFormatter stringFromNumber:waterVolume];
+		unitsLabel.text = @"qt";
+		cell.tag = kEditableTextCellTagWaterVolume;
+		break;
+
+	case kRowMashTunThermalMass:
+		label.text = @"Mash tun thermal mass:";
+		textField.text = [floatFormatter stringFromNumber:mashTunThermalMass];
+		unitsLabel.text = @"lb";
+		cell.tag = kEditableTextCellTagMashTunThermalMass;
+		break;
+
+	case kRowGristTemp:
+		label.text = @"Grist temperature:";
+		textField.text = [floatFormatter stringFromNumber:gristTemp];
+		unitsLabel.text = @"F.";
+		cell.tag = kEditableTextCellTagGristTemp;
+		break;
+
+	default:
+		break;
+	}
+
+	return cell;
 }
 
-- (UITableViewCell *) getStepCellForRow: (int)row {
+- (UITableViewCell *) getStepCellForRow:(int) row {
 	NSString *const kMashStepTableCellId = @"MashStepTableCellId";
-	UITableViewCell *cell = [mashStepsTable dequeueReusableCellWithIdentifier:kMashStepTableCellId];
+	MashStepCell *cell = (MashStepCell *)[mashStepsTable dequeueReusableCellWithIdentifier:kMashStepTableCellId];
 	if (cell == nil) {
-		cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:kMashStepTableCellId] autorelease];
+		cell = [TableCellFactory newMashStepCell];
 	}
-	
+
 	NSManagedObject *step = [mashSteps objectAtIndex:row];
-	cell.textLabel.text = [step valueForKey:@"name"];
-	
-	return cell;	
+	cell.mashStep = step;
+
+	return cell;
 }
 
 - (UITableViewCell *)tableView:(UITableView *) tableView cellForRowAtIndexPath:(NSIndexPath *) indexPath {
 	switch (indexPath.section) {
-		case kSectionDetails:
-			return [self getDetailsCellForRow:indexPath.row];
-			break;
-		case kSectionSteps:
-			return [self getStepCellForRow:indexPath.row];
-		default:
-			return nil;
-			break;
+	case kSectionDetails:
+		return [self getDetailsCellForRow:indexPath.row];
+		break;
+
+	case kSectionSteps:
+		return [self getStepCellForRow:indexPath.row];
+
+	default:
+		return nil;
+		break;
 	}
+}
+
+#pragma mark -
+#pragma mark UITableViewDelegate methods
+
+- (CGFloat)tableView:(UITableView *) tableView heightForRowAtIndexPath:(NSIndexPath *) indexPath {
+	switch (indexPath.section) {
+	case kSectionDetails:
+		return 44;
+		break;
+
+	case kSectionSteps:
+		return 65;
+		break;
+
+	default:
+		return 44;
+		break;
+	}
+}
+
+#pragma mark -
+#pragma mark UITextFieldDelegate methods
+
+- (void)textFieldDidEndEditing:(UITextField *) textField {
+	UITableViewCell *cell = (UITableViewCell *)[ViewUtils superViewOfView:textField withClass:[UITableViewCell class]];
+	NSNumber *value = [floatFormatter numberFromString:textField.text];
+
+	if (value != nil) {
+		switch (cell.tag) {
+			case kEditableTextCellTagGristWeight:
+				self.gristWeight = value;
+				break;
+
+			case kEditableTextCellTagWaterGristRatio:
+				self.waterGristRatio = value;
+				break;
+
+			case kEditableTextCellTagWaterVolume:
+				self.waterVolume = value;
+				break;
+
+			case kEditableTextCellTagMashTunThermalMass:
+				self.mashTunThermalMass = value;
+				break;
+
+			case kEditableTextCellTagGristTemp:
+				self.gristTemp = value;
+				break;
+
+			default:
+				break;
+		}
+	}
+	[mashStepsTable reloadData];
 }
 
 @end

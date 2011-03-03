@@ -11,24 +11,40 @@
 
 @class RootViewController;
 
-@interface DetailViewController : UIViewController <UIPopoverControllerDelegate, UISplitViewControllerDelegate, UITableViewDelegate, UITableViewDataSource> {
+@interface DetailViewController : UIViewController <UIPopoverControllerDelegate, UISplitViewControllerDelegate, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate> {
     
     UIPopoverController *popoverController;
-    UIToolbar *toolbar;
-    
+    UIToolbar *toolbar;	
+	UILabel *toolbarTitle;
+	UITableView *mashStepsTable;	
+    RootViewController *rootViewController;
+	
     NSManagedObject *detailItem;
 	NSArray *mashSteps;
 	
-	UITableView *mashStepsTable;
+	NSNumberFormatter *floatFormatter;
 	
-    RootViewController *rootViewController;
+	NSNumber *gristWeight;
+	NSNumber *waterGristRatio;
+	NSNumber *waterVolume;
+	NSNumber *mashTunThermalMass;
+	NSNumber *gristTemp;
 }
 
 @property (nonatomic, retain) IBOutlet UIToolbar *toolbar;
+@property (nonatomic, retain) IBOutlet UILabel *toolbarTitle;
 @property (nonatomic, retain) NSManagedObject *detailItem;
 @property (nonatomic, retain) NSArray *mashSteps;
 @property (nonatomic, assign) IBOutlet RootViewController *rootViewController;
-@property (nonatomic, assign) IBOutlet UITableView *mashStepsTable;
+@property (nonatomic, retain) IBOutlet UITableView *mashStepsTable;
+
+@property (nonatomic, retain) NSNumberFormatter *floatFormatter;
+
+@property (nonatomic, copy) NSNumber *gristWeight;
+@property (nonatomic, copy) NSNumber *waterGristRatio;
+@property (nonatomic, copy) NSNumber *waterVolume;
+@property (nonatomic, copy) NSNumber *mashTunThermalMass;
+@property (nonatomic, copy) NSNumber *gristTemp;
 
 - (IBAction)insertNewObject:(id)sender;
 

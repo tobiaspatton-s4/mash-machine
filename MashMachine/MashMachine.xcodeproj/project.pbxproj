@@ -18,6 +18,11 @@
 		2819300E112F7FA900ECF9B4 /* MashMachine.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2819300D112F7FA900ECF9B4 /* MashMachine.xcdatamodeld */; };
 		2892E4100DC94CBA00A64D0F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2892E40F0DC94CBA00A64D0F /* CoreGraphics.framework */; };
 		28AD73600D9D9599002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD735F0D9D9599002E5188 /* MainWindow.xib */; };
+		F600B12A131E57FD009D00F5 /* TableCellFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = F600B129131E57FD009D00F5 /* TableCellFactory.m */; };
+		F600B12C131E585F009D00F5 /* TableViewCells.xib in Resources */ = {isa = PBXBuildFile; fileRef = F600B12B131E585F009D00F5 /* TableViewCells.xib */; };
+		F600B2D0131EEF1A009D00F5 /* ViewUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = F600B2CF131EEF1A009D00F5 /* ViewUtils.m */; };
+		F600B385131EFF9A009D00F5 /* MashStepCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F600B384131EFF9A009D00F5 /* MashStepCell.m */; };
+		F600B55D131F1911009D00F5 /* MashCalculations.c in Sources */ = {isa = PBXBuildFile; fileRef = F600B55C131F1911009D00F5 /* MashCalculations.c */; };
 		F6C63F6513144B450028F1C9 /* DatabaseUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = F6C63F6413144B450028F1C9 /* DatabaseUtils.m */; };
 		F6C63F6D13144C080028F1C9 /* MashProfile.plist in Resources */ = {isa = PBXBuildFile; fileRef = F6C63F6C13144C080028F1C9 /* MashProfile.plist */; };
 		F6C63F94131451690028F1C9 /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = F6C63F93131451690028F1C9 /* Constants.m */; };
@@ -41,6 +46,15 @@
 		28AD735F0D9D9599002E5188 /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* MashMachine-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "MashMachine-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
+		F600B128131E57FD009D00F5 /* TableCellFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableCellFactory.h; sourceTree = "<group>"; };
+		F600B129131E57FD009D00F5 /* TableCellFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableCellFactory.m; sourceTree = "<group>"; };
+		F600B12B131E585F009D00F5 /* TableViewCells.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TableViewCells.xib; sourceTree = "<group>"; };
+		F600B2CE131EEF1A009D00F5 /* ViewUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewUtils.h; sourceTree = "<group>"; };
+		F600B2CF131EEF1A009D00F5 /* ViewUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewUtils.m; sourceTree = "<group>"; };
+		F600B383131EFF9A009D00F5 /* MashStepCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MashStepCell.h; sourceTree = "<group>"; };
+		F600B384131EFF9A009D00F5 /* MashStepCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MashStepCell.m; sourceTree = "<group>"; };
+		F600B55B131F1911009D00F5 /* MashCalculations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MashCalculations.h; sourceTree = "<group>"; };
+		F600B55C131F1911009D00F5 /* MashCalculations.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = MashCalculations.c; sourceTree = "<group>"; };
 		F6C63F6313144B450028F1C9 /* DatabaseUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DatabaseUtils.h; sourceTree = "<group>"; };
 		F6C63F6413144B450028F1C9 /* DatabaseUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DatabaseUtils.m; sourceTree = "<group>"; };
 		F6C63F6C13144C080028F1C9 /* MashProfile.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = MashProfile.plist; sourceTree = "<group>"; };
@@ -73,6 +87,12 @@
 				28042008108E984D000629CD /* RootViewController.m */,
 				28042009108E984D000629CD /* DetailViewController.h */,
 				2804200A108E984D000629CD /* DetailViewController.m */,
+				F600B128131E57FD009D00F5 /* TableCellFactory.h */,
+				F600B129131E57FD009D00F5 /* TableCellFactory.m */,
+				F600B383131EFF9A009D00F5 /* MashStepCell.h */,
+				F600B384131EFF9A009D00F5 /* MashStepCell.m */,
+				F600B55B131F1911009D00F5 /* MashCalculations.h */,
+				F600B55C131F1911009D00F5 /* MashCalculations.c */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -111,10 +131,12 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				F6C63F6C13144C080028F1C9 /* MashProfile.plist */,
 				2819300D112F7FA900ECF9B4 /* MashMachine.xcdatamodeld */,
 				28AD735F0D9D9599002E5188 /* MainWindow.xib */,
 				2804203B108E9BAB000629CD /* DetailView.xib */,
 				8D1107310486CEB800E47090 /* MashMachine-Info.plist */,
+				F600B12B131E585F009D00F5 /* TableViewCells.xib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -135,6 +157,8 @@
 			children = (
 				F6C63F6313144B450028F1C9 /* DatabaseUtils.h */,
 				F6C63F6413144B450028F1C9 /* DatabaseUtils.m */,
+				F600B2CE131EEF1A009D00F5 /* ViewUtils.h */,
+				F600B2CF131EEF1A009D00F5 /* ViewUtils.m */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -192,6 +216,7 @@
 				28AD73600D9D9599002E5188 /* MainWindow.xib in Resources */,
 				2804203C108E9BAB000629CD /* DetailView.xib in Resources */,
 				F6C63F6D13144C080028F1C9 /* MashProfile.plist in Resources */,
+				F600B12C131E585F009D00F5 /* TableViewCells.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -209,6 +234,10 @@
 				2819300E112F7FA900ECF9B4 /* MashMachine.xcdatamodeld in Sources */,
 				F6C63F6513144B450028F1C9 /* DatabaseUtils.m in Sources */,
 				F6C63F94131451690028F1C9 /* Constants.m in Sources */,
+				F600B12A131E57FD009D00F5 /* TableCellFactory.m in Sources */,
+				F600B2D0131EEF1A009D00F5 /* ViewUtils.m in Sources */,
+				F600B385131EFF9A009D00F5 /* MashStepCell.m in Sources */,
+				F600B55D131F1911009D00F5 /* MashCalculations.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -300,7 +329,6 @@
 			isa = XCVersionGroup;
 			children = (
 				280420B3108E9F58000629CD /* MashMachine.xcdatamodel */,
-				F6C63F6C13144C080028F1C9 /* MashProfile.plist */,
 			);
 			currentVersion = 280420B3108E9F58000629CD /* MashMachine.xcdatamodel */;
 			path = MashMachine.xcdatamodeld;

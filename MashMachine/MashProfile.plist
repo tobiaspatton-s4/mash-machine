@@ -10,6 +10,79 @@
 		<key>modificationDate</key>
 		<date>2011-02-22T19:55:33Z</date>
 		<key>name</key>
+		<string>Double Decoction</string>
+		<key>steps</key>
+		<array>
+			<dict>
+				<key>stepOrder</key>
+				<integer>0</integer>
+				<key>decoctTemp</key>
+				<integer>0</integer>
+				<key>decoctThickness</key>
+				<integer>0</integer>
+				<key>name</key>
+				<string>Protein rest</string>
+				<key>restStartTemp</key>
+				<integer>122</integer>
+				<key>restStopTemp</key>
+				<integer>122</integer>
+				<key>restTime</key>
+				<integer>15</integer>
+				<key>type</key>
+				<integer>1</integer>
+				<key>stepTime</key>
+				<integer>5</integer>
+			</dict>
+			<dict>
+				<key>stepOrder</key>
+				<integer>1</integer>
+				<key>decoctTemp</key>
+				<integer>200</integer>
+				<key>decoctThickness</key>
+				<real>3</real>
+				<key>name</key>
+				<string>Alpha/Beta rest</string>
+				<key>restStartTemp</key>
+				<integer>152</integer>
+				<key>restStopTemp</key>
+				<integer>152</integer>
+				<key>restTime</key>
+				<integer>75</integer>
+				<key>type</key>
+				<integer>2</integer>
+				<key>stepTime</key>
+				<integer>20</integer>
+			</dict>
+			<dict>
+				<key>stepOrder</key>
+				<integer>2</integer>
+				<key>decoctTemp</key>
+				<integer>200</integer>
+				<key>decoctThickness</key>
+				<integer>3</integer>
+				<key>name</key>
+				<string>Mash out</string>
+				<key>restStartTemp</key>
+				<integer>167</integer>
+				<key>restStopTemp</key>
+				<integer>167</integer>
+				<key>restTime</key>
+				<integer>20</integer>
+				<key>type</key>
+				<integer>2</integer>
+				<key>stepTime</key>
+				<integer>10</integer>
+			</dict>
+		</array>
+	</dict>
+	<dict>
+		<key>builtIn</key>
+		<true/>
+		<key>creationDate</key>
+		<date>2011-02-22T19:55:33Z</date>
+		<key>modificationDate</key>
+		<date>2011-02-22T19:55:33Z</date>
+		<key>name</key>
 		<string>Simple Infusion - Medium Body</string>
 		<key>steps</key>
 		<array>
@@ -34,6 +107,8 @@
 				<integer>5</integer>
 			</dict>
 			<dict>
+				<key>infuseTemp</key>
+				<integer>200</integer>
 				<key>stepOrder</key>
 				<integer>1</integer>
 				<key>decoctTemp</key>
@@ -87,6 +162,8 @@
 				<integer>5</integer>
 			</dict>
 			<dict>
+				<key>infuseTemp</key>
+				<integer>180</integer>
 				<key>stepOrder</key>
 				<integer>1</integer>
 				<key>decoctTemp</key>
@@ -107,6 +184,8 @@
 				<integer>5</integer>
 			</dict>
 			<dict>
+				<key>infuseTemp</key>
+				<integer>200</integer>
 				<key>stepOrder</key>
 				<integer>2</integer>
 				<key>decoctTemp</key>
