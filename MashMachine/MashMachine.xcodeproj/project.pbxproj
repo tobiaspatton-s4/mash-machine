@@ -23,6 +23,12 @@
 		F600B2D0131EEF1A009D00F5 /* ViewUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = F600B2CF131EEF1A009D00F5 /* ViewUtils.m */; };
 		F600B385131EFF9A009D00F5 /* MashStepCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F600B384131EFF9A009D00F5 /* MashStepCell.m */; };
 		F600B55D131F1911009D00F5 /* MashCalculations.c in Sources */ = {isa = PBXBuildFile; fileRef = F600B55C131F1911009D00F5 /* MashCalculations.c */; };
+		F600B9891320647E009D00F5 /* EditStepViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F600B9871320647E009D00F5 /* EditStepViewController.m */; };
+		F600B98A1320647E009D00F5 /* EditStepViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F600B9881320647E009D00F5 /* EditStepViewController.xib */; };
+		F600BBE713217791009D00F5 /* EditableTextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F600BBE613217791009D00F5 /* EditableTextCell.m */; };
+		F600BE2A13218215009D00F5 /* SelectOneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F600BE2813218215009D00F5 /* SelectOneViewController.m */; };
+		F600BE2B13218215009D00F5 /* SelectOneViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F600BE2913218215009D00F5 /* SelectOneViewController.xib */; };
+		F600C4271321A965009D00F5 /* EditableTextAndUnitsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F600C4261321A965009D00F5 /* EditableTextAndUnitsCell.m */; };
 		F6C63F6513144B450028F1C9 /* DatabaseUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = F6C63F6413144B450028F1C9 /* DatabaseUtils.m */; };
 		F6C63F6D13144C080028F1C9 /* MashProfile.plist in Resources */ = {isa = PBXBuildFile; fileRef = F6C63F6C13144C080028F1C9 /* MashProfile.plist */; };
 		F6C63F94131451690028F1C9 /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = F6C63F93131451690028F1C9 /* Constants.m */; };
@@ -55,6 +61,17 @@
 		F600B384131EFF9A009D00F5 /* MashStepCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MashStepCell.m; sourceTree = "<group>"; };
 		F600B55B131F1911009D00F5 /* MashCalculations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MashCalculations.h; sourceTree = "<group>"; };
 		F600B55C131F1911009D00F5 /* MashCalculations.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = MashCalculations.c; sourceTree = "<group>"; };
+		F600B594132021BD009D00F5 /* IMashInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IMashInfo.h; sourceTree = "<group>"; };
+		F600B9861320647E009D00F5 /* EditStepViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditStepViewController.h; sourceTree = "<group>"; };
+		F600B9871320647E009D00F5 /* EditStepViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditStepViewController.m; sourceTree = "<group>"; };
+		F600B9881320647E009D00F5 /* EditStepViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = EditStepViewController.xib; path = Classes/EditStepViewController.xib; sourceTree = "<group>"; };
+		F600BBE513217791009D00F5 /* EditableTextCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditableTextCell.h; sourceTree = "<group>"; };
+		F600BBE613217791009D00F5 /* EditableTextCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditableTextCell.m; sourceTree = "<group>"; };
+		F600BE2713218215009D00F5 /* SelectOneViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectOneViewController.h; sourceTree = "<group>"; };
+		F600BE2813218215009D00F5 /* SelectOneViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectOneViewController.m; sourceTree = "<group>"; };
+		F600BE2913218215009D00F5 /* SelectOneViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = SelectOneViewController.xib; path = Classes/SelectOneViewController.xib; sourceTree = "<group>"; };
+		F600C4251321A965009D00F5 /* EditableTextAndUnitsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditableTextAndUnitsCell.h; sourceTree = "<group>"; };
+		F600C4261321A965009D00F5 /* EditableTextAndUnitsCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditableTextAndUnitsCell.m; sourceTree = "<group>"; };
 		F6C63F6313144B450028F1C9 /* DatabaseUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DatabaseUtils.h; sourceTree = "<group>"; };
 		F6C63F6413144B450028F1C9 /* DatabaseUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DatabaseUtils.m; sourceTree = "<group>"; };
 		F6C63F6C13144C080028F1C9 /* MashProfile.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = MashProfile.plist; sourceTree = "<group>"; };
@@ -80,19 +97,23 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				F6C63F6213144B250028F1C9 /* Utilities */,
-				1D3623240D0F684500981E51 /* MashMachineAppDelegate.h */,
-				1D3623250D0F684500981E51 /* MashMachineAppDelegate.m */,
-				28042007108E984D000629CD /* RootViewController.h */,
-				28042008108E984D000629CD /* RootViewController.m */,
 				28042009108E984D000629CD /* DetailViewController.h */,
 				2804200A108E984D000629CD /* DetailViewController.m */,
+				F600B9861320647E009D00F5 /* EditStepViewController.h */,
+				F600B9871320647E009D00F5 /* EditStepViewController.m */,
+				F600B55C131F1911009D00F5 /* MashCalculations.c */,
+				F600B55B131F1911009D00F5 /* MashCalculations.h */,
+				1D3623240D0F684500981E51 /* MashMachineAppDelegate.h */,
+				1D3623250D0F684500981E51 /* MashMachineAppDelegate.m */,
+				F600B59313202120009D00F5 /* Protocols */,
+				28042007108E984D000629CD /* RootViewController.h */,
+				28042008108E984D000629CD /* RootViewController.m */,
+				F600BE2713218215009D00F5 /* SelectOneViewController.h */,
+				F600BE2813218215009D00F5 /* SelectOneViewController.m */,
+				F600BBE21321776C009D00F5 /* Table Cells */,
 				F600B128131E57FD009D00F5 /* TableCellFactory.h */,
 				F600B129131E57FD009D00F5 /* TableCellFactory.m */,
-				F600B383131EFF9A009D00F5 /* MashStepCell.h */,
-				F600B384131EFF9A009D00F5 /* MashStepCell.m */,
-				F600B55B131F1911009D00F5 /* MashCalculations.h */,
-				F600B55C131F1911009D00F5 /* MashCalculations.c */,
+				F6C63F6213144B250028F1C9 /* Utilities */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -131,11 +152,13 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				F6C63F6C13144C080028F1C9 /* MashProfile.plist */,
-				2819300D112F7FA900ECF9B4 /* MashMachine.xcdatamodeld */,
-				28AD735F0D9D9599002E5188 /* MainWindow.xib */,
 				2804203B108E9BAB000629CD /* DetailView.xib */,
+				F600B9881320647E009D00F5 /* EditStepViewController.xib */,
+				28AD735F0D9D9599002E5188 /* MainWindow.xib */,
 				8D1107310486CEB800E47090 /* MashMachine-Info.plist */,
+				2819300D112F7FA900ECF9B4 /* MashMachine.xcdatamodeld */,
+				F6C63F6C13144C080028F1C9 /* MashProfile.plist */,
+				F600BE2913218215009D00F5 /* SelectOneViewController.xib */,
 				F600B12B131E585F009D00F5 /* TableViewCells.xib */,
 			);
 			name = Resources;
@@ -150,6 +173,27 @@
 				280420C0108EA07E000629CD /* CoreData.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F600B59313202120009D00F5 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				F600B594132021BD009D00F5 /* IMashInfo.h */,
+			);
+			name = Protocols;
+			sourceTree = "<group>";
+		};
+		F600BBE21321776C009D00F5 /* Table Cells */ = {
+			isa = PBXGroup;
+			children = (
+				F600BBE513217791009D00F5 /* EditableTextCell.h */,
+				F600BBE613217791009D00F5 /* EditableTextCell.m */,
+				F600B383131EFF9A009D00F5 /* MashStepCell.h */,
+				F600B384131EFF9A009D00F5 /* MashStepCell.m */,
+				F600C4251321A965009D00F5 /* EditableTextAndUnitsCell.h */,
+				F600C4261321A965009D00F5 /* EditableTextAndUnitsCell.m */,
+			);
+			name = "Table Cells";
 			sourceTree = "<group>";
 		};
 		F6C63F6213144B250028F1C9 /* Utilities */ = {
@@ -217,6 +261,8 @@
 				2804203C108E9BAB000629CD /* DetailView.xib in Resources */,
 				F6C63F6D13144C080028F1C9 /* MashProfile.plist in Resources */,
 				F600B12C131E585F009D00F5 /* TableViewCells.xib in Resources */,
+				F600B98A1320647E009D00F5 /* EditStepViewController.xib in Resources */,
+				F600BE2B13218215009D00F5 /* SelectOneViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -238,6 +284,10 @@
 				F600B2D0131EEF1A009D00F5 /* ViewUtils.m in Sources */,
 				F600B385131EFF9A009D00F5 /* MashStepCell.m in Sources */,
 				F600B55D131F1911009D00F5 /* MashCalculations.c in Sources */,
+				F600B9891320647E009D00F5 /* EditStepViewController.m in Sources */,
+				F600BBE713217791009D00F5 /* EditableTextCell.m in Sources */,
+				F600BE2A13218215009D00F5 /* SelectOneViewController.m in Sources */,
+				F600C4271321A965009D00F5 /* EditableTextAndUnitsCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

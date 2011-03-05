@@ -11,6 +11,8 @@
 #import "TableCellFactory.h"
 #import "ViewUtils.h"
 #import "MashStepCell.h"
+#import "EditStepViewController.h"
+#import "EditableTextAndUnitsCell.h"
 
 @interface DetailViewController ()
 @property (nonatomic, retain) UIPopoverController *popoverController;
@@ -20,7 +22,7 @@
 @end
 
 enum {
-	kEditableTextCellTagGristWeight = 1,
+	kEditableTextCellTagGristWeight = 1000,
 	kEditableTextCellTagWaterGristRatio,
 	kEditableTextCellTagWaterVolume,
 	kEditableTextCellTagMashTunThermalMass,
@@ -63,6 +65,7 @@ enum {
 	waterVolume = [value retain];
 
 	if (gristWeight != nil && waterVolume != nil) {
+		[waterGristRatio release];
 		waterGristRatio = [[NSNumber numberWithFloat:[waterVolume floatValue] / [gristWeight floatValue]] retain];
 	}
 }
@@ -72,6 +75,7 @@ enum {
 	waterGristRatio = [value retain];
 
 	if (gristWeight != nil && waterGristRatio != nil) {
+		[waterVolume release];
 		waterVolume = [[NSNumber numberWithFloat:[gristWeight floatValue] * [waterGristRatio floatValue]] retain];
 	}
 }
@@ -81,15 +85,13 @@ enum {
 	gristWeight = [value retain];
 
 	if (gristWeight != nil && waterGristRatio != nil) {
+		[waterVolume release];
 		waterVolume = [[NSNumber numberWithFloat:[gristWeight floatValue] * [waterGristRatio floatValue]] retain];
 	}
 }
 
-#pragma mark -
-#pragma mark Object insertion
-
-- (IBAction)insertNewObject:(id) sender {
-	[self.rootViewController insertNewObject:sender];
+- (void) addStep: (MashStep *) step {
+	
 }
 
 #pragma mark -
@@ -196,6 +198,8 @@ enum {
 		NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
 		[formatter setMaximumFractionDigits:1];
 		[formatter setMinimumFractionDigits:1];
+		[formatter setMinimumIntegerDigits:1];
+		[formatter setPaddingCharacter:@"0"];
 		self.floatFormatter = formatter;
 		[formatter release];
 	}
@@ -262,7 +266,7 @@ enum {
 	}
 	switch (section) {
 	case kSectionDetails:
-		return 5;
+		return 4;
 		break;
 
 	case kSectionSteps:
@@ -292,8 +296,8 @@ enum {
 }
 
 - (UITableViewCell *) getDetailsCellForRow:(int) row {
-	NSString *const kDetailsTableCellId = @"DetailsTableCellId";
-	UITableViewCell *cell = [mashStepsTable dequeueReusableCellWithIdentifier:kDetailsTableCellId];
+	NSString *const kDetailsTableCellId = @"EditableTextAndUnitsCell";
+	EditableTextAndUnitsCell *cell = (EditableTextAndUnitsCell *)[mashStepsTable dequeueReusableCellWithIdentifier:kDetailsTableCellId];
 
 	if (cell == nil) {
 		cell = [TableCellFactory newEditableTextAndUnitsCell];
@@ -301,46 +305,42 @@ enum {
 
 	cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
-	UILabel *label = (UILabel *)[cell viewWithTag:kEditableTextAndUnitsCellTagLabel];
-	UITextField *textField = (UITextField *)[cell viewWithTag:kEditableTextAndUnitsCelLTagTextField];
-	UILabel *unitsLabel = (UILabel *)[cell viewWithTag:kEditableTextAndUnitsCelLTagUnitsLabel];
-
-	textField.delegate = self;
-	textField.keyboardType = UIKeyboardTypeNumberPad;
+	cell.textField.delegate = self;
+	cell.textField.keyboardType = UIKeyboardTypeNumberPad;
 
 	switch (row) {
 	case kRowGristWeight:
-		label.text = @"Grist weight:";
-		textField.text = [floatFormatter stringFromNumber:gristWeight];
-		unitsLabel.text = @"lb";
+		cell.textLabel.text = @"Grist weight:";
+		cell.textField.text = [floatFormatter stringFromNumber:gristWeight];
+		cell.unitsLabel.text = @"lb";
 		cell.tag = kEditableTextCellTagGristWeight;
 		break;
 
 	case kRowWaterGristRatio:
-		label.text = @"Water/grist ratio:";
-		textField.text = [floatFormatter stringFromNumber:waterGristRatio];
-		unitsLabel.text = @"qt/lb";
+		cell.textLabel.text = @"Water/grist ratio:";
+		cell.textField.text = [floatFormatter stringFromNumber:waterGristRatio];
+		cell.unitsLabel.text = @"qt/lb";
 		cell.tag = kEditableTextCellTagWaterGristRatio;
 		break;
 
 	case kRowWaterVolume:
-		label.text = @"Water volume:";
-		textField.text = [floatFormatter stringFromNumber:waterVolume];
-		unitsLabel.text = @"qt";
+		cell.textLabel.text = @"Water volume:";
+		cell.textField.text = [floatFormatter stringFromNumber:waterVolume];
+		cell.unitsLabel.text = @"qt";
 		cell.tag = kEditableTextCellTagWaterVolume;
 		break;
 
 	case kRowMashTunThermalMass:
-		label.text = @"Mash tun thermal mass:";
-		textField.text = [floatFormatter stringFromNumber:mashTunThermalMass];
-		unitsLabel.text = @"lb";
+		cell.textLabel.text = @"Mash tun thermal mass:";
+		cell.textField.text = [floatFormatter stringFromNumber:mashTunThermalMass];
+		cell.unitsLabel.text = @"lb";
 		cell.tag = kEditableTextCellTagMashTunThermalMass;
 		break;
 
 	case kRowGristTemp:
-		label.text = @"Grist temperature:";
-		textField.text = [floatFormatter stringFromNumber:gristTemp];
-		unitsLabel.text = @"F.";
+		cell.textLabel.text = @"Grist temperature:";
+		cell.textField.text = [floatFormatter stringFromNumber:gristTemp];
+		cell.unitsLabel.text = @"F";
 		cell.tag = kEditableTextCellTagGristTemp;
 		break;
 
@@ -356,6 +356,9 @@ enum {
 	MashStepCell *cell = (MashStepCell *)[mashStepsTable dequeueReusableCellWithIdentifier:kMashStepTableCellId];
 	if (cell == nil) {
 		cell = [TableCellFactory newMashStepCell];
+		cell.mashInfo = self;
+		cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
+		cell.selectionStyle = UITableViewCellSelectionStyleNone;
 	}
 
 	NSManagedObject *step = [mashSteps objectAtIndex:row];
@@ -398,6 +401,17 @@ enum {
 	}
 }
 
+- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
+	NSManagedObject *step = [mashSteps objectAtIndex:indexPath.row];
+	EditStepViewController *controller = [[[EditStepViewController alloc] init] autorelease];
+	controller.mashStep = step;
+	
+	UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:controller];
+	navController.modalPresentationStyle = UIModalPresentationFormSheet;
+	navController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+	[self presentModalViewController:navController animated:YES];
+}
+
 #pragma mark -
 #pragma mark UITextFieldDelegate methods
 
@@ -432,6 +446,11 @@ enum {
 		}
 	}
 	[mashStepsTable reloadData];
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+	[textField resignFirstResponder];
+	return YES;
 }
 
 @end

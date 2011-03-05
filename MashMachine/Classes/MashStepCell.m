@@ -17,6 +17,7 @@ enum {
 };
 
 const double kPoundsPerQuartWater = 2.086351011735304;
+const double kMashHeatCapacity = 0.4;
 
 @interface MashStepCell ()
 
@@ -24,33 +25,114 @@ const double kPoundsPerQuartWater = 2.086351011735304;
 - (NSString *) textForDecoctionStep;
 - (NSString *) textForInfusionStep;
 - (NSString *) textForHeatingStep;
+- (void) mashConditionsPriorToStepAtIndex:(int) index totalWaterVolume:(NSNumber **) outVolume mashTemp:(NSNumber **) outTemp;
 
 @end
 
 @implementation MashStepCell
 
 @synthesize mashStep;
+@synthesize mashInfo;
+@synthesize floatFormatter;
+
+- (void) mashConditionsPriorToStepAtIndex:(int) index totalWaterVolume:(NSNumber **) outVolume mashTemp:(NSNumber **) outTemp {
+	// first infusion step has water volume set explicitly
+	NSManagedObject *step = [[mashInfo mashSteps] objectAtIndex:0];
+	float waterVolume = [[mashInfo waterVolume] floatValue];
+	NSNumber *prevStepTemp = [step valueForKey:@"restStopTemp"];
+
+	for (int i = 1; i < index; i++) {
+		// subsequent infusion steps have water volume calculated
+		step = [[mashInfo mashSteps] objectAtIndex:i];
+		prevStepTemp = [step valueForKey:@"restStopTemp"];
+		
+		if ([(NSNumber *)[step valueForKey:@"type"] intValue] != kMashStepTypeInfusion) {
+			// no water is added during decoction or direct heating
+			continue;
+		}
+
+		float stepWaterMass = infusionWaterMass(kMashHeatCapacity,
+		                                        [[mashInfo gristWeight] floatValue],
+		                                        waterVolume * kPoundsPerQuartWater,
+		                                        [(NSNumber *)[step valueForKey:@"restStartTemp"] floatValue],
+		                                        [prevStepTemp floatValue],
+		                                        [(NSNumber *)[step valueForKey:@"infuseTemp"] floatValue]);
+
+		waterVolume += stepWaterMass / kPoundsPerQuartWater;
+	}
+	*outVolume = [NSNumber numberWithFloat:waterVolume];
+	*outTemp = prevStepTemp;
+}
 
 - (NSString *) textForDecoctionStep {
-	NSNumber *decoctVolume = [NSNumber numberWithFloat:6.0]; // todo: calculate
-	NSNumber *stepTime = [mashStep valueForKey:@"stepTime"];
-	return [NSString stringWithFormat: @"Decoct %@ qt and boil for %@ minutes", decoctVolume, stepTime];
+	NSNumber *totalVolume = nil;
+	NSNumber *mashTemp = nil;
+	int stepIdx = [[mashInfo mashSteps] indexOfObject:mashStep];
+	if (stepIdx > 0) {
+		[self mashConditionsPriorToStepAtIndex:stepIdx totalWaterVolume:&totalVolume mashTemp:&mashTemp];
+
+		float decoctMass = decoctionMass(kMashHeatCapacity,
+		                                 [[mashInfo gristWeight] floatValue],
+		                                 [totalVolume floatValue] * kPoundsPerQuartWater,
+		                                 [(NSNumber *)[mashStep valueForKey:@"restStartTemp"] floatValue],
+		                                 [(NSNumber *)[mashStep valueForKey:@"decoctTemp"] floatValue],
+		                                 [mashTemp floatValue]);
+
+		NSNumber *stepTime = [mashStep valueForKey:@"stepTime"];
+	//	NSNumber *decoctThickness = [mashStep valueForKey:@"decoctThickness"];
+		NSNumber *decoctVolume = [NSNumber numberWithFloat:decoctMass / kPoundsPerQuartWater];// [decoctThickness floatValue]];
+
+		return [NSString stringWithFormat:@"Decoct %@ qt and boil for %@ minutes", 
+				[floatFormatter stringFromNumber:decoctVolume], 
+				stepTime];
+	}
+	else {
+		return @"First step must be infusion.";
+	}
 }
 
 - (NSString *) textForInfusionStep {
-	NSNumber *infuseVolume = [NSNumber numberWithFloat:6.0]; // todo: calculate
-	NSNumber *infuseTemp = [mashStep valueForKey:@"infuseTemp"]; // todo: calculate if null (first step)
-	
+	NSNumber *infuseVolume = [mashInfo waterVolume];
+	NSNumber *infuseTemp = [mashStep valueForKey:@"infuseTemp"];
+
 	if (infuseTemp == nil || [infuseTemp floatValue] == 0) {
-		float tw = strikeWaterTemperature(20 * kPoundsPerQuartWater, 150, 0.4, 10, 60);
+		// initial strike
+		float tw = strikeWaterTemperature([[mashInfo waterVolume] floatValue] * kPoundsPerQuartWater,
+		                                  [(NSNumber *)[mashStep valueForKey:@"restStartTemp"] floatValue],
+		                                  kMashHeatCapacity,
+		                                  [[mashInfo gristWeight] floatValue],
+		                                  [[mashInfo gristTemp] floatValue]);
 		infuseTemp = [NSNumber numberWithFloat:tw];
 	}
-	return [NSString stringWithFormat: @"Add %@ qt of water at %@ F.", infuseVolume, infuseTemp];	
+	else {
+		int stepIdx = [[mashInfo mashSteps] indexOfObject:mashStep];
+		if (stepIdx > 0) {
+			NSNumber *totalVolume = nil;
+			NSNumber *mashTemp = nil;
+			[self mashConditionsPriorToStepAtIndex:stepIdx totalWaterVolume:&totalVolume mashTemp:&mashTemp];
+
+			float waterMass = infusionWaterMass(kMashHeatCapacity,
+			                                    [[mashInfo gristWeight] floatValue],
+			                                    [totalVolume floatValue] * kPoundsPerQuartWater,
+			                                    [(NSNumber *)[mashStep valueForKey:@"restStartTemp"] floatValue],
+			                                    [mashTemp floatValue],
+			                                    [(NSNumber *)[mashStep valueForKey:@"infuseTemp"] floatValue]);
+			infuseVolume = [NSNumber numberWithFloat:waterMass / kPoundsPerQuartWater];
+		}
+		else {
+			return @"Error calculating infusion water volume";
+		}
+	}
+
+	return [NSString stringWithFormat:@"Add %@ qt of water at %@ F",
+	        [floatFormatter stringFromNumber:infuseVolume],
+	        [floatFormatter stringFromNumber:infuseTemp]];
 }
 
 - (NSString *) textForHeatingStep {
-	return @"Apply heat";
-	
+	return [NSString stringWithFormat:@"Heat to %@ F", 
+			[floatFormatter stringFromNumber:[mashStep valueForKey:@"restStartTemp"]]];
+														
 }
 
 - (void) setMashStep:(NSManagedObject *) value {
@@ -59,21 +141,18 @@ const double kPoundsPerQuartWater = 2.086351011735304;
 	[self updateUserInterface];
 }
 
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
-    
-    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
-    if (self) {
-        // Initialization code.
-    }
-    return self;
+- (id)initWithStyle:(UITableViewCellStyle) style reuseIdentifier:(NSString *) reuseIdentifier {
+	self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+	if (self) {
+		// Initialization code.
+	}
+	return self;
 }
 
+- (void)setSelected:(BOOL) selected animated:(BOOL) animated {
+	[super setSelected:selected animated:animated];
 
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
-    
-    [super setSelected:selected animated:animated];
-    
-    // Configure the view for the selected state.
+	// Configure the view for the selected state.
 }
 
 - (UILabel *) textLabel {
@@ -81,16 +160,30 @@ const double kPoundsPerQuartWater = 2.086351011735304;
 }
 
 - (UILabel *) detailTextLabel {
-	return (UILabel *)[self viewWithTag:kTagDetailsLabel];	
+	return (UILabel *)[self viewWithTag:kTagDetailsLabel];
 }
 
 - (UILabel *) timeAndTempLabel {
 	return (UILabel *)[self viewWithTag:kTagTimeAndTempLabel];
 }
 
+- (id)initWithCoder:(NSCoder *) aDecoder {
+	if (self = [super initWithCoder:aDecoder]) {
+		NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+		[formatter setMaximumFractionDigits:1];
+		[formatter setMinimumFractionDigits:1];
+		[formatter setMinimumIntegerDigits:1];
+		[formatter setPaddingCharacter:@"0"];
+		self.floatFormatter = formatter;
+		[formatter release];
+	}
+	return self;
+}
+
 - (void)dealloc {
 	[mashStep release];
-    [super dealloc];
+	[floatFormatter release];
+	[super dealloc];
 }
 
 - (void) updateUserInterface {
@@ -98,27 +191,30 @@ const double kPoundsPerQuartWater = 2.086351011735304;
 		self.textLabel.text = self.detailTextLabel.text = self.timeAndTempLabel.text = @"";
 		return;
 	}
-	
+
 	self.textLabel.text = [mashStep valueForKey:@"name"];
-	
+
 	NSNumber *restTemp = [mashStep valueForKey:@"restStartTemp"];
 	NSNumber *restTime = [mashStep valueForKey:@"restTime"];
-	
-	self.timeAndTempLabel.text = [NSString stringWithFormat:@"%@ F. for %@ minutes", restTemp, restTime];	
-	
+
+	self.timeAndTempLabel.text = [NSString stringWithFormat:@"%@ F for %@ minutes", restTemp, restTime];
+
 	int stepType = [(NSNumber *)[mashStep valueForKey:@"type"] intValue];
 	switch (stepType) {
-		case kMashStepTypeDecoction:
-			self.detailTextLabel.text = [self textForDecoctionStep];
-			break;
-		case kMashStepTypeInfusion:
-			self.detailTextLabel.text = [self textForInfusionStep];
-			break;
-		case kMashStepTypeDirectHeat:
-			self.detailTextLabel.text = [self textForHeatingStep];
-			break;
-		default:
-			break;
+	case kMashStepTypeDecoction:
+		self.detailTextLabel.text = [self textForDecoctionStep];
+		break;
+
+	case kMashStepTypeInfusion:
+		self.detailTextLabel.text = [self textForInfusionStep];
+		break;
+
+	case kMashStepTypeDirectHeat:
+		self.detailTextLabel.text = [self textForHeatingStep];
+		break;
+
+	default:
+		break;
 	}
 }
 

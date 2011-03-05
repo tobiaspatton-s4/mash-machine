@@ -8,10 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
+#import "IMashInfo.h"
 
 @class RootViewController;
 
-@interface DetailViewController : UIViewController <UIPopoverControllerDelegate, UISplitViewControllerDelegate, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate> {
+@interface DetailViewController : UIViewController <UIPopoverControllerDelegate, UISplitViewControllerDelegate, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, IMashInfo> {
     
     UIPopoverController *popoverController;
     UIToolbar *toolbar;	
@@ -46,6 +47,6 @@
 @property (nonatomic, copy) NSNumber *mashTunThermalMass;
 @property (nonatomic, copy) NSNumber *gristTemp;
 
-- (IBAction)insertNewObject:(id)sender;
+- (void) addStep: (MashStep *) step;
 
 @end

@@ -78,6 +78,7 @@
     
     NSManagedObject *managedObject = [self.fetchedResultsController objectAtIndexPath:indexPath];
 	cell.textLabel.font = [UIFont systemFontOfSize:18];
+	cell.textLabel.adjustsFontSizeToFitWidth = YES;
     cell.textLabel.text = [managedObject valueForKey:@"name"];
 	cell.detailTextLabel.text = [NSString stringWithFormat:@"%d steps", [[managedObject valueForKey:@"steps"] count]];
 }

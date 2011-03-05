@@ -6,8 +6,10 @@
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
+#import "EditableTextCell.h"
 #import "TableCellFactory.h"
 #import "MashStepCell.h"
+#import "EditableTextAndUnitsCell.h"
 
 @interface TableCellFactory ()
 + (TableCellFactory *) Instance;
@@ -52,12 +54,12 @@
 	return result;
 }
 
-+ (UITableViewCell *) newEditableTextCell {
-	return [TableCellFactory newCellWithName: @"editableTextCell"];
++ (EditableTextCell *) newEditableTextCell {
+	return (EditableTextCell *)[TableCellFactory newCellWithName: @"editableTextCell"];
 }
 
-+ (UITableViewCell *) newEditableTextAndUnitsCell {
-	return [TableCellFactory newCellWithName: @"editableTextAndUnitsCell"];
++ (EditableTextAndUnitsCell *) newEditableTextAndUnitsCell {
+	return (EditableTextAndUnitsCell *)[TableCellFactory newCellWithName: @"editableTextAndUnitsCell"];
 }
 
 + (MashStepCell *) newMashStepCell {
