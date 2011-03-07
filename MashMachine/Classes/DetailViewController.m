@@ -13,12 +13,15 @@
 #import "MashStepCell.h"
 #import "EditStepViewController.h"
 #import "EditableTextAndUnitsCell.h"
+#import "MashMachineAppDelegate.h"
+#import "Constants.h"
 
 @interface DetailViewController ()
 @property (nonatomic, retain) UIPopoverController *popoverController;
 - (void)configureView;
 - (UITableViewCell *) getDetailsCellForRow:(int) row;
 - (UITableViewCell *) getStepCellForRow:(int) row;
+- (void) editStep: (NSManagedObject *)step;
 @end
 
 enum {
@@ -56,6 +59,7 @@ enum {
 @synthesize floatFormatter;
 @synthesize gristTemp;
 @synthesize toolbarTitle;
+@synthesize editButton;
 
 #pragma mark -
 #pragma mark Properties
@@ -221,6 +225,7 @@ enum {
 	self.mashTunThermalMass = nil;
 	self.floatFormatter = nil;
 	self.gristTemp = nil;
+	self.editButton = nil;
 }
 
 #pragma mark -
@@ -246,12 +251,49 @@ enum {
 	[mashTunThermalMass release];
 	[floatFormatter release];
 	[gristTemp release];
+	[editButton release];
 
 	[super dealloc];
 }
 
+- (void) editStep: (NSManagedObject *)step {
+	EditStepViewController *controller = [[[EditStepViewController alloc] init] autorelease];
+	controller.mashStep = step;
+	controller.delegate = self;
+	
+	UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:controller];
+	navController.modalPresentationStyle = UIModalPresentationFormSheet;
+	navController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+	[self presentModalViewController:navController animated:YES];
+	
+}
+
+- (IBAction) addStepTouched: (id)sender {
+	[self editStep:nil];
+}
+
+- (IBAction) editTouched: (id)sender {
+	self.editButton = (UIButton *)sender;
+	if (mashStepsTable.isEditing) {
+		[mashStepsTable setEditing:NO animated: YES];
+		[editButton setTitle:@"Edit" forState:UIControlStateNormal];
+	}
+	else {		
+		[mashStepsTable setEditing:YES animated: YES];
+		[editButton setTitle:@"Done" forState:UIControlStateNormal];
+	}
+}
+
 #pragma mark -
 #pragma mark UITableViewDataSource methods
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+	NSManagedObjectContext *context = [(MashMachineAppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+	NSManagedObject *stepToDelete = [mashSteps objectAtIndex:indexPath.row];
+	[context deleteObject:stepToDelete];
+	[context save:nil];
+	[self configureView];
+}
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *) tableView {
 	if (detailItem == nil) {
@@ -385,6 +427,31 @@ enum {
 #pragma mark -
 #pragma mark UITableViewDelegate methods
 
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
+	switch (indexPath.section) {
+		case kSectionSteps:
+			return UITableViewCellEditingStyleDelete;
+			break;
+		default:
+			return UITableViewCellEditingStyleNone;
+			break;
+	}
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+	if (section == 0) {
+		return nil;
+	}
+	
+	NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"DetailsSectionHeader" owner:self options:nil];	
+	[self.editButton setTitle: mashStepsTable.isEditing ? @"Done" : @"Edit" forState:UIControlStateNormal];
+	return [nib objectAtIndex:0];	
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+	return 60;
+}
+
 - (CGFloat)tableView:(UITableView *) tableView heightForRowAtIndexPath:(NSIndexPath *) indexPath {
 	switch (indexPath.section) {
 	case kSectionDetails:
@@ -402,14 +469,7 @@ enum {
 }
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
-	NSManagedObject *step = [mashSteps objectAtIndex:indexPath.row];
-	EditStepViewController *controller = [[[EditStepViewController alloc] init] autorelease];
-	controller.mashStep = step;
-	
-	UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:controller];
-	navController.modalPresentationStyle = UIModalPresentationFormSheet;
-	navController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-	[self presentModalViewController:navController animated:YES];
+	[self editStep:[mashSteps objectAtIndex:indexPath.row]];
 }
 
 #pragma mark -
@@ -451,6 +511,40 @@ enum {
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
 	[textField resignFirstResponder];
 	return YES;
+}
+
+#pragma mark -
+#pragma mark EditStepDelegate methods
+
+- (void) editStepViewController: (EditStepViewController *)controller didFinishEditing: (NSManagedObject *) step {
+	NSManagedObjectContext *context = [(MashMachineAppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+	if (step == nil) {
+		step = [NSEntityDescription insertNewObjectForEntityForName:@"MashStep" inManagedObjectContext:context];
+		[step setValue:[NSNumber numberWithInt:[mashSteps count]] forKey:@"stepOrder"];
+		[step setValue:detailItem forKey:@"profile"];
+	}
+	
+	[step setValue:controller.stepName forKey:@"name"];
+	[step setValue:[NSNumber numberWithInt:controller.stepType] forKey:@"type"];
+	[step setValue:controller.startTemp forKey:@"restStartTemp"];
+	[step setValue:controller.endTemp forKey:@"restStopTemp"];
+	[step setValue:controller.restTime forKey:@"restTime"];
+	[step setValue:controller.stepTime forKey:@"stepTime"];
+	
+	switch (controller.stepType) {
+		case kMashStepTypeInfusion:
+			[step setValue:controller.additionTemp forKey:@"infuseTemp"];
+			break;
+		case kMashStepTypeDecoction:
+			[step setValue:controller.additionTemp forKey:@"decoctTemp"];
+			[step setValue:controller.decoctionThickness forKey:@"decoctThickness"];
+			break;
+		default:
+			break;
+	}
+	
+	[context save:nil];
+	[self configureView];
 }
 
 @end

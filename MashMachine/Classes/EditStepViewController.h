@@ -9,7 +9,14 @@
 #import <UIKit/UIKit.h>
 #import "SelectOneViewController.h"
 
+@class EditStepViewController;
 @class NSManagedObject;
+
+@protocol EditStepDelegate
+
+- (void) editStepViewController: (EditStepViewController *)controller didFinishEditing: (NSManagedObject *) step;
+
+@end
 
 @interface EditStepViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, SelectOneViewControllerDelegate, UITextFieldDelegate> {
 	UITableView *formTable;
@@ -26,6 +33,8 @@
 	NSNumber *stepTime;
 	NSNumber *additionTemp;
 	NSNumber *decoctionThickness;
+	
+	id<EditStepDelegate> delegate;
 }
 
 @property (nonatomic, retain) IBOutlet UITableView *formTable;
@@ -39,6 +48,7 @@
 @property (nonatomic, copy) NSNumber *additionTemp;
 @property (nonatomic, copy) NSNumber *decoctionThickness;
 @property (nonatomic, retain) NSNumberFormatter *floatFormatter;
+@property (nonatomic, assign) id<EditStepDelegate> delegate;
 
 - (IBAction) cancelTouched: (id)sender;
 - (IBAction) saveTouched: (id)sender;

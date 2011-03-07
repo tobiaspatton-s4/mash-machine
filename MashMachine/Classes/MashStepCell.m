@@ -45,7 +45,7 @@ const double kMashHeatCapacity = 0.4;
 		// subsequent infusion steps have water volume calculated
 		step = [[mashInfo mashSteps] objectAtIndex:i];
 		prevStepTemp = [step valueForKey:@"restStopTemp"];
-		
+
 		if ([(NSNumber *)[step valueForKey:@"type"] intValue] != kMashStepTypeInfusion) {
 			// no water is added during decoction or direct heating
 			continue;
@@ -79,12 +79,12 @@ const double kMashHeatCapacity = 0.4;
 		                                 [mashTemp floatValue]);
 
 		NSNumber *stepTime = [mashStep valueForKey:@"stepTime"];
-	//	NSNumber *decoctThickness = [mashStep valueForKey:@"decoctThickness"];
-		NSNumber *decoctVolume = [NSNumber numberWithFloat:decoctMass / kPoundsPerQuartWater];// [decoctThickness floatValue]];
+		//	NSNumber *decoctThickness = [mashStep valueForKey:@"decoctThickness"];
+		NSNumber *decoctVolume = [NSNumber numberWithFloat:decoctMass / kPoundsPerQuartWater]; // [decoctThickness floatValue]];
 
-		return [NSString stringWithFormat:@"Decoct %@ qt and boil for %@ minutes", 
-				[floatFormatter stringFromNumber:decoctVolume], 
-				stepTime];
+		return [NSString stringWithFormat:@"Decoct %@ qt and boil for %@ minutes",
+		        [floatFormatter stringFromNumber:decoctVolume],
+		        stepTime];
 	}
 	else {
 		return @"First step must be infusion.";
@@ -94,8 +94,9 @@ const double kMashHeatCapacity = 0.4;
 - (NSString *) textForInfusionStep {
 	NSNumber *infuseVolume = [mashInfo waterVolume];
 	NSNumber *infuseTemp = [mashStep valueForKey:@"infuseTemp"];
+	int stepIdx = [[mashInfo mashSteps] indexOfObject:mashStep];
 
-	if (infuseTemp == nil || [infuseTemp floatValue] == 0) {
+	if (stepIdx == 0) {
 		// initial strike
 		float tw = strikeWaterTemperature([[mashInfo waterVolume] floatValue] * kPoundsPerQuartWater,
 		                                  [(NSNumber *)[mashStep valueForKey:@"restStartTemp"] floatValue],
@@ -105,23 +106,17 @@ const double kMashHeatCapacity = 0.4;
 		infuseTemp = [NSNumber numberWithFloat:tw];
 	}
 	else {
-		int stepIdx = [[mashInfo mashSteps] indexOfObject:mashStep];
-		if (stepIdx > 0) {
-			NSNumber *totalVolume = nil;
-			NSNumber *mashTemp = nil;
-			[self mashConditionsPriorToStepAtIndex:stepIdx totalWaterVolume:&totalVolume mashTemp:&mashTemp];
+		NSNumber *totalVolume = nil;
+		NSNumber *mashTemp = nil;
+		[self mashConditionsPriorToStepAtIndex:stepIdx totalWaterVolume:&totalVolume mashTemp:&mashTemp];
 
-			float waterMass = infusionWaterMass(kMashHeatCapacity,
-			                                    [[mashInfo gristWeight] floatValue],
-			                                    [totalVolume floatValue] * kPoundsPerQuartWater,
-			                                    [(NSNumber *)[mashStep valueForKey:@"restStartTemp"] floatValue],
-			                                    [mashTemp floatValue],
-			                                    [(NSNumber *)[mashStep valueForKey:@"infuseTemp"] floatValue]);
-			infuseVolume = [NSNumber numberWithFloat:waterMass / kPoundsPerQuartWater];
-		}
-		else {
-			return @"Error calculating infusion water volume";
-		}
+		float waterMass = infusionWaterMass(kMashHeatCapacity,
+		                                    [[mashInfo gristWeight] floatValue],
+		                                    [totalVolume floatValue] * kPoundsPerQuartWater,
+		                                    [(NSNumber *)[mashStep valueForKey:@"restStartTemp"] floatValue],
+		                                    [mashTemp floatValue],
+		                                    [(NSNumber *)[mashStep valueForKey:@"infuseTemp"] floatValue]);
+		infuseVolume = [NSNumber numberWithFloat:waterMass / kPoundsPerQuartWater];
 	}
 
 	return [NSString stringWithFormat:@"Add %@ qt of water at %@ F",
@@ -130,9 +125,8 @@ const double kMashHeatCapacity = 0.4;
 }
 
 - (NSString *) textForHeatingStep {
-	return [NSString stringWithFormat:@"Heat to %@ F", 
-			[floatFormatter stringFromNumber:[mashStep valueForKey:@"restStartTemp"]]];
-														
+	return [NSString stringWithFormat:@"Heat to %@ F",
+	        [floatFormatter stringFromNumber:[mashStep valueForKey:@"restStartTemp"]]];
 }
 
 - (void) setMashStep:(NSManagedObject *) value {

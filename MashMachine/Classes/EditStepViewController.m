@@ -64,6 +64,7 @@ static NSArray *MashStepTypes;
 @synthesize stepTime;
 @synthesize additionTemp;
 @synthesize decoctionThickness;
+@synthesize delegate;
 
 + (void) initialize {
 	MashStepTypes = [[NSArray alloc] initWithObjects:@"Direct heat", @"Infusion", @"Decoction", nil];
@@ -130,6 +131,7 @@ static NSArray *MashStepTypes;
 
 - (IBAction) saveTouched:(id) sender {
 	[self dismissModalViewControllerAnimated:YES];
+	[delegate editStepViewController:self didFinishEditing:mashStep];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
@@ -194,7 +196,7 @@ static NSArray *MashStepTypes;
 
 	switch (stepType) {
 	case kMashStepTypeDirectHeat:
-		return 5;
+		return 6;
 		break;
 
 	case kMashStepTypeInfusion:

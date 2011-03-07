@@ -9,16 +9,18 @@
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
 #import "IMashInfo.h"
+#import "EditStepViewController.h"
 
 @class RootViewController;
 
-@interface DetailViewController : UIViewController <UIPopoverControllerDelegate, UISplitViewControllerDelegate, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, IMashInfo> {
+@interface DetailViewController : UIViewController <UIPopoverControllerDelegate, UISplitViewControllerDelegate, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, IMashInfo, EditStepDelegate> {
     
     UIPopoverController *popoverController;
     UIToolbar *toolbar;	
 	UILabel *toolbarTitle;
 	UITableView *mashStepsTable;	
     RootViewController *rootViewController;
+	UIButton *editButton;
 	
     NSManagedObject *detailItem;
 	NSArray *mashSteps;
@@ -38,6 +40,7 @@
 @property (nonatomic, retain) NSArray *mashSteps;
 @property (nonatomic, assign) IBOutlet RootViewController *rootViewController;
 @property (nonatomic, retain) IBOutlet UITableView *mashStepsTable;
+@property (nonatomic, retain) IBOutlet UIButton *editButton;
 
 @property (nonatomic, retain) NSNumberFormatter *floatFormatter;
 
@@ -48,5 +51,8 @@
 @property (nonatomic, copy) NSNumber *gristTemp;
 
 - (void) addStep: (MashStep *) step;
+
+- (IBAction) addStepTouched: (id)sender;
+- (IBAction) editTouched: (id)sender;
 
 @end

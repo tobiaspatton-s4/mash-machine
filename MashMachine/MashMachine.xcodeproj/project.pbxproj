@@ -29,6 +29,8 @@
 		F600BE2A13218215009D00F5 /* SelectOneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F600BE2813218215009D00F5 /* SelectOneViewController.m */; };
 		F600BE2B13218215009D00F5 /* SelectOneViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F600BE2913218215009D00F5 /* SelectOneViewController.xib */; };
 		F600C4271321A965009D00F5 /* EditableTextAndUnitsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F600C4261321A965009D00F5 /* EditableTextAndUnitsCell.m */; };
+		F600C6EA13257A31009D00F5 /* DetailsSectionHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = F600C6E913257A31009D00F5 /* DetailsSectionHeader.xib */; };
+		F600C799132583DE009D00F5 /* add_button_bkg.png in Resources */ = {isa = PBXBuildFile; fileRef = F600C798132583DE009D00F5 /* add_button_bkg.png */; };
 		F6C63F6513144B450028F1C9 /* DatabaseUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = F6C63F6413144B450028F1C9 /* DatabaseUtils.m */; };
 		F6C63F6D13144C080028F1C9 /* MashProfile.plist in Resources */ = {isa = PBXBuildFile; fileRef = F6C63F6C13144C080028F1C9 /* MashProfile.plist */; };
 		F6C63F94131451690028F1C9 /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = F6C63F93131451690028F1C9 /* Constants.m */; };
@@ -72,6 +74,8 @@
 		F600BE2913218215009D00F5 /* SelectOneViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = SelectOneViewController.xib; path = Classes/SelectOneViewController.xib; sourceTree = "<group>"; };
 		F600C4251321A965009D00F5 /* EditableTextAndUnitsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditableTextAndUnitsCell.h; sourceTree = "<group>"; };
 		F600C4261321A965009D00F5 /* EditableTextAndUnitsCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditableTextAndUnitsCell.m; sourceTree = "<group>"; };
+		F600C6E913257A31009D00F5 /* DetailsSectionHeader.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DetailsSectionHeader.xib; sourceTree = "<group>"; };
+		F600C798132583DE009D00F5 /* add_button_bkg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = add_button_bkg.png; sourceTree = "<group>"; };
 		F6C63F6313144B450028F1C9 /* DatabaseUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DatabaseUtils.h; sourceTree = "<group>"; };
 		F6C63F6413144B450028F1C9 /* DatabaseUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DatabaseUtils.m; sourceTree = "<group>"; };
 		F6C63F6C13144C080028F1C9 /* MashProfile.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = MashProfile.plist; sourceTree = "<group>"; };
@@ -152,6 +156,8 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				F600C78013257FEA009D00F5 /* images */,
+				F600C6E913257A31009D00F5 /* DetailsSectionHeader.xib */,
 				2804203B108E9BAB000629CD /* DetailView.xib */,
 				F600B9881320647E009D00F5 /* EditStepViewController.xib */,
 				28AD735F0D9D9599002E5188 /* MainWindow.xib */,
@@ -194,6 +200,14 @@
 				F600C4261321A965009D00F5 /* EditableTextAndUnitsCell.m */,
 			);
 			name = "Table Cells";
+			sourceTree = "<group>";
+		};
+		F600C78013257FEA009D00F5 /* images */ = {
+			isa = PBXGroup;
+			children = (
+				F600C798132583DE009D00F5 /* add_button_bkg.png */,
+			);
+			name = images;
 			sourceTree = "<group>";
 		};
 		F6C63F6213144B250028F1C9 /* Utilities */ = {
@@ -263,6 +277,8 @@
 				F600B12C131E585F009D00F5 /* TableViewCells.xib in Resources */,
 				F600B98A1320647E009D00F5 /* EditStepViewController.xib in Resources */,
 				F600BE2B13218215009D00F5 /* SelectOneViewController.xib in Resources */,
+				F600C6EA13257A31009D00F5 /* DetailsSectionHeader.xib in Resources */,
+				F600C799132583DE009D00F5 /* add_button_bkg.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
