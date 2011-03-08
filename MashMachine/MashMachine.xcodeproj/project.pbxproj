@@ -35,6 +35,7 @@
 		F6C63F6513144B450028F1C9 /* DatabaseUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = F6C63F6413144B450028F1C9 /* DatabaseUtils.m */; };
 		F6C63F6D13144C080028F1C9 /* MashProfile.plist in Resources */ = {isa = PBXBuildFile; fileRef = F6C63F6C13144C080028F1C9 /* MashProfile.plist */; };
 		F6C63F94131451690028F1C9 /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = F6C63F93131451690028F1C9 /* Constants.m */; };
+		F6EDAAD41326A95E0000D24E /* UnitConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = F6EDAAD31326A95E0000D24E /* UnitConverter.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -84,6 +85,9 @@
 		F6C63F6C13144C080028F1C9 /* MashProfile.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = MashProfile.plist; sourceTree = "<group>"; };
 		F6C63F92131451690028F1C9 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		F6C63F93131451690028F1C9 /* Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Constants.m; sourceTree = "<group>"; };
+		F6EDAAD21326A95E0000D24E /* UnitConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnitConverter.h; sourceTree = "<group>"; };
+		F6EDAAD31326A95E0000D24E /* UnitConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UnitConverter.m; sourceTree = "<group>"; };
+		F6EDAB5F1326B2D60000D24E /* UnitTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "UnitTests-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,6 +112,7 @@
 				2804200A108E984D000629CD /* DetailViewController.m */,
 				F600B9861320647E009D00F5 /* EditStepViewController.h */,
 				F600B9871320647E009D00F5 /* EditStepViewController.m */,
+				F6EDAACF1326A8FA0000D24E /* Formatters */,
 				F600B55C131F1911009D00F5 /* MashCalculations.c */,
 				F600B55B131F1911009D00F5 /* MashCalculations.h */,
 				1D3623240D0F684500981E51 /* MashMachineAppDelegate.h */,
@@ -141,6 +146,7 @@
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
+				F6EDAB5F1326B2D60000D24E /* UnitTests-Info.plist */,
 			);
 			name = CustomTemplate;
 			sourceTree = "<group>";
@@ -224,6 +230,15 @@
 				F600B2CF131EEF1A009D00F5 /* ViewUtils.m */,
 			);
 			name = Utilities;
+			sourceTree = "<group>";
+		};
+		F6EDAACF1326A8FA0000D24E /* Formatters */ = {
+			isa = PBXGroup;
+			children = (
+				F6EDAAD21326A95E0000D24E /* UnitConverter.h */,
+				F6EDAAD31326A95E0000D24E /* UnitConverter.m */,
+			);
+			name = Formatters;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -310,6 +325,7 @@
 				F600BE2A13218215009D00F5 /* SelectOneViewController.m in Sources */,
 				F600C4271321A965009D00F5 /* EditableTextAndUnitsCell.m in Sources */,
 				F600CD891325A49F009D00F5 /* MashProfileCell.m in Sources */,
+				F6EDAAD41326A95E0000D24E /* UnitConverter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

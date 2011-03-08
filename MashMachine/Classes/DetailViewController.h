@@ -12,6 +12,7 @@
 #import "EditStepViewController.h"
 
 @class RootViewController;
+@class UnitNumberFormater;
 
 @interface DetailViewController : UIViewController <UIPopoverControllerDelegate, UISplitViewControllerDelegate, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, IMashInfo, EditStepDelegate> {
     
@@ -26,6 +27,7 @@
 	NSArray *mashSteps;
 	
 	NSNumberFormatter *floatFormatter;
+	UnitNumberFormater *weightFormatter;
 	
 	NSNumber *gristWeight;
 	NSNumber *waterGristRatio;
@@ -43,6 +45,7 @@
 @property (nonatomic, retain) IBOutlet UIButton *editButton;
 
 @property (nonatomic, retain) NSNumberFormatter *floatFormatter;
+@property (nonatomic, retain) UnitNumberFormater *weightFormatter;
 
 @property (nonatomic, copy) NSNumber *gristWeight;
 @property (nonatomic, copy) NSNumber *waterGristRatio;

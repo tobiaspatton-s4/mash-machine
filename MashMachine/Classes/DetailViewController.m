@@ -15,6 +15,7 @@
 #import "EditableTextAndUnitsCell.h"
 #import "MashMachineAppDelegate.h"
 #import "Constants.h"
+#import "UnitConverter.h"
 
 @interface DetailViewController ()
 @property (nonatomic, retain) UIPopoverController *popoverController;
@@ -60,6 +61,7 @@ enum {
 @synthesize gristTemp;
 @synthesize toolbarTitle;
 @synthesize editButton;
+@synthesize weightFormatter;
 
 #pragma mark -
 #pragma mark Properties
@@ -202,6 +204,14 @@ enum {
 		[formatter setPaddingCharacter:@"0"];
 		self.floatFormatter = formatter;
 		[formatter release];
+		
+		UnitNumberFormater *wf = [[UnitNumberFormater alloc] initWithCannonicalUnit:kUnitKilogram andDisplayUnit:kUnitPound];
+		[wf setMaximumFractionDigits:1];
+		[wf setMinimumFractionDigits:1];
+		[wf setMinimumIntegerDigits:1];
+		[wf setPaddingCharacter:@"0"];
+		self.weightFormatter = wf;
+		[wf release];
 	}
 	return self;
 }
@@ -222,6 +232,7 @@ enum {
 	self.floatFormatter = nil;
 	self.gristTemp = nil;
 	self.editButton = nil;
+	self.weightFormatter = nil;
 }
 
 #pragma mark -
@@ -248,6 +259,7 @@ enum {
 	[floatFormatter release];
 	[gristTemp release];
 	[editButton release];
+	[weightFormatter release];
 
 	[super dealloc];
 }
@@ -345,11 +357,10 @@ enum {
 
 	cell.textField.delegate = self;
 	cell.textField.keyboardType = UIKeyboardTypeNumberPad;
-
 	switch (row) {
 	case kRowGristWeight:
 		cell.textLabel.text = @"Grist weight:";
-		cell.textField.text = [floatFormatter stringFromNumber:gristWeight];
+		cell.textField.text = [weightFormatter stringFromNumber:gristWeight];
 		cell.unitsLabel.text = @"lb";
 		cell.tag = kEditableTextCellTagGristWeight;
 		break;
