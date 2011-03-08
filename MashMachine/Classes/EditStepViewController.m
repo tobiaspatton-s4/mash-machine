@@ -102,6 +102,28 @@ static NSArray *MashStepTypes;
 	[self configureUI];
 }
 
+- (void) keyboardDidAppear:(NSNotification *) notification {
+	NSDictionary *info = [notification userInfo];
+	NSValue *aValue = [info objectForKey:UIKeyboardFrameEndUserInfoKey];
+	CGRect keyboardFrame = [aValue CGRectValue];
+	CGRect adjustedKeyboardFrame = [formTable.superview convertRect:keyboardFrame fromView:nil];
+
+	CGRect tableFrame = formTable.frame;
+	offsetForKeyboard = tableFrame.size.height - adjustedKeyboardFrame.origin.y;
+
+	tableFrame.size.height -= offsetForKeyboard;
+	formTable.frame = tableFrame;
+
+	NSIndexPath *indexPath = [formTable indexPathForCell:edittedCell];
+	[formTable scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+}
+
+- (void) keyboardWillDisappear:(NSNotification *) notification {
+	CGRect tableFrame = formTable.frame;
+	tableFrame.size.height += offsetForKeyboard;
+	formTable.frame = tableFrame;
+}
+
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
 	[super viewDidLoad];
@@ -123,6 +145,16 @@ static NSArray *MashStepTypes;
 	[formatter release];
 
 	[self configureUI];
+}
+
+- (void) viewDidAppear:(BOOL) animated {
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidAppear:) name:UIKeyboardDidShowNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillDisappear:) name:UIKeyboardWillHideNotification object:nil];
+}
+
+- (void) viewDidDisappear:(BOOL) animated {
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidShowNotification object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
 
 - (IBAction) cancelTouched:(id) sender {
@@ -398,6 +430,11 @@ static NSArray *MashStepTypes;
 	return YES;
 }
 
+- (BOOL)textFieldShouldBeginEditing:(UITextField *) textField {
+	edittedCell = (UITableViewCell *)[ViewUtils superViewOfView:textField withClass:[UITableViewCell class]];
+	return YES;
+}
+
 - (void)textFieldDidEndEditing:(UITextField *) textField {
 	UITableViewCell *cell = (UITableViewCell *)[ViewUtils superViewOfView:textField withClass:[UITableViewCell class]];
 	switch (cell.tag) {
@@ -407,6 +444,7 @@ static NSArray *MashStepTypes;
 
 	case kTableCellTagStartTemp:
 		self.startTemp = [floatFormatter numberFromString:textField.text];
+		self.endTemp = self.startTemp;
 		break;
 
 	case kTableCellTagEndTemp:

@@ -20,6 +20,8 @@
 
 @interface EditStepViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, SelectOneViewControllerDelegate, UITextFieldDelegate> {
 	UITableView *formTable;
+	float offsetForKeyboard;
+	UITableViewCell *edittedCell;
 	
 	NSManagedObject *mashStep;
 	SelectOneViewController *stepTypeSelector;

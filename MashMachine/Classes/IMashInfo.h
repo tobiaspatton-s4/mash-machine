@@ -18,6 +18,5 @@
 - (NSNumber *) mashTunThermalMass;
 - (NSNumber *) gristTemp;
 - (NSArray *) mashSteps;
-- (void) addStep: (MashStep *) step;
 
 @end

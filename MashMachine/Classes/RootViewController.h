@@ -12,7 +12,7 @@
 
 @class DetailViewController;
 
-@interface RootViewController : UITableViewController <NSFetchedResultsControllerDelegate> {
+@interface RootViewController : UITableViewController <NSFetchedResultsControllerDelegate, UITextFieldDelegate> {
     
     DetailViewController *detailViewController;
     
@@ -25,6 +25,5 @@
 @property (nonatomic, retain) NSFetchedResultsController *fetchedResultsController;
 @property (nonatomic, retain) NSManagedObjectContext *managedObjectContext;
 
-- (void)insertNewObject:(id)sender;
-
+- (IBAction) addProfileTouched: (id)sender;
 @end

@@ -12,7 +12,7 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="37"/>
+			<integer value="50"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -90,7 +90,7 @@
 							<object class="IBUINavigationItem" key="IBUINavigationItem" id="463972797">
 								<reference key="IBUINavigationBar"/>
 								<string key="IBUITitle">Root View Controller</string>
-								<object class="IBUIBarButtonItem" key="IBUILeftBarButtonItem" id="121168700">
+								<object class="IBUIBarButtonItem" key="IBUILeftBarButtonItem" id="664169398">
 									<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 									<int key="IBUIStyle">1</int>
 									<reference key="IBUINavigationItem" ref="463972797"/>
@@ -195,6 +195,14 @@
 					</object>
 					<int key="connectionID">48</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchEventConnection" key="connection">
+						<string key="label">addProfileTouched:</string>
+						<reference key="source" ref="172979946"/>
+						<reference key="destination" ref="641806676"/>
+					</object>
+					<int key="connectionID">53</int>
+				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<object class="NSArray" key="orderedObjects">
@@ -271,7 +279,7 @@
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<reference ref="172979946"/>
-							<reference ref="121168700"/>
+							<reference ref="664169398"/>
 						</object>
 						<reference key="parent" ref="641806676"/>
 					</object>
@@ -282,7 +290,7 @@
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">50</int>
-						<reference key="object" ref="121168700"/>
+						<reference key="object" ref="664169398"/>
 						<reference key="parent" ref="463972797"/>
 					</object>
 				</object>
@@ -317,7 +325,7 @@
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>MashMachineAppDelegate</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
-					<string>{{222, 266}, {1024, 768}}</string>
+					<string>{{461, 237}, {1024, 768}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>DetailViewController</string>
@@ -346,7 +354,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">50</int>
+			<int key="maxID">53</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -502,13 +510,13 @@
 					<string key="className">RootViewController</string>
 					<string key="superclassName">UITableViewController</string>
 					<object class="NSMutableDictionary" key="actions">
-						<string key="NS.key.0">insertNewObject:</string>
+						<string key="NS.key.0">addProfileTouched:</string>
 						<string key="NS.object.0">id</string>
 					</object>
 					<object class="NSMutableDictionary" key="actionInfosByName">
-						<string key="NS.key.0">insertNewObject:</string>
+						<string key="NS.key.0">addProfileTouched:</string>
 						<object class="IBActionInfo" key="NS.object.0">
-							<string key="name">insertNewObject:</string>
+							<string key="name">addProfileTouched:</string>
 							<string key="candidateClassName">id</string>
 						</object>
 					</object>

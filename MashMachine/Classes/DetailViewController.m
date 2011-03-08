@@ -94,10 +94,6 @@ enum {
 	}
 }
 
-- (void) addStep: (MashStep *) step {
-	
-}
-
 #pragma mark -
 #pragma mark Managing the detail item
 

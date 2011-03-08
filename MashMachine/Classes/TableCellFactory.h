@@ -22,6 +22,7 @@ enum {
 @class MashStepCell;
 @class EditableTextCell;
 @class EditableTextAndUnitsCell;
+@class MashProfileCell;
 
 @interface TableCellFactory : NSObject {
 	@private
@@ -29,14 +30,17 @@ enum {
 	UITableViewCell *editableTextCell;
 	UITableViewCell *editableTextAndUnitsCell;
 	UITableViewCell *mashStepCell;
+	UITableViewCell *mashProfileCell;
 }
 
 @property (nonatomic, retain) IBOutlet UITableViewCell *editableTextCell;
 @property (nonatomic, retain) IBOutlet UITableViewCell *editableTextAndUnitsCell;
 @property (nonatomic, retain) IBOutlet UITableViewCell *mashStepCell;
+@property (nonatomic, retain) IBOutlet UITableViewCell *mashProfileCell;
 
 + (EditableTextCell *) newEditableTextCell;
 + (EditableTextAndUnitsCell *) newEditableTextAndUnitsCell;
 + (MashStepCell *) newMashStepCell;
++ (MashProfileCell *) newMashProfileCell;
 
 @end

@@ -21,6 +21,7 @@
 @synthesize editableTextCell;
 @synthesize editableTextAndUnitsCell;
 @synthesize mashStepCell;
+@synthesize mashProfileCell;
 
 + (TableCellFactory *) Instance {
 	static TableCellFactory *sInstance = nil;
@@ -36,6 +37,7 @@
 	[editableTextCell release];	
 	[editableTextAndUnitsCell release];
 	[mashStepCell release];
+	[mashProfileCell release];
 	[super dealloc];
 }
 
@@ -64,6 +66,10 @@
 
 + (MashStepCell *) newMashStepCell {
 	return (MashStepCell *)[TableCellFactory newCellWithName: @"mashStepCell"];
+}
+
++ (MashProfileCell *) newMashProfileCell {
+	return (MashProfileCell *)[TableCellFactory newCellWithName: @"mashProfileCell"];
 }
 
 

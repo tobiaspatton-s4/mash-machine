@@ -31,6 +31,7 @@
 		F600C4271321A965009D00F5 /* EditableTextAndUnitsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F600C4261321A965009D00F5 /* EditableTextAndUnitsCell.m */; };
 		F600C6EA13257A31009D00F5 /* DetailsSectionHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = F600C6E913257A31009D00F5 /* DetailsSectionHeader.xib */; };
 		F600C799132583DE009D00F5 /* add_button_bkg.png in Resources */ = {isa = PBXBuildFile; fileRef = F600C798132583DE009D00F5 /* add_button_bkg.png */; };
+		F600CD891325A49F009D00F5 /* MashProfileCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F600CD881325A49F009D00F5 /* MashProfileCell.m */; };
 		F6C63F6513144B450028F1C9 /* DatabaseUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = F6C63F6413144B450028F1C9 /* DatabaseUtils.m */; };
 		F6C63F6D13144C080028F1C9 /* MashProfile.plist in Resources */ = {isa = PBXBuildFile; fileRef = F6C63F6C13144C080028F1C9 /* MashProfile.plist */; };
 		F6C63F94131451690028F1C9 /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = F6C63F93131451690028F1C9 /* Constants.m */; };
@@ -76,6 +77,8 @@
 		F600C4261321A965009D00F5 /* EditableTextAndUnitsCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditableTextAndUnitsCell.m; sourceTree = "<group>"; };
 		F600C6E913257A31009D00F5 /* DetailsSectionHeader.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DetailsSectionHeader.xib; sourceTree = "<group>"; };
 		F600C798132583DE009D00F5 /* add_button_bkg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = add_button_bkg.png; sourceTree = "<group>"; };
+		F600CD871325A49F009D00F5 /* MashProfileCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MashProfileCell.h; sourceTree = "<group>"; };
+		F600CD881325A49F009D00F5 /* MashProfileCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MashProfileCell.m; sourceTree = "<group>"; };
 		F6C63F6313144B450028F1C9 /* DatabaseUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DatabaseUtils.h; sourceTree = "<group>"; };
 		F6C63F6413144B450028F1C9 /* DatabaseUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DatabaseUtils.m; sourceTree = "<group>"; };
 		F6C63F6C13144C080028F1C9 /* MashProfile.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = MashProfile.plist; sourceTree = "<group>"; };
@@ -198,6 +201,8 @@
 				F600B384131EFF9A009D00F5 /* MashStepCell.m */,
 				F600C4251321A965009D00F5 /* EditableTextAndUnitsCell.h */,
 				F600C4261321A965009D00F5 /* EditableTextAndUnitsCell.m */,
+				F600CD871325A49F009D00F5 /* MashProfileCell.h */,
+				F600CD881325A49F009D00F5 /* MashProfileCell.m */,
 			);
 			name = "Table Cells";
 			sourceTree = "<group>";
@@ -304,6 +309,7 @@
 				F600BBE713217791009D00F5 /* EditableTextCell.m in Sources */,
 				F600BE2A13218215009D00F5 /* SelectOneViewController.m in Sources */,
 				F600C4271321A965009D00F5 /* EditableTextAndUnitsCell.m in Sources */,
+				F600CD891325A49F009D00F5 /* MashProfileCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

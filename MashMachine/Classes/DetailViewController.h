@@ -50,8 +50,6 @@
 @property (nonatomic, copy) NSNumber *mashTunThermalMass;
 @property (nonatomic, copy) NSNumber *gristTemp;
 
-- (void) addStep: (MashStep *) step;
-
 - (IBAction) addStepTouched: (id)sender;
 - (IBAction) editTouched: (id)sender;
 
