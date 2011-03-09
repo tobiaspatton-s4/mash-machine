@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 
 enum {
+	kUnitUnknown,
+	
 	// mass
 	kUnitGram,
 	kUnitKilogram,
@@ -20,7 +22,21 @@ enum {
 	kUnitLiter,
 	kUnitFluidOunce,
 	kUnitQuart,
-	kUnitGallon
+	kUnitGallon,
+	
+	// time
+	kUnitSecond,
+	kUnitMinute,
+	kUnitHour,
+	kUnitDay,
+	
+	// temperature
+	kUnitCelsius,
+	kUnitFahrenheit,
+	
+	// density
+	kUnitQuartsPerPound,
+	kUnitLitresPerKilogram
 };
 
 typedef int EConversionUnit;
@@ -35,7 +51,6 @@ typedef int EConversionUnit;
 
 @protocol IConverter<NSObject>
 
-@property (nonatomic, retain) NSNumber *conversionFactor;
 @property (assign) EConversionUnit cannonicalUnit;
 @property (assign) EConversionUnit displayUnit;
 
@@ -44,11 +59,7 @@ typedef int EConversionUnit;
 
 @end
 
-@interface Converter : NSObject<IConverter>
-{
-	EConversionUnit displayUnit;
-	EConversionUnit cannonicalUnit;
-	NSNumber *conversionFactor;
+@interface Converter : NSObject {	
 }
 
 + (id<IConverter>) converterFromCannonicalUnit: (EConversionUnit) cannonicalUnit toDisplayUnit: (EConversionUnit) displayUnit;

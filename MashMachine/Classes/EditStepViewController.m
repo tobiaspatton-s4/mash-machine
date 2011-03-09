@@ -15,6 +15,7 @@
 #import "EditableTextCell.h"
 #import "SelectOneViewController.h"
 #import "ViewUtils.h"
+#import "UnitConverter.h"
 
 enum {
 	kRowStepName = 0,
@@ -45,7 +46,6 @@ static NSArray *MashStepTypes;
 
 - (void) configureUI;
 - (UITableViewCell *) tableView:(UITableView *) tableView editableTextCellForRow:(int) row;
-- (UITableViewCell *) tableView:(UITableView *) tableView editableTextAndUnitCellForRow:(int) row;
 - (UITableViewCell *) tableView:(UITableView *) tableView itemSelectionCellForRow:(int) row;
 
 @end
@@ -58,13 +58,13 @@ static NSArray *MashStepTypes;
 @synthesize stepTypeSelector;
 @synthesize stepName;
 @synthesize startTemp;
-@synthesize floatFormatter;
 @synthesize endTemp;
 @synthesize restTime;
 @synthesize stepTime;
 @synthesize additionTemp;
 @synthesize decoctionThickness;
 @synthesize delegate;
+@synthesize mashInfo;
 
 + (void) initialize {
 	MashStepTypes = [[NSArray alloc] initWithObjects:@"Direct heat", @"Infusion", @"Decoction", nil];
@@ -136,14 +136,6 @@ static NSArray *MashStepTypes;
 	                                                                                        target:self
 	                                                                                        action:@selector(saveTouched:)] autorelease];
 
-	NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
-	[formatter setMaximumFractionDigits:1];
-	[formatter setMinimumFractionDigits:1];
-	[formatter setMinimumIntegerDigits:1];
-	[formatter setPaddingCharacter:@"0"];
-	self.floatFormatter = formatter;
-	[formatter release];
-
 	[self configureUI];
 }
 
@@ -180,17 +172,6 @@ static NSArray *MashStepTypes;
 
 - (void)viewDidUnload {
 	[super viewDidUnload];
-	self.mashStep = nil;
-	self.stepTypeSelector = nil;
-	self.formTable = nil;
-	self.stepName = nil;
-	self.startTemp = nil;
-	self.floatFormatter = nil;
-	self.endTemp = nil;
-	self.restTime = nil;
-	self.stepTime = nil;
-	self.additionTemp = nil;
-	self.decoctionThickness = nil;
 }
 
 - (void)dealloc {
@@ -199,7 +180,6 @@ static NSArray *MashStepTypes;
 	[formTable release];
 	[stepName release];
 	[startTemp release];
-	[floatFormatter release];
 	[endTemp release];
 	[restTime release];
 	[stepTime release];
@@ -266,51 +246,32 @@ static NSArray *MashStepTypes;
 		cell.textField.delegate = self;
 		break;
 
-	default:
-		break;
-	}
-	return cell;
-}
-
-- (UITableViewCell *) tableView:(UITableView *) tableView editableTextAndUnitCellForRow:(int) row {
-	NSString *const kEditableTextCell = @"EditableTextAndUnitsCell";
-	EditableTextAndUnitsCell *cell = (EditableTextAndUnitsCell *)[tableView dequeueReusableCellWithIdentifier:kEditableTextCell];
-
-	if (cell == nil) {
-		cell = [TableCellFactory newEditableTextAndUnitsCell];
-	}
-
-	switch (row) {
-	case kRowStartTemp:
-		cell.textLabel.text = @"Temperature at start:";
-		cell.tag = kTableCellTagStartTemp;
-		cell.textField.text = [floatFormatter stringFromNumber:startTemp];
-		cell.textField.delegate = self;
-		cell.unitsLabel.text = @"F";
-		break;
-
-	case kRowEndTemp:
-		cell.textLabel.text = @"Temperature at end:";
-		cell.tag = kTableCellTagEndTemp;
-		cell.textField.text = [floatFormatter stringFromNumber:endTemp];
-		cell.textField.delegate = self;
-		cell.unitsLabel.text = @"F";
-		break;
-
 	case kRowRestTime:
 		cell.textLabel.text = @"Rest time:";
 		cell.tag = kTableCellTagRestTime;
-		cell.textField.text = [floatFormatter stringFromNumber:restTime];
+		cell.textField.text = [mashInfo.timeFormatter stringFromNumber:restTime];
 		cell.textField.delegate = self;
-		cell.unitsLabel.text = @"min";
 		break;
 
 	case kRowStepTime:
 		cell.textLabel.text = @"Rise time:";
 		cell.tag = kTableCellTagStepTime;
-		cell.textField.text = [floatFormatter stringFromNumber:stepTime];
+		cell.textField.text = [mashInfo.timeFormatter stringFromNumber:stepTime];
 		cell.textField.delegate = self;
-		cell.unitsLabel.text = @"min";
+		break;
+
+	case kRowStartTemp:
+		cell.textLabel.text = @"Temperature at start:";
+		cell.tag = kTableCellTagStartTemp;
+		cell.textField.text = [mashInfo.tempFormatter stringFromNumber:startTemp];
+		cell.textField.delegate = self;
+		break;
+
+	case kRowEndTemp:
+		cell.textLabel.text = @"Temperature at end:";
+		cell.tag = kTableCellTagEndTemp;
+		cell.textField.text = [mashInfo.tempFormatter stringFromNumber:endTemp];
+		cell.textField.delegate = self;
 		break;
 
 	case kRowAdditionTemp:
@@ -321,17 +282,15 @@ static NSArray *MashStepTypes;
 			cell.textLabel.text = @"Decoction temperature:";
 		}
 		cell.tag = kTableCellTagAdditionTemp;
-		cell.textField.text = [floatFormatter stringFromNumber:additionTemp];
+		cell.textField.text = [mashInfo.tempFormatter stringFromNumber:additionTemp];
 		cell.textField.delegate = self;
-		cell.unitsLabel.text = @"F";
 		break;
 
 	case kRowDecoctThickness:
 		cell.textLabel.text = @"Decoction thickness:";
-		cell.tag = kTableCellTagStepTime;
-		cell.textField.text = [floatFormatter stringFromNumber:decoctionThickness];
+		cell.tag = kTableCellTagDecoctThickness;
+		cell.textField.text = [mashInfo.densityFormatter stringFromNumber:decoctionThickness];
 		cell.textField.delegate = self;
-		cell.unitsLabel.text = @"qt/lb";
 		break;
 
 	default:
@@ -366,20 +325,20 @@ static NSArray *MashStepTypes;
 	UITableViewCell *cell = nil;
 	switch (indexPath.row) {
 	case kRowStepName:
-		cell = [self tableView:tableView editableTextCellForRow:kRowStepName];
+	case kRowStepTime:
+	case kRowRestTime:
+	case kRowStartTemp:
+	case kRowEndTemp:
+	case kRowAdditionTemp:
+		cell = [self tableView:tableView editableTextCellForRow:indexPath.row];
 		break;
 
 	case kRowStepType:
 		cell = [self tableView:tableView itemSelectionCellForRow:kRowStepType];
 		break;
 
-	case kRowStartTemp:
-	case kRowEndTemp:
-	case kRowStepTime:
-	case kRowRestTime:
-	case kRowAdditionTemp:
 	case kRowDecoctThickness:
-		cell = [self tableView:tableView editableTextAndUnitCellForRow:indexPath.row];
+		cell = [self tableView:tableView editableTextCellForRow:indexPath.row];
 		break;
 
 	default:
@@ -443,28 +402,28 @@ static NSArray *MashStepTypes;
 		break;
 
 	case kTableCellTagStartTemp:
-		self.startTemp = [floatFormatter numberFromString:textField.text];
+		self.startTemp = [mashInfo.tempFormatter numberFromString:textField.text];
 		self.endTemp = self.startTemp;
 		break;
 
 	case kTableCellTagEndTemp:
-		self.endTemp = [floatFormatter numberFromString:textField.text];
+		self.endTemp = [mashInfo.tempFormatter numberFromString:textField.text];
 		break;
 
 	case kTableCellTagRestTime:
-		self.restTime = [floatFormatter numberFromString:textField.text];
+		self.restTime = [mashInfo.timeFormatter numberFromString:textField.text];
 		break;
 
 	case kTableCellTagStepTime:
-		self.stepTime = [floatFormatter numberFromString:textField.text];
+		self.stepTime = [mashInfo.timeFormatter numberFromString:textField.text];
 		break;
 
 	case kTableCellTagAdditionTemp:
-		self.additionTemp = [floatFormatter numberFromString:textField.text];
+		self.additionTemp = [mashInfo.tempFormatter numberFromString:textField.text];
 		break;
 
 	case kTableCellTagDecoctThickness:
-		self.decoctionThickness = [floatFormatter numberFromString:textField.text];
+		self.decoctionThickness = [mashInfo.densityFormatter numberFromString:textField.text];
 		break;
 
 	default:

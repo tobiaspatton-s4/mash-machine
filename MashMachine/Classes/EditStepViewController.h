@@ -8,9 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "SelectOneViewController.h"
+#import "IMashInfo.h"
 
 @class EditStepViewController;
 @class NSManagedObject;
+@class UnitNumberFormater;
 
 @protocol EditStepDelegate
 
@@ -25,7 +27,6 @@
 	
 	NSManagedObject *mashStep;
 	SelectOneViewController *stepTypeSelector;
-	NSNumberFormatter *floatFormatter;
 	
 	NSString *stepName;
 	int stepType;
@@ -37,6 +38,7 @@
 	NSNumber *decoctionThickness;
 	
 	id<EditStepDelegate> delegate;
+	id<IMashInfo> mashInfo;
 }
 
 @property (nonatomic, retain) IBOutlet UITableView *formTable;
@@ -49,8 +51,8 @@
 @property (nonatomic, copy) NSNumber *stepTime;
 @property (nonatomic, copy) NSNumber *additionTemp;
 @property (nonatomic, copy) NSNumber *decoctionThickness;
-@property (nonatomic, retain) NSNumberFormatter *floatFormatter;
 @property (nonatomic, assign) id<EditStepDelegate> delegate;
+@property (nonatomic, assign) id<IMashInfo> mashInfo;
 
 - (IBAction) cancelTouched: (id)sender;
 - (IBAction) saveTouched: (id)sender;

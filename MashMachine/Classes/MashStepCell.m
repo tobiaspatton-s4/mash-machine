@@ -33,7 +33,6 @@ const double kMashHeatCapacity = 0.4;
 
 @synthesize mashStep;
 @synthesize mashInfo;
-@synthesize floatFormatter;
 
 - (void) mashConditionsPriorToStepAtIndex:(int) index totalWaterVolume:(NSNumber **) outVolume mashTemp:(NSNumber **) outTemp {
 	// first infusion step has water volume set explicitly
@@ -82,9 +81,9 @@ const double kMashHeatCapacity = 0.4;
 		//	NSNumber *decoctThickness = [mashStep valueForKey:@"decoctThickness"];
 		NSNumber *decoctVolume = [NSNumber numberWithFloat:decoctMass / kPoundsPerQuartWater]; // [decoctThickness floatValue]];
 
-		return [NSString stringWithFormat:@"Decoct %@ qt and boil for %@ minutes",
-		        [floatFormatter stringFromNumber:decoctVolume],
-		        stepTime];
+		return [NSString stringWithFormat:@"Decoct %@ and boil for %@",
+		        [mashInfo.volumeFormatter stringFromNumber:decoctVolume],
+		        [mashInfo.timeFormatter stringFromNumber:stepTime]];
 	}
 	else {
 		return @"First step must be infusion.";
@@ -119,14 +118,14 @@ const double kMashHeatCapacity = 0.4;
 		infuseVolume = [NSNumber numberWithFloat:waterMass / kPoundsPerQuartWater];
 	}
 
-	return [NSString stringWithFormat:@"Add %@ qt of water at %@ F",
-	        [floatFormatter stringFromNumber:infuseVolume],
-	        [floatFormatter stringFromNumber:infuseTemp]];
+	return [NSString stringWithFormat:@"Add %@ of water at %@",
+	        [mashInfo.volumeFormatter stringFromNumber:infuseVolume],
+	        [mashInfo.tempFormatter stringFromNumber:infuseTemp]];
 }
 
 - (NSString *) textForHeatingStep {
-	return [NSString stringWithFormat:@"Heat to %@ F",
-	        [floatFormatter stringFromNumber:[mashStep valueForKey:@"restStartTemp"]]];
+	return [NSString stringWithFormat:@"Heat to %@",
+	        [mashInfo.tempFormatter stringFromNumber:[mashStep valueForKey:@"restStartTemp"]]];
 }
 
 - (void) setMashStep:(NSManagedObject *) value {
@@ -161,22 +160,8 @@ const double kMashHeatCapacity = 0.4;
 	return (UILabel *)[self viewWithTag:kTagTimeAndTempLabel];
 }
 
-- (id)initWithCoder:(NSCoder *) aDecoder {
-	if (self = [super initWithCoder:aDecoder]) {
-		NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
-		[formatter setMaximumFractionDigits:1];
-		[formatter setMinimumFractionDigits:1];
-		[formatter setMinimumIntegerDigits:1];
-		[formatter setPaddingCharacter:@"0"];
-		self.floatFormatter = formatter;
-		[formatter release];
-	}
-	return self;
-}
-
 - (void)dealloc {
 	[mashStep release];
-	[floatFormatter release];
 	[super dealloc];
 }
 

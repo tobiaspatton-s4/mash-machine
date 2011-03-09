@@ -22,7 +22,7 @@
 - (void)configureView;
 - (UITableViewCell *) getDetailsCellForRow:(int) row;
 - (UITableViewCell *) getStepCellForRow:(int) row;
-- (void) editStep: (NSManagedObject *)step;
+- (void) editStep:(NSManagedObject *) step;
 @end
 
 enum {
@@ -43,7 +43,8 @@ enum {
 	kRowGristTemp,
 	kRowWaterVolume,
 	kRowWaterGristRatio,
-	kRowMashTunThermalMass};
+	kRowMashTunThermalMass
+};
 
 @implementation DetailViewController
 
@@ -57,11 +58,15 @@ enum {
 @synthesize waterGristRatio;
 @synthesize waterVolume;
 @synthesize mashTunThermalMass;
-@synthesize floatFormatter;
+@synthesize volumeFormatter;
 @synthesize gristTemp;
 @synthesize toolbarTitle;
 @synthesize editButton;
 @synthesize weightFormatter;
+@synthesize densityFormatter;
+@synthesize tempFormatter;
+@synthesize timeFormatter;
+
 
 #pragma mark -
 #pragma mark Properties
@@ -196,22 +201,46 @@ enum {
 		self.waterVolume = [NSNumber numberWithFloat:15.0];
 		self.waterGristRatio = [NSNumber numberWithFloat:1.5];
 		self.gristTemp = [NSNumber numberWithFloat:60];
-
-		NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
-		[formatter setMaximumFractionDigits:1];
-		[formatter setMinimumFractionDigits:1];
-		[formatter setMinimumIntegerDigits:1];
-		[formatter setPaddingCharacter:@"0"];
-		self.floatFormatter = formatter;
-		[formatter release];
 		
-		UnitNumberFormater *wf = [[UnitNumberFormater alloc] initWithCannonicalUnit:kUnitKilogram andDisplayUnit:kUnitPound];
+		UnitNumberFormater *vf = [[UnitNumberFormater alloc] initWithCannonicalUnit:kUnitQuart andDisplayUnit:kUnitQuart];
+		[vf setMaximumFractionDigits:1];
+		[vf setMinimumFractionDigits:1];
+		[vf setMinimumIntegerDigits:1];
+		[vf setPaddingCharacter:@"0"];
+		self.volumeFormatter = vf;
+		[vf release];
+
+		UnitNumberFormater *wf = [[UnitNumberFormater alloc] initWithCannonicalUnit:kUnitPound andDisplayUnit:kUnitPound];
 		[wf setMaximumFractionDigits:1];
 		[wf setMinimumFractionDigits:1];
 		[wf setMinimumIntegerDigits:1];
 		[wf setPaddingCharacter:@"0"];
 		self.weightFormatter = wf;
 		[wf release];
+		
+		UnitNumberFormater *df = [[UnitNumberFormater alloc] initWithCannonicalUnit:kUnitQuartsPerPound andDisplayUnit:kUnitQuartsPerPound];
+		[df setMaximumFractionDigits:1];
+		[df setMinimumFractionDigits:1];
+		[df setMinimumIntegerDigits:1];
+		[df setPaddingCharacter:@"0"];
+		self.densityFormatter = df;
+		[df release];
+		
+		UnitNumberFormater *tf = [[UnitNumberFormater alloc] initWithCannonicalUnit:kUnitFahrenheit andDisplayUnit:kUnitFahrenheit];
+		[tf setMaximumFractionDigits:1];
+		[tf setMinimumFractionDigits:1];
+		[tf setMinimumIntegerDigits:1];
+		[tf setPaddingCharacter:@"0"];
+		self.tempFormatter = tf;
+		[tf release];
+		
+		UnitNumberFormater *timef = [[UnitNumberFormater alloc] initWithCannonicalUnit:kUnitMinute andDisplayUnit:kUnitMinute];
+		[timef setMaximumFractionDigits:1];
+		[timef setMinimumFractionDigits:1];
+		[timef setMinimumIntegerDigits:1];
+		[timef setPaddingCharacter:@"0"];
+		self.timeFormatter = timef;
+		[timef release];
 	}
 	return self;
 }
@@ -219,20 +248,15 @@ enum {
 - (void)viewDidUnload {
 	// Release any retained subviews of the main view.
 	// e.g. self.myOutlet = nil;
-	self.detailItem = nil;
-	self.mashSteps = nil;
 	self.toolbar = nil;
 	self.toolbarTitle = nil;
 	self.popoverController = nil;
 	self.mashStepsTable = nil;
-	self.gristWeight = nil;
-	self.waterVolume = nil;
-	self.waterGristRatio = nil;
-	self.mashTunThermalMass = nil;
-	self.floatFormatter = nil;
-	self.gristTemp = nil;
 	self.editButton = nil;
 	self.weightFormatter = nil;
+	self.densityFormatter = nil;
+	self.tempFormatter = nil;
+	self.timeFormatter = nil;
 }
 
 #pragma mark -
@@ -256,38 +280,41 @@ enum {
 	[waterVolume release];
 	[waterGristRatio release];
 	[mashTunThermalMass release];
-	[floatFormatter release];
+	[volumeFormatter release];
 	[gristTemp release];
 	[editButton release];
 	[weightFormatter release];
+	[densityFormatter release];
+	[tempFormatter release];
+	[timeFormatter release];
 
 	[super dealloc];
 }
 
-- (void) editStep: (NSManagedObject *)step {
+- (void) editStep:(NSManagedObject *) step {
 	EditStepViewController *controller = [[[EditStepViewController alloc] init] autorelease];
 	controller.mashStep = step;
 	controller.delegate = self;
-	
+	controller.mashInfo = self;
+
 	UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:controller];
 	navController.modalPresentationStyle = UIModalPresentationFormSheet;
 	navController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
 	[self presentModalViewController:navController animated:YES];
-	
 }
 
-- (IBAction) addStepTouched: (id)sender {
+- (IBAction) addStepTouched:(id) sender {
 	[self editStep:nil];
 }
 
-- (IBAction) editTouched: (id)sender {
+- (IBAction) editTouched:(id) sender {
 	self.editButton = (UIButton *)sender;
 	if (mashStepsTable.isEditing) {
-		[mashStepsTable setEditing:NO animated: YES];
+		[mashStepsTable setEditing:NO animated:YES];
 		[editButton setTitle:@"Edit" forState:UIControlStateNormal];
 	}
-	else {		
-		[mashStepsTable setEditing:YES animated: YES];
+	else {
+		[mashStepsTable setEditing:YES animated:YES];
 		[editButton setTitle:@"Done" forState:UIControlStateNormal];
 	}
 }
@@ -295,7 +322,7 @@ enum {
 #pragma mark -
 #pragma mark UITableViewDataSource methods
 
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *) tableView commitEditingStyle:(UITableViewCellEditingStyle) editingStyle forRowAtIndexPath:(NSIndexPath *) indexPath {
 	NSManagedObjectContext *context = [(MashMachineAppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
 	NSManagedObject *stepToDelete = [mashSteps objectAtIndex:indexPath.row];
 	[context deleteObject:stepToDelete];
@@ -347,49 +374,46 @@ enum {
 
 - (UITableViewCell *) getDetailsCellForRow:(int) row {
 	NSString *const kDetailsTableCellId = @"EditableTextAndUnitsCell";
-	EditableTextAndUnitsCell *cell = (EditableTextAndUnitsCell *)[mashStepsTable dequeueReusableCellWithIdentifier:kDetailsTableCellId];
+	EditableTextCell *cell = (EditableTextCell *)[mashStepsTable dequeueReusableCellWithIdentifier:kDetailsTableCellId];
 
 	if (cell == nil) {
-		cell = [TableCellFactory newEditableTextAndUnitsCell];
+		cell = [TableCellFactory newEditableTextCell];
 	}
 
 	cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
 	cell.textField.delegate = self;
 	cell.textField.keyboardType = UIKeyboardTypeNumberPad;
+	cell.textField.autocorrectionType = UITextAutocorrectionTypeNo;
+	
 	switch (row) {
 	case kRowGristWeight:
 		cell.textLabel.text = @"Grist weight:";
 		cell.textField.text = [weightFormatter stringFromNumber:gristWeight];
-		cell.unitsLabel.text = @"lb";
 		cell.tag = kEditableTextCellTagGristWeight;
 		break;
 
 	case kRowWaterGristRatio:
 		cell.textLabel.text = @"Water/grist ratio:";
-		cell.textField.text = [floatFormatter stringFromNumber:waterGristRatio];
-		cell.unitsLabel.text = @"qt/lb";
+		cell.textField.text = [densityFormatter stringFromNumber:waterGristRatio];
 		cell.tag = kEditableTextCellTagWaterGristRatio;
 		break;
 
 	case kRowWaterVolume:
 		cell.textLabel.text = @"Water volume:";
-		cell.textField.text = [floatFormatter stringFromNumber:waterVolume];
-		cell.unitsLabel.text = @"qt";
+		cell.textField.text = [volumeFormatter stringFromNumber:waterVolume];
 		cell.tag = kEditableTextCellTagWaterVolume;
 		break;
 
 	case kRowMashTunThermalMass:
 		cell.textLabel.text = @"Mash tun thermal mass:";
-		cell.textField.text = [floatFormatter stringFromNumber:mashTunThermalMass];
-		cell.unitsLabel.text = @"lb";
+		cell.textField.text = [weightFormatter stringFromNumber:mashTunThermalMass];
 		cell.tag = kEditableTextCellTagMashTunThermalMass;
 		break;
 
 	case kRowGristTemp:
 		cell.textLabel.text = @"Grist temperature:";
-		cell.textField.text = [floatFormatter stringFromNumber:gristTemp];
-		cell.unitsLabel.text = @"F";
+		cell.textField.text = [tempFormatter stringFromNumber:gristTemp];
 		cell.tag = kEditableTextCellTagGristTemp;
 		break;
 
@@ -434,34 +458,35 @@ enum {
 #pragma mark -
 #pragma mark UITableViewDelegate methods
 
-- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (UITableViewCellEditingStyle)tableView:(UITableView *) tableView editingStyleForRowAtIndexPath:(NSIndexPath *) indexPath {
 	switch (indexPath.section) {
-		case kSectionSteps:
-			return UITableViewCellEditingStyleDelete;
-			break;
-		default:
-			return UITableViewCellEditingStyleNone;
-			break;
+	case kSectionSteps:
+		return UITableViewCellEditingStyleDelete;
+		break;
+
+	default:
+		return UITableViewCellEditingStyleNone;
+		break;
 	}
 }
 
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+- (UIView *)tableView:(UITableView *) tableView viewForHeaderInSection:(NSInteger) section {
 	if (section == 0) {
 		return nil;
 	}
-	
-	NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"DetailsSectionHeader" owner:self options:nil];	
-	[self.editButton setTitle: mashStepsTable.isEditing ? @"Done" : @"Edit" forState:UIControlStateNormal];
-	return [nib objectAtIndex:0];	
+
+	NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"DetailsSectionHeader" owner:self options:nil];
+	[self.editButton setTitle:mashStepsTable.isEditing ? @"Done":@"Edit" forState:UIControlStateNormal];
+	return [nib objectAtIndex:0];
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+- (CGFloat)tableView:(UITableView *) tableView heightForHeaderInSection:(NSInteger) section {
 	return 60;
 }
 
 - (CGFloat)tableView:(UITableView *) tableView heightForRowAtIndexPath:(NSIndexPath *) indexPath {
 	switch (indexPath.section) {
-	case kSectionDetails:
+	case kSectionDetails :
 		return 44;
 		break;
 
@@ -475,7 +500,7 @@ enum {
 	}
 }
 
-- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *) tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *) indexPath {
 	[self editStep:[mashSteps objectAtIndex:indexPath.row]];
 }
 
@@ -484,38 +509,35 @@ enum {
 
 - (void)textFieldDidEndEditing:(UITextField *) textField {
 	UITableViewCell *cell = (UITableViewCell *)[ViewUtils superViewOfView:textField withClass:[UITableViewCell class]];
-	NSNumber *value = [floatFormatter numberFromString:textField.text];
 
-	if (value != nil) {
-		switch (cell.tag) {
-			case kEditableTextCellTagGristWeight:
-				self.gristWeight = value;
-				break;
+	switch (cell.tag) {
+	case kEditableTextCellTagGristWeight:
+		self.gristWeight = [weightFormatter numberFromString:textField.text];
+		break;
 
-			case kEditableTextCellTagWaterGristRatio:
-				self.waterGristRatio = value;
-				break;
+	case kEditableTextCellTagWaterGristRatio:
+		self.waterGristRatio = [densityFormatter numberFromString:textField.text];
+		break;
 
-			case kEditableTextCellTagWaterVolume:
-				self.waterVolume = value;
-				break;
+	case kEditableTextCellTagWaterVolume:
+		self.waterVolume = [volumeFormatter numberFromString:textField.text];
+		break;
 
-			case kEditableTextCellTagMashTunThermalMass:
-				self.mashTunThermalMass = value;
-				break;
+	case kEditableTextCellTagMashTunThermalMass:
+		self.mashTunThermalMass = [weightFormatter numberFromString:textField.text];;
+		break;
 
-			case kEditableTextCellTagGristTemp:
-				self.gristTemp = value;
-				break;
+	case kEditableTextCellTagGristTemp:
+		self.gristTemp = [tempFormatter numberFromString:textField.text];
+		break;
 
-			default:
-				break;
-		}
+	default:
+		break;
 	}
 	[mashStepsTable reloadData];
 }
 
-- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+- (BOOL)textFieldShouldReturn:(UITextField *) textField {
 	[textField resignFirstResponder];
 	return YES;
 }
@@ -523,33 +545,35 @@ enum {
 #pragma mark -
 #pragma mark EditStepDelegate methods
 
-- (void) editStepViewController: (EditStepViewController *)controller didFinishEditing: (NSManagedObject *) step {
+- (void) editStepViewController:(EditStepViewController *) controller didFinishEditing:(NSManagedObject *) step {
 	NSManagedObjectContext *context = [(MashMachineAppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
 	if (step == nil) {
 		step = [NSEntityDescription insertNewObjectForEntityForName:@"MashStep" inManagedObjectContext:context];
 		[step setValue:[NSNumber numberWithInt:[mashSteps count]] forKey:@"stepOrder"];
 		[step setValue:detailItem forKey:@"profile"];
 	}
-	
+
 	[step setValue:controller.stepName forKey:@"name"];
 	[step setValue:[NSNumber numberWithInt:controller.stepType] forKey:@"type"];
 	[step setValue:controller.startTemp forKey:@"restStartTemp"];
 	[step setValue:controller.endTemp forKey:@"restStopTemp"];
 	[step setValue:controller.restTime forKey:@"restTime"];
 	[step setValue:controller.stepTime forKey:@"stepTime"];
-	
+
 	switch (controller.stepType) {
-		case kMashStepTypeInfusion:
-			[step setValue:controller.additionTemp forKey:@"infuseTemp"];
-			break;
-		case kMashStepTypeDecoction:
-			[step setValue:controller.additionTemp forKey:@"decoctTemp"];
-			[step setValue:controller.decoctionThickness forKey:@"decoctThickness"];
-			break;
-		default:
-			break;
+	case kMashStepTypeInfusion:
+		[step setValue:controller.additionTemp forKey:@"infuseTemp"];
+		break;
+
+	case kMashStepTypeDecoction:
+		[step setValue:controller.additionTemp forKey:@"decoctTemp"];
+		[step setValue:controller.decoctionThickness forKey:@"decoctThickness"];
+		break;
+
+	default:
+		break;
 	}
-	
+
 	[context save:nil];
 	[self configureView];
 }

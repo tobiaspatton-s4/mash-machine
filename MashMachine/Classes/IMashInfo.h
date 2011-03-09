@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @class MashStep;
+@class UnitNumberFormater;
 
 @protocol IMashInfo
 
@@ -18,5 +19,11 @@
 - (NSNumber *) mashTunThermalMass;
 - (NSNumber *) gristTemp;
 - (NSArray *) mashSteps;
+
+- (UnitNumberFormater *) weightFormatter;
+- (UnitNumberFormater *) volumeFormatter;
+- (UnitNumberFormater *) densityFormatter;
+- (UnitNumberFormater *) tempFormatter;
+- (UnitNumberFormater *) timeFormatter;
 
 @end

@@ -26,8 +26,11 @@
     NSManagedObject *detailItem;
 	NSArray *mashSteps;
 	
-	NSNumberFormatter *floatFormatter;
 	UnitNumberFormater *weightFormatter;
+	UnitNumberFormater *volumeFormatter;
+	UnitNumberFormater *densityFormatter;
+	UnitNumberFormater *tempFormatter;
+	UnitNumberFormater *timeFormatter;
 	
 	NSNumber *gristWeight;
 	NSNumber *waterGristRatio;
@@ -44,8 +47,11 @@
 @property (nonatomic, retain) IBOutlet UITableView *mashStepsTable;
 @property (nonatomic, retain) IBOutlet UIButton *editButton;
 
-@property (nonatomic, retain) NSNumberFormatter *floatFormatter;
 @property (nonatomic, retain) UnitNumberFormater *weightFormatter;
+@property (nonatomic, retain) UnitNumberFormater *volumeFormatter;
+@property (nonatomic, retain) UnitNumberFormater *densityFormatter;
+@property (nonatomic, retain) UnitNumberFormater *tempFormatter;
+@property (nonatomic, retain) UnitNumberFormater *timeFormatter;
 
 @property (nonatomic, copy) NSNumber *gristWeight;
 @property (nonatomic, copy) NSNumber *waterGristRatio;

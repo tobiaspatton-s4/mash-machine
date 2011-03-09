@@ -15,12 +15,10 @@
 	@private
 	NSManagedObject *mashStep;
 	id<IMashInfo> mashInfo;
-	NSNumberFormatter *floatFormatter;
 }
 
 @property (readonly) UILabel *timeAndTempLabel;
 @property (nonatomic, retain) NSManagedObject *mashStep;
 @property (nonatomic, assign) id<IMashInfo> mashInfo;
-@property (nonatomic, retain) NSNumberFormatter *floatFormatter;
 
 @end

@@ -201,14 +201,14 @@
 		F600BBE21321776C009D00F5 /* Table Cells */ = {
 			isa = PBXGroup;
 			children = (
-				F600BBE513217791009D00F5 /* EditableTextCell.h */,
-				F600BBE613217791009D00F5 /* EditableTextCell.m */,
-				F600B383131EFF9A009D00F5 /* MashStepCell.h */,
-				F600B384131EFF9A009D00F5 /* MashStepCell.m */,
 				F600C4251321A965009D00F5 /* EditableTextAndUnitsCell.h */,
 				F600C4261321A965009D00F5 /* EditableTextAndUnitsCell.m */,
+				F600BBE513217791009D00F5 /* EditableTextCell.h */,
+				F600BBE613217791009D00F5 /* EditableTextCell.m */,
 				F600CD871325A49F009D00F5 /* MashProfileCell.h */,
 				F600CD881325A49F009D00F5 /* MashProfileCell.m */,
+				F600B383131EFF9A009D00F5 /* MashStepCell.h */,
+				F600B384131EFF9A009D00F5 /* MashStepCell.m */,
 			);
 			name = "Table Cells";
 			sourceTree = "<group>";
