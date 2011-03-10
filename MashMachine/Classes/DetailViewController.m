@@ -23,6 +23,8 @@
 - (UITableViewCell *) getDetailsCellForRow:(int) row;
 - (UITableViewCell *) getStepCellForRow:(int) row;
 - (void) editStep:(NSManagedObject *) step;
+- (void) createUnitFormatters;
+- (void) userDefaultsDidChange: (NSNotification *) aNotification;
 @end
 
 enum {
@@ -166,33 +168,10 @@ enum {
 #pragma mark -
 #pragma mark View lifecycle
 
-/*
-   // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
-   - (void)viewDidLoad {
-    [super viewDidLoad];
-   }
- */
-
-/*
-   - (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-   }
- */
-/*
-   - (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-   }
- */
-/*
-   - (void)viewWillDisappear:(BOOL)animated {
-        [super viewWillDisappear:animated];
-   }
- */
-/*
-   - (void)viewDidDisappear:(BOOL)animated {
-        [super viewDidDisappear:animated];
-   }
- */
+- (void) userDefaultsDidChange: (NSNotification *) aNotification {
+	[self createUnitFormatters];
+	[mashStepsTable reloadData];
+}
 
 - (id) initWithCoder:(NSCoder *) aDecoder {
 	if (self = [super initWithCoder:aDecoder]) {
@@ -202,47 +181,64 @@ enum {
 		self.waterGristRatio = [NSNumber numberWithFloat:1.5];
 		self.gristTemp = [NSNumber numberWithFloat:60];
 		
-		UnitNumberFormater *vf = [[UnitNumberFormater alloc] initWithCannonicalUnit:kUnitQuart andDisplayUnit:kUnitQuart];
-		[vf setMaximumFractionDigits:1];
-		[vf setMinimumFractionDigits:1];
-		[vf setMinimumIntegerDigits:1];
-		[vf setPaddingCharacter:@"0"];
-		self.volumeFormatter = vf;
-		[vf release];
-
-		UnitNumberFormater *wf = [[UnitNumberFormater alloc] initWithCannonicalUnit:kUnitPound andDisplayUnit:kUnitPound];
-		[wf setMaximumFractionDigits:1];
-		[wf setMinimumFractionDigits:1];
-		[wf setMinimumIntegerDigits:1];
-		[wf setPaddingCharacter:@"0"];
-		self.weightFormatter = wf;
-		[wf release];
-		
-		UnitNumberFormater *df = [[UnitNumberFormater alloc] initWithCannonicalUnit:kUnitQuartsPerPound andDisplayUnit:kUnitQuartsPerPound];
-		[df setMaximumFractionDigits:1];
-		[df setMinimumFractionDigits:1];
-		[df setMinimumIntegerDigits:1];
-		[df setPaddingCharacter:@"0"];
-		self.densityFormatter = df;
-		[df release];
-		
-		UnitNumberFormater *tf = [[UnitNumberFormater alloc] initWithCannonicalUnit:kUnitFahrenheit andDisplayUnit:kUnitFahrenheit];
-		[tf setMaximumFractionDigits:1];
-		[tf setMinimumFractionDigits:1];
-		[tf setMinimumIntegerDigits:1];
-		[tf setPaddingCharacter:@"0"];
-		self.tempFormatter = tf;
-		[tf release];
-		
-		UnitNumberFormater *timef = [[UnitNumberFormater alloc] initWithCannonicalUnit:kUnitMinute andDisplayUnit:kUnitMinute];
-		[timef setMaximumFractionDigits:1];
-		[timef setMinimumFractionDigits:1];
-		[timef setMinimumIntegerDigits:1];
-		[timef setPaddingCharacter:@"0"];
-		self.timeFormatter = timef;
-		[timef release];
+		[[NSNotificationCenter defaultCenter] addObserver:self 
+												 selector:@selector(userDefaultsDidChange:) 
+													 name:NSUserDefaultsDidChangeNotification 
+												   object:nil];
 	}
 	return self;
+}
+
+- (void) createUnitFormatters {
+	NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+	
+	UnitNumberFormater *vf = [[UnitNumberFormater alloc] initWithCannonicalUnit:kUnitQuart 
+																 andDisplayUnit:[[prefs valueForKey:@"prefUnitsVolume"] intValue]];
+	[vf setMaximumFractionDigits:1];
+	[vf setMinimumFractionDigits:1];
+	[vf setMinimumIntegerDigits:1];
+	[vf setPaddingCharacter:@"0"];
+	self.volumeFormatter = vf;
+	[vf release];
+	
+	UnitNumberFormater *wf = [[UnitNumberFormater alloc] initWithCannonicalUnit:kUnitPound 
+																 andDisplayUnit:[[prefs valueForKey:@"prefUnitsWeight"] intValue]];
+	[wf setMaximumFractionDigits:1];
+	[wf setMinimumFractionDigits:1];
+	[wf setMinimumIntegerDigits:1];
+	[wf setPaddingCharacter:@"0"];
+	self.weightFormatter = wf;
+	[wf release];
+	
+	UnitNumberFormater *df = [[UnitNumberFormater alloc] initWithCannonicalUnit:kUnitQuartsPerPound 
+																 andDisplayUnit:[[prefs valueForKey:@"prefUnitsDensity"] intValue]];
+	[df setMaximumFractionDigits:1];
+	[df setMinimumFractionDigits:1];
+	[df setMinimumIntegerDigits:1];
+	[df setPaddingCharacter:@"0"];
+	self.densityFormatter = df;
+	[df release];
+	
+	UnitNumberFormater *tf = [[UnitNumberFormater alloc] initWithCannonicalUnit:kUnitFahrenheit 
+																 andDisplayUnit:[[prefs valueForKey:@"prefUnitsTemperature"] intValue]];
+	[tf setMaximumFractionDigits:1];
+	[tf setMinimumFractionDigits:1];
+	[tf setMinimumIntegerDigits:1];
+	[tf setPaddingCharacter:@"0"];
+	self.tempFormatter = tf;
+	[tf release];
+	
+	UnitNumberFormater *timef = [[UnitNumberFormater alloc] initWithCannonicalUnit:kUnitMinute andDisplayUnit:kUnitMinute];
+	[timef setMaximumFractionDigits:1];
+	[timef setMinimumFractionDigits:1];
+	[timef setMinimumIntegerDigits:1];
+	[timef setPaddingCharacter:@"0"];
+	self.timeFormatter = timef;
+	[timef release];	
+}
+
+- (void) viewDidLoad {	
+	[self createUnitFormatters];
 }
 
 - (void)viewDidUnload {

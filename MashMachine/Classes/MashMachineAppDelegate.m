@@ -12,6 +12,7 @@
 #import "RootViewController.h"
 #import "DetailViewController.h"
 #import "DatabaseUtils.h"
+#import "UnitConverter.h"
 
 @interface MashMachineAppDelegate ()
 
@@ -85,7 +86,16 @@
     
     // Override point for customization after app launch.
 	[self installDefaultDataIfNeeded];
-    
+	
+	NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+	[prefs registerDefaults: [NSDictionary dictionaryWithObjectsAndKeys:
+							  [NSNumber numberWithInt:kUnitQuart], @"prefUnitsVolume",
+							  [NSNumber numberWithInt:kUnitPound], @"prefUnitsWeight",
+							  [NSNumber numberWithInt:kUnitFahrenheit], @"prefUnitsTemperature",
+							  [NSNumber numberWithInt:kUnitQuartsPerPound], @"prefUnitsDensity",
+							  nil]];
+    [prefs synchronize];
+	
 	// Add the split view controller's view to the window and display.
 	[self.window addSubview:splitViewController.view];
     [self.window makeKeyAndVisible];

@@ -9,34 +9,34 @@
 #import <Foundation/Foundation.h>
 
 enum {
-	kUnitUnknown,
+	kUnitUnknown = 0,
 	
 	// mass
-	kUnitGram,
-	kUnitKilogram,
-	kUnitPound,
-	kUnitOunce,
+	kUnitGram = 1,
+	kUnitKilogram = 2,
+	kUnitPound = 3,
+	kUnitOunce = 4,
 	
 	// volume
-	kUnitMilliliter,
-	kUnitLiter,
-	kUnitFluidOunce,
-	kUnitQuart,
-	kUnitGallon,
+	kUnitMilliliter = 5,
+	kUnitLiter = 6,
+	kUnitFluidOunce = 7,
+	kUnitQuart = 8,
+	kUnitGallon = 9,
 	
 	// time
-	kUnitSecond,
-	kUnitMinute,
-	kUnitHour,
-	kUnitDay,
+	kUnitSecond = 10,
+	kUnitMinute = 11,
+	kUnitHour = 12,
+	kUnitDay = 13,
 	
 	// temperature
-	kUnitCelsius,
-	kUnitFahrenheit,
+	kUnitCelsius = 14,
+	kUnitFahrenheit = 15,
 	
 	// density
-	kUnitQuartsPerPound,
-	kUnitLitresPerKilogram
+	kUnitQuartsPerPound = 16,
+	kUnitLitresPerKilogram = 17
 };
 
 typedef int EConversionUnit;

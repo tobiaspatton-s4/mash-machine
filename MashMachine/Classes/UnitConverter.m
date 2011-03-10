@@ -247,7 +247,7 @@ typedef NSNumber *(^ConversionBlockType)(NSNumber *);
 	                         // from Farhenheit
 	                         [NSDictionary dictionaryWithObjectsAndKeys:
 	                          ^NSNumber * (NSNumber * value) {
-	                                  return [NSNumber numberWithFloat:(5.0f / 9.0f) * [value floatValue] - 32];
+	                                  return [NSNumber numberWithFloat:(5.0f / 9.0f) * ([value floatValue] - 32)];
 				  }, [NSNumber numberWithInt:kUnitCelsius],
 	                          nil],
 	                         [NSNumber numberWithInt:kUnitFahrenheit],
@@ -349,7 +349,7 @@ typedef NSNumber *(^ConversionBlockType)(NSNumber *);
 	sscanf(cstr, "%*f%10s", s); //todo: check result and create error message if required
 
 	if (strlen(s) == 0) {
-		stringWithoutUnits = [string copy];
+		stringWithoutUnits = string;
 		fromUnit = self.unitConverter.displayUnit;
 	}
 	else {

@@ -36,6 +36,7 @@
 		F6C63F6D13144C080028F1C9 /* MashProfile.plist in Resources */ = {isa = PBXBuildFile; fileRef = F6C63F6C13144C080028F1C9 /* MashProfile.plist */; };
 		F6C63F94131451690028F1C9 /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = F6C63F93131451690028F1C9 /* Constants.m */; };
 		F6EDAAD41326A95E0000D24E /* UnitConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = F6EDAAD31326A95E0000D24E /* UnitConverter.m */; };
+		F6F2799F13284F8600845E67 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F6F2799E13284F8600845E67 /* Settings.bundle */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -88,6 +89,7 @@
 		F6EDAAD21326A95E0000D24E /* UnitConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnitConverter.h; sourceTree = "<group>"; };
 		F6EDAAD31326A95E0000D24E /* UnitConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UnitConverter.m; sourceTree = "<group>"; };
 		F6EDAB5F1326B2D60000D24E /* UnitTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "UnitTests-Info.plist"; sourceTree = "<group>"; };
+		F6F2799E13284F8600845E67 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -175,6 +177,7 @@
 				F6C63F6C13144C080028F1C9 /* MashProfile.plist */,
 				F600BE2913218215009D00F5 /* SelectOneViewController.xib */,
 				F600B12B131E585F009D00F5 /* TableViewCells.xib */,
+				F6F2799E13284F8600845E67 /* Settings.bundle */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -299,6 +302,7 @@
 				F600BE2B13218215009D00F5 /* SelectOneViewController.xib in Resources */,
 				F600C6EA13257A31009D00F5 /* DetailsSectionHeader.xib in Resources */,
 				F600C799132583DE009D00F5 /* add_button_bkg.png in Resources */,
+				F6F2799F13284F8600845E67 /* Settings.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
