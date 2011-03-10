@@ -47,6 +47,7 @@ static NSArray *MashStepTypes;
 - (void) configureUI;
 - (UITableViewCell *) tableView:(UITableView *) tableView editableTextCellForRow:(int) row;
 - (UITableViewCell *) tableView:(UITableView *) tableView itemSelectionCellForRow:(int) row;
+- (void) userDefaultsDidChange: (NSNotification *) aNotification;
 
 @end
 
@@ -135,6 +136,11 @@ static NSArray *MashStepTypes;
 	self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave
 	                                                                                        target:self
 	                                                                                        action:@selector(saveTouched:)] autorelease];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self 
+											 selector:@selector(userDefaultsDidChange:) 
+												 name:NSUserDefaultsDidChangeNotification 
+											   object:nil];	
 
 	[self configureUI];
 }
@@ -168,6 +174,16 @@ static NSArray *MashStepTypes;
 	[super didReceiveMemoryWarning];
 
 	// Release any cached data, images, etc. that aren't in use.
+}
+
+- (void) userDefaultsDidChange: (NSNotification *) aNotification {
+	// The IMashInfo object owns the unit number formatters. We rely on it to notice that the defaults have
+	// changed, and to update the formatters. Since the order in which observers are messaged is undefined,
+	// we can't rely on on the IMashInfo object to be messaged before this object. Hence, we call reloadData
+	// after a small delay.
+	//[formTable reloadData];
+	
+	[formTable performSelector:@selector(reloadData) withObject:nil afterDelay:0.1];
 }
 
 - (void)viewDidUnload {
