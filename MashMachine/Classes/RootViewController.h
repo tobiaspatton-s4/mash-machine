@@ -18,12 +18,15 @@
     
     NSFetchedResultsController *fetchedResultsController;
     NSManagedObjectContext *managedObjectContext;
+	
+	NSManagedObjectID *addedObjectId; 
 }
 
 @property (nonatomic, retain) IBOutlet DetailViewController *detailViewController;
 
 @property (nonatomic, retain) NSFetchedResultsController *fetchedResultsController;
 @property (nonatomic, retain) NSManagedObjectContext *managedObjectContext;
+@property (nonatomic, retain) NSManagedObjectID *addedObjectId; 
 
 - (IBAction) addProfileTouched: (id)sender;
 @end

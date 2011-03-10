@@ -11,6 +11,7 @@
 #import "TableCellFactory.h"
 #import "MashProfileCell.h"
 #import "ViewUtils.h"
+#import "MashMachineAppDelegate.h"
 
 /*
  This template does not ensure user interface consistency during editing operations in the table view. You must implement appropriate methods to provide the user experience you require.
@@ -20,13 +21,34 @@
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
 @end
 
-
-
 @implementation RootViewController
 
-@synthesize detailViewController, fetchedResultsController, managedObjectContext;
+@synthesize detailViewController, fetchedResultsController, managedObjectContext, addedObjectId;
 
 - (IBAction) addProfileTouched: (id)sender {
+	NSManagedObjectContext *context = [(MashMachineAppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+	NSManagedObject *profile = [NSEntityDescription insertNewObjectForEntityForName:@"MashProfile" inManagedObjectContext:context];	
+	
+	[profile setValue:@"New Profile" forKey:@"name"];
+	[profile setValue:NO forKey:@"builtIn"];
+	[profile setValue:[NSDate date] forKey:@"creationDate"];
+	[profile setValue:[NSDate date] forKey:@"modificationDate"];
+	
+	NSError *error = nil;
+	[context save:&error];
+	
+	self.addedObjectId = profile.objectID;
+	[self.fetchedResultsController performFetch:nil];
+	
+	for (int i = 0; i <[[self.fetchedResultsController fetchedObjects] count]; i++) {
+		NSIndexPath *indexPath = [NSIndexPath indexPathForRow:i inSection:0];
+		NSManagedObject *mo = [self.fetchedResultsController objectAtIndexPath:indexPath];
+		if (mo.objectID == profile.objectID) {
+			[[[self editButtonItem] target] performSelector:[[self editButtonItem] action]];
+			MashProfileCell *cell = (MashProfileCell *)[self.tableView cellForRowAtIndexPath:indexPath];
+			[cell.textField becomeFirstResponder];
+		}
+	}
 }
 
 #pragma mark -
@@ -289,6 +311,7 @@
     [detailViewController release];
     [fetchedResultsController release];
     [managedObjectContext release];
+	[addedObjectId release];
     
     [super dealloc];
 }
