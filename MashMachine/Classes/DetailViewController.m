@@ -16,15 +16,17 @@
 #import "MashMachineAppDelegate.h"
 #import "Constants.h"
 #import "UnitConverter.h"
+#import "MashPlotCell.h"
 
 @interface DetailViewController ()
 @property (nonatomic, retain) UIPopoverController *popoverController;
 - (void)configureView;
 - (UITableViewCell *) getDetailsCellForRow:(int) row;
 - (UITableViewCell *) getStepCellForRow:(int) row;
+- (UITableViewCell *) getPlotCell;
 - (void) editStep:(NSManagedObject *) step;
 - (void) createUnitFormatters;
-- (void) userDefaultsDidChange: (NSNotification *) aNotification;
+- (void) userDefaultsDidChange:(NSNotification *) aNotification;
 @end
 
 enum {
@@ -37,7 +39,8 @@ enum {
 
 enum {
 	kSectionDetails,
-	kSectionSteps
+	kSectionSteps,
+	kSectionVisualization
 };
 
 enum {
@@ -45,7 +48,8 @@ enum {
 	kRowGristTemp,
 	kRowWaterVolume,
 	kRowWaterGristRatio,
-	kRowMashTunThermalMass
+	kRowMashTunThermalMass,
+	kRowMashPlot
 };
 
 @implementation DetailViewController
@@ -168,7 +172,7 @@ enum {
 #pragma mark -
 #pragma mark View lifecycle
 
-- (void) userDefaultsDidChange: (NSNotification *) aNotification {
+- (void) userDefaultsDidChange:(NSNotification *) aNotification {
 	[self createUnitFormatters];
 	[mashStepsTable reloadData];
 }
@@ -180,64 +184,64 @@ enum {
 		self.waterVolume = [NSNumber numberWithFloat:15.0];
 		self.waterGristRatio = [NSNumber numberWithFloat:1.5];
 		self.gristTemp = [NSNumber numberWithFloat:60];
-		
-		[[NSNotificationCenter defaultCenter] addObserver:self 
-												 selector:@selector(userDefaultsDidChange:) 
-													 name:NSUserDefaultsDidChangeNotification 
-												   object:nil];
+
+		[[NSNotificationCenter defaultCenter] addObserver:self
+		                                         selector:@selector(userDefaultsDidChange:)
+		                                             name:NSUserDefaultsDidChangeNotification
+		                                           object:nil];
 	}
 	return self;
 }
 
 - (void) createUnitFormatters {
 	NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-	
-	UnitNumberFormater *vf = [[UnitNumberFormater alloc] initWithCannonicalUnit:kUnitQuart 
-																 andDisplayUnit:[[prefs valueForKey:@"prefUnitsVolume"] intValue]];
+
+	UnitNumberFormater *vf = [[UnitNumberFormater alloc] initWithCannonicalUnit:kUnitQuart
+	                                                             andDisplayUnit:[[prefs valueForKey:@"prefUnitsVolume"] intValue]];
 	[vf setMaximumFractionDigits:1];
 	[vf setMinimumFractionDigits:1];
 	[vf setMinimumIntegerDigits:1];
 	[vf setPaddingCharacter:@"0"];
 	self.volumeFormatter = vf;
 	[vf release];
-	
-	UnitNumberFormater *wf = [[UnitNumberFormater alloc] initWithCannonicalUnit:kUnitPound 
-																 andDisplayUnit:[[prefs valueForKey:@"prefUnitsWeight"] intValue]];
+
+	UnitNumberFormater *wf = [[UnitNumberFormater alloc] initWithCannonicalUnit:kUnitPound
+	                                                             andDisplayUnit:[[prefs valueForKey:@"prefUnitsWeight"] intValue]];
 	[wf setMaximumFractionDigits:1];
 	[wf setMinimumFractionDigits:1];
 	[wf setMinimumIntegerDigits:1];
 	[wf setPaddingCharacter:@"0"];
 	self.weightFormatter = wf;
 	[wf release];
-	
-	UnitNumberFormater *df = [[UnitNumberFormater alloc] initWithCannonicalUnit:kUnitQuartsPerPound 
-																 andDisplayUnit:[[prefs valueForKey:@"prefUnitsDensity"] intValue]];
+
+	UnitNumberFormater *df = [[UnitNumberFormater alloc] initWithCannonicalUnit:kUnitQuartsPerPound
+	                                                             andDisplayUnit:[[prefs valueForKey:@"prefUnitsDensity"] intValue]];
 	[df setMaximumFractionDigits:1];
 	[df setMinimumFractionDigits:1];
 	[df setMinimumIntegerDigits:1];
 	[df setPaddingCharacter:@"0"];
 	self.densityFormatter = df;
 	[df release];
-	
-	UnitNumberFormater *tf = [[UnitNumberFormater alloc] initWithCannonicalUnit:kUnitFahrenheit 
-																 andDisplayUnit:[[prefs valueForKey:@"prefUnitsTemperature"] intValue]];
+
+	UnitNumberFormater *tf = [[UnitNumberFormater alloc] initWithCannonicalUnit:kUnitFahrenheit
+	                                                             andDisplayUnit:[[prefs valueForKey:@"prefUnitsTemperature"] intValue]];
 	[tf setMaximumFractionDigits:1];
 	[tf setMinimumFractionDigits:1];
 	[tf setMinimumIntegerDigits:1];
 	[tf setPaddingCharacter:@"0"];
 	self.tempFormatter = tf;
 	[tf release];
-	
+
 	UnitNumberFormater *timef = [[UnitNumberFormater alloc] initWithCannonicalUnit:kUnitMinute andDisplayUnit:kUnitMinute];
 	[timef setMaximumFractionDigits:1];
 	[timef setMinimumFractionDigits:1];
 	[timef setMinimumIntegerDigits:1];
 	[timef setPaddingCharacter:@"0"];
 	self.timeFormatter = timef;
-	[timef release];	
+	[timef release];
 }
 
-- (void) viewDidLoad {	
+- (void) viewDidLoad {
 	[self createUnitFormatters];
 }
 
@@ -330,7 +334,7 @@ enum {
 	if (detailItem == nil) {
 		return 0;
 	}
-	return 2;
+	return 3;
 }
 
 - (NSInteger)tableView:(UITableView *) tableView numberOfRowsInSection:(NSInteger) section {
@@ -344,6 +348,10 @@ enum {
 
 	case kSectionSteps:
 		return [mashSteps count];
+		break;
+
+	case kSectionVisualization:
+		return 1;
 		break;
 
 	default:
@@ -360,6 +368,10 @@ enum {
 
 	case kSectionSteps:
 		return @"Steps";
+		break;
+
+	case kSectionVisualization:
+		return @"Plot";
 		break;
 
 	default:
@@ -381,7 +393,7 @@ enum {
 	cell.textField.delegate = self;
 	cell.textField.keyboardType = UIKeyboardTypeNumberPad;
 	cell.textField.autocorrectionType = UITextAutocorrectionTypeNo;
-	
+
 	switch (row) {
 	case kRowGristWeight:
 		cell.textLabel.text = @"Grist weight:";
@@ -436,6 +448,18 @@ enum {
 	return cell;
 }
 
+- (UITableViewCell *) getPlotCell {
+	NSString *const kMashPlotCellId = @"MashPlotCellId";
+	MashPlotCell *cell = (MashPlotCell *)[mashStepsTable dequeueReusableCellWithIdentifier:kMashPlotCellId];
+	if (cell == nil) {
+		cell = [TableCellFactory newMashPlotCell];
+		cell.mashInfo = self;
+		cell.selectionStyle = UITableViewCellSelectionStyleNone;
+	}
+	
+	return cell;
+}
+
 - (UITableViewCell *)tableView:(UITableView *) tableView cellForRowAtIndexPath:(NSIndexPath *) indexPath {
 	switch (indexPath.section) {
 	case kSectionDetails:
@@ -444,6 +468,10 @@ enum {
 
 	case kSectionSteps:
 		return [self getStepCellForRow:indexPath.row];
+
+	case kSectionVisualization:
+		return [self getPlotCell];
+		break;
 
 	default:
 		return nil;
@@ -467,7 +495,7 @@ enum {
 }
 
 - (UIView *)tableView:(UITableView *) tableView viewForHeaderInSection:(NSInteger) section {
-	if (section == 0) {
+	if (section != kSectionSteps) {
 		return nil;
 	}
 
@@ -488,6 +516,10 @@ enum {
 
 	case kSectionSteps:
 		return 65;
+		break;
+
+	case kSectionVisualization:
+		return 300;
 		break;
 
 	default:
@@ -520,7 +552,8 @@ enum {
 		break;
 
 	case kEditableTextCellTagMashTunThermalMass:
-		self.mashTunThermalMass = [weightFormatter numberFromString:textField.text];;
+		self.mashTunThermalMass = [weightFormatter numberFromString:textField.text];
+		;
 		break;
 
 	case kEditableTextCellTagGristTemp:

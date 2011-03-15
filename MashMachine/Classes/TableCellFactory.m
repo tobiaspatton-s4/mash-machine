@@ -10,6 +10,7 @@
 #import "TableCellFactory.h"
 #import "MashStepCell.h"
 #import "EditableTextAndUnitsCell.h"
+#import "MashPlotCell.h"
 
 @interface TableCellFactory ()
 + (TableCellFactory *) Instance;
@@ -22,6 +23,7 @@
 @synthesize editableTextAndUnitsCell;
 @synthesize mashStepCell;
 @synthesize mashProfileCell;
+@synthesize mashPlotCell;
 
 + (TableCellFactory *) Instance {
 	static TableCellFactory *sInstance = nil;
@@ -70,6 +72,10 @@
 
 + (MashProfileCell *) newMashProfileCell {
 	return (MashProfileCell *)[TableCellFactory newCellWithName: @"mashProfileCell"];
+}
+
++ (MashPlotCell *) newMashPlotCell {
+	return (MashPlotCell *)[TableCellFactory newCellWithName: @"mashPlotCell"];
 }
 
 

@@ -18,6 +18,8 @@
 		2819300E112F7FA900ECF9B4 /* MashMachine.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2819300D112F7FA900ECF9B4 /* MashMachine.xcdatamodeld */; };
 		2892E4100DC94CBA00A64D0F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2892E40F0DC94CBA00A64D0F /* CoreGraphics.framework */; };
 		28AD73600D9D9599002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD735F0D9D9599002E5188 /* MainWindow.xib */; };
+		F6005963132E93BC0092A4DD /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F6005962132E93BC0092A4DD /* QuartzCore.framework */; };
+		F60059DD132E9A6F0092A4DD /* MashPlotCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F60059DC132E9A6F0092A4DD /* MashPlotCell.m */; };
 		F600B12A131E57FD009D00F5 /* TableCellFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = F600B129131E57FD009D00F5 /* TableCellFactory.m */; };
 		F600B12C131E585F009D00F5 /* TableViewCells.xib in Resources */ = {isa = PBXBuildFile; fileRef = F600B12B131E585F009D00F5 /* TableViewCells.xib */; };
 		F600B2D0131EEF1A009D00F5 /* ViewUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = F600B2CF131EEF1A009D00F5 /* ViewUtils.m */; };
@@ -57,6 +59,9 @@
 		28AD735F0D9D9599002E5188 /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* MashMachine-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "MashMachine-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
+		F6005962132E93BC0092A4DD /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		F60059DB132E9A6F0092A4DD /* MashPlotCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MashPlotCell.h; sourceTree = "<group>"; };
+		F60059DC132E9A6F0092A4DD /* MashPlotCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MashPlotCell.m; sourceTree = "<group>"; };
 		F600B128131E57FD009D00F5 /* TableCellFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableCellFactory.h; sourceTree = "<group>"; };
 		F600B129131E57FD009D00F5 /* TableCellFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableCellFactory.m; sourceTree = "<group>"; };
 		F600B12B131E585F009D00F5 /* TableViewCells.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TableViewCells.xib; sourceTree = "<group>"; };
@@ -101,6 +106,7 @@
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
 				2892E4100DC94CBA00A64D0F /* CoreGraphics.framework in Frameworks */,
 				280420C1108EA07E000629CD /* CoreData.framework in Frameworks */,
+				F6005963132E93BC0092A4DD /* QuartzCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -189,6 +195,7 @@
 				1D30AB110D05D00D00671497 /* Foundation.framework */,
 				2892E40F0DC94CBA00A64D0F /* CoreGraphics.framework */,
 				280420C0108EA07E000629CD /* CoreData.framework */,
+				F6005962132E93BC0092A4DD /* QuartzCore.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -212,6 +219,8 @@
 				F600CD881325A49F009D00F5 /* MashProfileCell.m */,
 				F600B383131EFF9A009D00F5 /* MashStepCell.h */,
 				F600B384131EFF9A009D00F5 /* MashStepCell.m */,
+				F60059DB132E9A6F0092A4DD /* MashPlotCell.h */,
+				F60059DC132E9A6F0092A4DD /* MashPlotCell.m */,
 			);
 			name = "Table Cells";
 			sourceTree = "<group>";
@@ -269,6 +278,9 @@
 /* Begin PBXProject section */
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+				ORGANIZATIONNAME = "Blue Cedar Creative";
+			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "MashMachine" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
@@ -330,6 +342,7 @@
 				F600C4271321A965009D00F5 /* EditableTextAndUnitsCell.m in Sources */,
 				F600CD891325A49F009D00F5 /* MashProfileCell.m in Sources */,
 				F6EDAAD41326A95E0000D24E /* UnitConverter.m in Sources */,
+				F60059DD132E9A6F0092A4DD /* MashPlotCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -366,13 +379,21 @@
 		C01FCF4F08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ADDITIONAL_SDKS = "/Library/SDKs/CorePlotSDK/${PLATFORM_NAME}.sdk";
 				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Tobias Patton (G5A7WHQ473)";
 				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				OTHER_CFLAGS = "-DDEBUG";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-all_load",
+					"-lCorePlot",
+				);
 				PREBINDING = NO;
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "3E164807-9D08-4BAC-B96B-7F8AD85EA6CF";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 2;
 			};
@@ -381,12 +402,19 @@
 		C01FCF5008A954540054247B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ADDITIONAL_SDKS = "/Library/SDKs/CorePlotSDK/${PLATFORM_NAME}.sdk";
 				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-all_load",
+					"-lCorePlot",
+				);
 				PREBINDING = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 2;

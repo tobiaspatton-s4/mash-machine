@@ -47,6 +47,7 @@
 			[[[self editButtonItem] target] performSelector:[[self editButtonItem] action]];
 			MashProfileCell *cell = (MashProfileCell *)[self.tableView cellForRowAtIndexPath:indexPath];
 			[cell.textField becomeFirstResponder];
+			[cell.textField setSelected:YES];
 		}
 	}
 }

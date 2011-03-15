@@ -176,7 +176,9 @@ const double kMashHeatCapacity = 0.4;
 	NSNumber *restTemp = [mashStep valueForKey:@"restStartTemp"];
 	NSNumber *restTime = [mashStep valueForKey:@"restTime"];
 
-	self.timeAndTempLabel.text = [NSString stringWithFormat:@"%@ F for %@ minutes", restTemp, restTime];
+	self.timeAndTempLabel.text = [NSString stringWithFormat:@"%@ for %@", 
+								  [mashInfo.tempFormatter stringFromNumber:restTemp], 
+								  [mashInfo.timeFormatter stringFromNumber:restTime]];
 
 	int stepType = [(NSNumber *)[mashStep valueForKey:@"type"] intValue];
 	switch (stepType) {

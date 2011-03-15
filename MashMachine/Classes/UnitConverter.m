@@ -346,9 +346,9 @@ typedef NSNumber *(^ConversionBlockType)(NSNumber *);
 
 	const char *cstr = [string cStringUsingEncoding:NSUTF8StringEncoding];
 	char s[11];
-	sscanf(cstr, "%*f%10s", s); //todo: check result and create error message if required
+	int numMatches = sscanf(cstr, "%*f%10s", s); 
 
-	if (strlen(s) == 0) {
+	if (numMatches < 1) {
 		stringWithoutUnits = string;
 		fromUnit = self.unitConverter.displayUnit;
 	}

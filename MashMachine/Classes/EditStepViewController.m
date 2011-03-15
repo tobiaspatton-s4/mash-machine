@@ -237,7 +237,7 @@ static NSArray *MashStepTypes;
 		break;
 
 	case kMashStepTypeDecoction:
-		return 8;
+		return 7;
 		break;
 
 	default:
