@@ -9,3 +9,6 @@
 
 #include "Constants.h"
 
+const double kPoundsPerQuartWater = 2.086351011735304;
+const double kMashHeatCapacity = 0.4;
+

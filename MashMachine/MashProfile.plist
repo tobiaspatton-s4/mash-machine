@@ -34,6 +34,8 @@
 				<integer>5</integer>
 			</dict>
 			<dict>
+				<key>boilTime</key>
+				<integer>10</integer>
 				<key>stepOrder</key>
 				<integer>1</integer>
 				<key>decoctTemp</key>
@@ -54,6 +56,8 @@
 				<integer>20</integer>
 			</dict>
 			<dict>
+				<key>boilTime</key>
+				<integer>20</integer>
 				<key>stepOrder</key>
 				<integer>2</integer>
 				<key>decoctTemp</key>
@@ -71,7 +75,7 @@
 				<key>type</key>
 				<integer>2</integer>
 				<key>stepTime</key>
-				<integer>10</integer>
+				<integer>30</integer>
 			</dict>
 		</array>
 	</dict>

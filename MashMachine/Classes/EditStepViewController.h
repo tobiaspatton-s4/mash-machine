@@ -36,6 +36,7 @@
 	NSNumber *stepTime;
 	NSNumber *additionTemp;
 	NSNumber *decoctionThickness;
+	NSNumber *boilTime;
 	
 	id<EditStepDelegate> delegate;
 	id<IMashInfo> mashInfo;
@@ -51,6 +52,7 @@
 @property (nonatomic, copy) NSNumber *stepTime;
 @property (nonatomic, copy) NSNumber *additionTemp;
 @property (nonatomic, copy) NSNumber *decoctionThickness;
+@property (nonatomic, copy) NSNumber *boilTime;
 @property (nonatomic, assign) id<EditStepDelegate> delegate;
 @property (nonatomic, assign) id<IMashInfo> mashInfo;
 

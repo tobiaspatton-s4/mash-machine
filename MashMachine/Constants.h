@@ -7,6 +7,9 @@
  *
  */
 
+extern const double kPoundsPerQuartWater;
+extern const double kMashHeatCapacity;
+
 enum {
 	kMashStepTypeDirectHeat = 0,
 	kMashStepTypeInfusion = 1,

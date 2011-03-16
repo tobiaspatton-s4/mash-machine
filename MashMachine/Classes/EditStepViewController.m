@@ -25,7 +25,7 @@ enum {
 	kRowStepTime,
 	kRowRestTime,
 	kRowAdditionTemp,
-	kRowDecoctThickness
+	kRowBoilTime,
 };
 
 enum {
@@ -35,7 +35,7 @@ enum {
 	kTableCellTagRestTime,
 	kTableCellTagStepTime,
 	kTableCellTagAdditionTemp,
-	kTableCellTagDecoctThickness
+	kTableCellTagBoilTime,
 };
 
 static NSArray *MashStepTypes;
@@ -47,7 +47,7 @@ static NSArray *MashStepTypes;
 - (void) configureUI;
 - (UITableViewCell *) tableView:(UITableView *) tableView editableTextCellForRow:(int) row;
 - (UITableViewCell *) tableView:(UITableView *) tableView itemSelectionCellForRow:(int) row;
-- (void) userDefaultsDidChange: (NSNotification *) aNotification;
+- (void) userDefaultsDidChange:(NSNotification *) aNotification;
 
 @end
 
@@ -66,6 +66,7 @@ static NSArray *MashStepTypes;
 @synthesize decoctionThickness;
 @synthesize delegate;
 @synthesize mashInfo;
+@synthesize boilTime;
 
 + (void) initialize {
 	MashStepTypes = [[NSArray alloc] initWithObjects:@"Direct heat", @"Infusion", @"Decoction", nil];
@@ -83,6 +84,7 @@ static NSArray *MashStepTypes;
 		self.stepTime = [NSNumber numberWithFloat:5.0];
 		self.additionTemp = [NSNumber numberWithFloat:212.0];
 		self.decoctionThickness = [NSNumber numberWithFloat:1.3];
+		self.boilTime = [NSNumber numberWithFloat:10.0];
 	}
 	else {
 		self.stepType = [(NSNumber *)[mashStep valueForKey:@"type"] intValue];
@@ -97,6 +99,7 @@ static NSArray *MashStepTypes;
 		else if (stepType == kMashStepTypeDecoction) {
 			self.additionTemp = [mashStep valueForKey:@"decoctTemp"];
 			self.decoctionThickness = [mashStep valueForKey:@"decoctThickness"];
+			self.boilTime = [mashStep valueForKey:@"boilTime"];
 		}
 	}
 
@@ -136,11 +139,11 @@ static NSArray *MashStepTypes;
 	self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave
 	                                                                                        target:self
 	                                                                                        action:@selector(saveTouched:)] autorelease];
-	
-	[[NSNotificationCenter defaultCenter] addObserver:self 
-											 selector:@selector(userDefaultsDidChange:) 
-												 name:NSUserDefaultsDidChangeNotification 
-											   object:nil];	
+
+	[[NSNotificationCenter defaultCenter] addObserver:self
+	                                         selector:@selector(userDefaultsDidChange:)
+	                                             name:NSUserDefaultsDidChangeNotification
+	                                           object:nil];
 
 	[self configureUI];
 }
@@ -176,17 +179,18 @@ static NSArray *MashStepTypes;
 	// Release any cached data, images, etc. that aren't in use.
 }
 
-- (void) userDefaultsDidChange: (NSNotification *) aNotification {
+- (void) userDefaultsDidChange:(NSNotification *) aNotification {
 	// The IMashInfo object owns the unit number formatters. We rely on it to notice that the defaults have
 	// changed, and to update the formatters. Since the order in which observers are messaged is undefined,
 	// we can't rely on on the IMashInfo object to be messaged before this object. Hence, we call reloadData
 	// after a small delay.
 	//[formTable reloadData];
-	
+
 	[formTable performSelector:@selector(reloadData) withObject:nil afterDelay:0.1];
 }
 
 - (void)viewDidUnload {
+	self.formTable = nil;
 	[super viewDidUnload];
 }
 
@@ -201,6 +205,7 @@ static NSArray *MashStepTypes;
 	[stepTime release];
 	[additionTemp release];
 	[decoctionThickness release];
+	[boilTime release];
 	[super dealloc];
 }
 
@@ -237,7 +242,7 @@ static NSArray *MashStepTypes;
 		break;
 
 	case kMashStepTypeDecoction:
-		return 7;
+		return 8;
 		break;
 
 	default:
@@ -302,10 +307,10 @@ static NSArray *MashStepTypes;
 		cell.textField.delegate = self;
 		break;
 
-	case kRowDecoctThickness:
-		cell.textLabel.text = @"Decoction thickness:";
-		cell.tag = kTableCellTagDecoctThickness;
-		cell.textField.text = [mashInfo.densityFormatter stringFromNumber:decoctionThickness];
+	case kRowBoilTime:
+		cell.textLabel.text = @"Boil time:";
+		cell.tag = kTableCellTagBoilTime;
+		cell.textField.text = [mashInfo.timeFormatter stringFromNumber:boilTime];
 		cell.textField.delegate = self;
 		break;
 
@@ -346,15 +351,12 @@ static NSArray *MashStepTypes;
 	case kRowStartTemp:
 	case kRowEndTemp:
 	case kRowAdditionTemp:
+	case kRowBoilTime:
 		cell = [self tableView:tableView editableTextCellForRow:indexPath.row];
 		break;
 
 	case kRowStepType:
 		cell = [self tableView:tableView itemSelectionCellForRow:kRowStepType];
-		break;
-
-	case kRowDecoctThickness:
-		cell = [self tableView:tableView editableTextCellForRow:indexPath.row];
 		break;
 
 	default:
@@ -438,8 +440,8 @@ static NSArray *MashStepTypes;
 		self.additionTemp = [mashInfo.tempFormatter numberFromString:textField.text];
 		break;
 
-	case kTableCellTagDecoctThickness:
-		self.decoctionThickness = [mashInfo.densityFormatter numberFromString:textField.text];
+	case kTableCellTagBoilTime:
+		self.boilTime = [mashInfo.timeFormatter numberFromString:textField.text];
 		break;
 
 	default:

@@ -16,9 +16,6 @@ enum {
 	kTagDetailsLabel
 };
 
-const double kPoundsPerQuartWater = 2.086351011735304;
-const double kMashHeatCapacity = 0.4;
-
 @interface MashStepCell ()
 
 - (void) updateUserInterface;

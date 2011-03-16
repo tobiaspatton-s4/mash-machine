@@ -12,11 +12,11 @@
 @interface MashPlotCell : UITableViewCell <CPPlotDataSource> {
 	id<IMashInfo> mashInfo;
 	CPGraphHostingView *hostView;
-	NSArray *mainPlotData;
+	NSArray *allPlotData;
 }
 
 @property (nonatomic, assign) id<IMashInfo> mashInfo;
 @property (nonatomic, retain) CPGraphHostingView *hostView;
-@property (nonatomic, retain) NSArray *mainPlotData;
+@property (nonatomic, retain) NSArray *allPlotData;
 
 @end

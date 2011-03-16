@@ -456,7 +456,7 @@ enum {
 		cell.mashInfo = self;
 		cell.selectionStyle = UITableViewCellSelectionStyleNone;
 	}
-	
+
 	return cell;
 }
 
@@ -597,6 +597,7 @@ enum {
 	case kMashStepTypeDecoction:
 		[step setValue:controller.additionTemp forKey:@"decoctTemp"];
 		[step setValue:controller.decoctionThickness forKey:@"decoctThickness"];
+		[step setValue:controller.boilTime forKey:@"boilTime"];
 		break;
 
 	default:
