@@ -9,6 +9,7 @@
 #import "MashStepCell.h"
 #import "Constants.h"
 #import "MashCalculations.h"
+#import "Entities.h"
 
 enum {
 	kTagTextLabel = 1,
@@ -33,7 +34,7 @@ enum {
 
 - (void) mashConditionsPriorToStepAtIndex:(int) index totalWaterVolume:(NSNumber **) outVolume mashTemp:(NSNumber **) outTemp {
 	// first infusion step has water volume set explicitly
-	NSManagedObject *step = [[mashInfo mashSteps] objectAtIndex:0];
+	MashStep *step = [[mashInfo mashSteps] objectAtIndex:0];
 	float waterVolume = [[mashInfo waterVolume] floatValue];
 	NSNumber *prevStepTemp = [step valueForKey:@"restStopTemp"];
 
@@ -50,9 +51,9 @@ enum {
 		float stepWaterMass = infusionWaterMass(kMashHeatCapacity,
 		                                        [[mashInfo gristWeight] floatValue],
 		                                        waterVolume * kPoundsPerQuartWater,
-		                                        [(NSNumber *)[step valueForKey:@"restStartTemp"] floatValue],
+		                                        [step.restStartTemp floatValue],
 		                                        [prevStepTemp floatValue],
-		                                        [(NSNumber *)[step valueForKey:@"infuseTemp"] floatValue]);
+		                                        [step.infuseTemp floatValue]);
 
 		waterVolume += stepWaterMass / kPoundsPerQuartWater;
 	}
@@ -70,8 +71,8 @@ enum {
 		float decoctMass = decoctionMass(kMashHeatCapacity,
 		                                 [[mashInfo gristWeight] floatValue],
 		                                 [totalVolume floatValue] * kPoundsPerQuartWater,
-		                                 [(NSNumber *)[mashStep valueForKey:@"restStartTemp"] floatValue],
-		                                 [(NSNumber *)[mashStep valueForKey:@"decoctTemp"] floatValue],
+		                                 [mashStep.restStartTemp floatValue],
+		                                 [mashStep.decoctTemp floatValue],
 		                                 [mashTemp floatValue]);
 
 		NSNumber *stepTime = [mashStep valueForKey:@"stepTime"];
@@ -95,7 +96,7 @@ enum {
 	if (stepIdx == 0) {
 		// initial strike
 		float tw = strikeWaterTemperature([[mashInfo waterVolume] floatValue] * kPoundsPerQuartWater,
-		                                  [(NSNumber *)[mashStep valueForKey:@"restStartTemp"] floatValue],
+		                                  [mashStep.restStartTemp floatValue],
 		                                  kMashHeatCapacity,
 		                                  [[mashInfo gristWeight] floatValue],
 		                                  [[mashInfo gristTemp] floatValue]);
@@ -109,9 +110,9 @@ enum {
 		float waterMass = infusionWaterMass(kMashHeatCapacity,
 		                                    [[mashInfo gristWeight] floatValue],
 		                                    [totalVolume floatValue] * kPoundsPerQuartWater,
-		                                    [(NSNumber *)[mashStep valueForKey:@"restStartTemp"] floatValue],
+		                                    [mashStep.restStartTemp floatValue],
 		                                    [mashTemp floatValue],
-		                                    [(NSNumber *)[mashStep valueForKey:@"infuseTemp"] floatValue]);
+		                                    [mashStep.infuseTemp floatValue]);
 		infuseVolume = [NSNumber numberWithFloat:waterMass / kPoundsPerQuartWater];
 	}
 
@@ -122,10 +123,10 @@ enum {
 
 - (NSString *) textForHeatingStep {
 	return [NSString stringWithFormat:@"Heat to %@",
-	        [mashInfo.tempFormatter stringFromNumber:[mashStep valueForKey:@"restStartTemp"]]];
+	        [mashInfo.tempFormatter stringFromNumber:mashStep.restStartTemp]];
 }
 
-- (void) setMashStep:(NSManagedObject *) value {
+- (void) setMashStep:(MashStep *) value {
 	[mashStep autorelease];
 	mashStep = [value retain];
 	[self updateUserInterface];
@@ -168,17 +169,13 @@ enum {
 		return;
 	}
 
-	self.textLabel.text = [mashStep valueForKey:@"name"];
-
-	NSNumber *restTemp = [mashStep valueForKey:@"restStartTemp"];
-	NSNumber *restTime = [mashStep valueForKey:@"restTime"];
+	self.textLabel.text = mashStep.name;
 
 	self.timeAndTempLabel.text = [NSString stringWithFormat:@"%@ for %@", 
-								  [mashInfo.tempFormatter stringFromNumber:restTemp], 
-								  [mashInfo.timeFormatter stringFromNumber:restTime]];
+								  [mashInfo.tempFormatter stringFromNumber:mashStep.restStartTemp], 
+								  [mashInfo.timeFormatter stringFromNumber:mashStep.restTime]];
 
-	int stepType = [(NSNumber *)[mashStep valueForKey:@"type"] intValue];
-	switch (stepType) {
+	switch ([mashStep.type intValue]) {
 	case kMashStepTypeDecoction:
 		self.detailTextLabel.text = [self textForDecoctionStep];
 		break;

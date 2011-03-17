@@ -12,6 +12,7 @@
 #import "MashProfileCell.h"
 #import "ViewUtils.h"
 #import "MashMachineAppDelegate.h"
+#import "Entities.h"
 
 /*
  This template does not ensure user interface consistency during editing operations in the table view. You must implement appropriate methods to provide the user experience you require.
@@ -105,12 +106,12 @@
 
 - (void)configureCell:(MashProfileCell *)cell atIndexPath:(NSIndexPath *)indexPath {
     
-    NSManagedObject *managedObject = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    MashProfile *profile = (MashProfile *)[self.fetchedResultsController objectAtIndexPath:indexPath];
 	cell.textField.font = [UIFont systemFontOfSize:18];
 	cell.textField.adjustsFontSizeToFitWidth = YES;
-    cell.textField.text = [managedObject valueForKey:@"name"];
+    cell.textField.text = profile.name;
 	cell.textField.delegate = self;
-	cell.detailTextLabel.text = [NSString stringWithFormat:@"%d steps", [[managedObject valueForKey:@"steps"] count]];
+	cell.detailTextLabel.text = [NSString stringWithFormat:@"%d steps", [profile.steps count]];
 }
 
 #pragma mark -
@@ -189,7 +190,7 @@
 - (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     // Set the detail item in the detail view controller.
-    NSManagedObject *selectedObject = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    MashProfile *selectedObject = [self.fetchedResultsController objectAtIndexPath:indexPath];
     self.detailViewController.detailItem = selectedObject;    
 }
 

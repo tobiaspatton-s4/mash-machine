@@ -16,6 +16,7 @@
 #import "SelectOneViewController.h"
 #import "ViewUtils.h"
 #import "UnitConverter.h"
+#import "Entities.h"
 
 enum {
 	kRowStepName = 0,
@@ -72,7 +73,7 @@ static NSArray *MashStepTypes;
 	MashStepTypes = [[NSArray alloc] initWithObjects:@"Direct heat", @"Infusion", @"Decoction", nil];
 }
 
-- (void) setMashStep:(NSManagedObject *) value {
+- (void) setMashStep:(MashStep *) value {
 	[mashStep autorelease];
 	mashStep = [value retain];
 	if (mashStep == nil) {
@@ -87,21 +88,21 @@ static NSArray *MashStepTypes;
 		self.boilTime = [NSNumber numberWithFloat:10.0];
 	}
 	else {
-		self.stepType = [(NSNumber *)[mashStep valueForKey:@"type"] intValue];
-		self.stepName = [mashStep valueForKey:@"name"];
-		self.startTemp = [mashStep valueForKey:@"restStartTemp"];
-		self.endTemp = [mashStep valueForKey:@"restStopTemp"];
-		self.restTime = [mashStep valueForKey:@"restTime"];
-		self.stepTime = [mashStep valueForKey:@"stepTime"];
+		self.stepType = [mashStep.type intValue];
+		self.stepName = mashStep.name;
+		self.startTemp = mashStep.restStartTemp;
+		self.endTemp = mashStep.restStopTemp;
+		self.restTime = mashStep.restTime;
+		self.stepTime = mashStep.stepTime;
 		if (stepType == kMashStepTypeInfusion) {
-			self.additionTemp = [mashStep valueForKey:@"infuseTemp"];
+			self.additionTemp = mashStep.infuseTemp;
 			self.decoctionThickness = [NSNumber numberWithFloat:1.3];
 			self.boilTime = [NSNumber numberWithFloat:10.0];
 		}
 		else if (stepType == kMashStepTypeDecoction) {
-			self.additionTemp = [mashStep valueForKey:@"decoctTemp"];
-			self.decoctionThickness = [mashStep valueForKey:@"decoctThickness"];
-			self.boilTime = [mashStep valueForKey:@"boilTime"];
+			self.additionTemp = mashStep.decoctTemp;
+			self.decoctionThickness = mashStep.decoctThickness;
+			self.boilTime = mashStep.boilTime;
 		}
 	}
 
@@ -216,7 +217,7 @@ static NSArray *MashStepTypes;
 		return;
 	}
 
-	self.navigationItem.title = [mashStep valueForKey:@"name"];
+	self.navigationItem.title = mashStep.name;
 }
 
 #pragma mark -
@@ -235,7 +236,7 @@ static NSArray *MashStepTypes;
 		break;
 
 	case kMashStepTypeInfusion:
-		stepNum = [(NSNumber *)[mashStep valueForKey:@"stepOrder"] intValue];
+		stepNum = [mashStep.stepOrder intValue];
 		if (stepNum == 0) {
 			// does not have infusion temperature -- this is calculated for the first step
 			return 6;
@@ -273,6 +274,7 @@ static NSArray *MashStepTypes;
 		cell.textLabel.text = @"Rest time:";
 		cell.tag = kTableCellTagRestTime;
 		cell.textField.text = [mashInfo.timeFormatter stringFromNumber:restTime];
+		cell.textField.keyboardType = UIKeyboardTypeNumberPad;
 		cell.textField.delegate = self;
 		break;
 
@@ -280,6 +282,7 @@ static NSArray *MashStepTypes;
 		cell.textLabel.text = @"Rise time:";
 		cell.tag = kTableCellTagStepTime;
 		cell.textField.text = [mashInfo.timeFormatter stringFromNumber:stepTime];
+		cell.textField.keyboardType = UIKeyboardTypeNumberPad;
 		cell.textField.delegate = self;
 		break;
 
@@ -287,6 +290,7 @@ static NSArray *MashStepTypes;
 		cell.textLabel.text = @"Temperature at start:";
 		cell.tag = kTableCellTagStartTemp;
 		cell.textField.text = [mashInfo.tempFormatter stringFromNumber:startTemp];
+		cell.textField.keyboardType = UIKeyboardTypeNumberPad;
 		cell.textField.delegate = self;
 		break;
 
@@ -294,6 +298,7 @@ static NSArray *MashStepTypes;
 		cell.textLabel.text = @"Temperature at end:";
 		cell.tag = kTableCellTagEndTemp;
 		cell.textField.text = [mashInfo.tempFormatter stringFromNumber:endTemp];
+		cell.textField.keyboardType = UIKeyboardTypeNumberPad;
 		cell.textField.delegate = self;
 		break;
 
@@ -306,6 +311,7 @@ static NSArray *MashStepTypes;
 		}
 		cell.tag = kTableCellTagAdditionTemp;
 		cell.textField.text = [mashInfo.tempFormatter stringFromNumber:additionTemp];
+		cell.textField.keyboardType = UIKeyboardTypeNumberPad;
 		cell.textField.delegate = self;
 		break;
 
@@ -313,6 +319,7 @@ static NSArray *MashStepTypes;
 		cell.textLabel.text = @"Boil time:";
 		cell.tag = kTableCellTagBoilTime;
 		cell.textField.text = [mashInfo.timeFormatter stringFromNumber:boilTime];
+		cell.textField.keyboardType = UIKeyboardTypeNumberPad;
 		cell.textField.delegate = self;
 		break;
 

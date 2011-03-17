@@ -9,16 +9,17 @@
 #import <UIKit/UIKit.h>
 #import "IMashInfo.h"
 
+@class MashStep;
 @class NSManagedObject;
 
 @interface MashStepCell : UITableViewCell {
 	@private
-	NSManagedObject *mashStep;
+	MashStep *mashStep;
 	id<IMashInfo> mashInfo;
 }
 
 @property (readonly) UILabel *timeAndTempLabel;
-@property (nonatomic, retain) NSManagedObject *mashStep;
+@property (nonatomic, retain) MashStep *mashStep;
 @property (nonatomic, assign) id<IMashInfo> mashInfo;
 
 @end

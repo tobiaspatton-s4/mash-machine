@@ -13,10 +13,11 @@
 @class EditStepViewController;
 @class NSManagedObject;
 @class UnitNumberFormater;
+@class MashStep;
 
 @protocol EditStepDelegate
 
-- (void) editStepViewController: (EditStepViewController *)controller didFinishEditing: (NSManagedObject *) step;
+- (void) editStepViewController: (EditStepViewController *)controller didFinishEditing: (MashStep *) step;
 
 @end
 
@@ -25,7 +26,7 @@
 	float offsetForKeyboard;
 	UITableViewCell *edittedCell;
 	
-	NSManagedObject *mashStep;
+	MashStep *mashStep;
 	SelectOneViewController *stepTypeSelector;
 	
 	NSString *stepName;
@@ -43,7 +44,7 @@
 }
 
 @property (nonatomic, retain) IBOutlet UITableView *formTable;
-@property (nonatomic, retain) NSManagedObject *mashStep;
+@property (nonatomic, retain) MashStep *mashStep;
 @property (nonatomic, assign) int stepType;
 @property (nonatomic, copy) NSString *stepName;
 @property (nonatomic, copy) NSNumber *startTemp;

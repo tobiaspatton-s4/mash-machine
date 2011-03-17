@@ -10,6 +10,7 @@
 #import "Constants.h"
 #import "MashCalculations.h"
 #import "UnitConverter.h"
+#import "Entities.h"
 #import <CoreData/CoreData.h>
 
 @interface MashPlotCell ()
@@ -197,18 +198,15 @@ enum {
 	                     [tempConverter convertToDisplay:mashInfo.gristTemp], @"temp",
 	                     nil]];
 
-	NSManagedObject *previousStep;
+	MashStep *previousStep;
 	float previousTime = 0.0;
 
 	float time = 0.0;
-	for (NSManagedObject *step in mashInfo.mashSteps) {
+	for (MashStep *step in mashInfo.mashSteps) {
 		NSMutableArray *stepPlot = [NSMutableArray array];
 		[result addObject:stepPlot];
-
-		NSNumber *startTemp = (NSNumber *)[step valueForKey:@"restStartTemp"];
-		NSNumber *stopTemp = (NSNumber *)[step valueForKey:@"restStopTemp"];
-		NSNumber *stepTime = (NSNumber *)[step valueForKey:@"stepTime"];
-		NSNumber *restTime = (NSNumber *)[step valueForKey:@"restTime"];
+		
+		NSNumber *stepTime = [step.stepTime copy];;
 		int stepType = [(NSNumber *)[step valueForKey:@"type"] intValue];
 		int stepIdx = [[mashInfo mashSteps] indexOfObject:step];
 
@@ -222,7 +220,7 @@ enum {
 			if (stepIdx == 0) {
 				// initial strike
 				tw = strikeWaterTemperature([[mashInfo waterVolume] floatValue] * kPoundsPerQuartWater,
-				                            [(NSNumber *)[step valueForKey:@"restStartTemp"] floatValue],
+				                            [step.restStartTemp floatValue],
 				                            kMashHeatCapacity,
 				                            [[mashInfo gristWeight] floatValue],
 				                            [[mashInfo gristTemp] floatValue]);
@@ -246,13 +244,13 @@ enum {
 			// point at the right point (ie. on the line), we must calculate the line's
 			// slope and adjust to y-position accordingly.
 
-			float lineSlope = ([[previousStep valueForKey:@"restStopTemp"] floatValue] -
-			                   [[previousStep valueForKey:@"restStartTemp"] floatValue]) /
-			                  [[previousStep valueForKey:@"restTime"] floatValue];
+			float lineSlope = ([previousStep.restStopTemp floatValue] -
+			                   [previousStep.restStartTemp floatValue]) /
+			                  [previousStep.restTime floatValue];
 
-			NSNumber *pullTime = [NSNumber numberWithFloat:time - [stepTime floatValue]];
+			NSNumber *pullTime = [NSNumber numberWithFloat:time - [step.stepTime floatValue]];
 
-			float actualTemp = [[previousStep valueForKey:@"restStartTemp"] floatValue] +
+			float actualTemp = [previousStep.restStartTemp floatValue] +
 			                   lineSlope * ([pullTime floatValue] - previousTime);
 
 			[stepPlot addObject:[NSDictionary dictionaryWithObjectsAndKeys:
@@ -281,19 +279,19 @@ enum {
 		time += [stepTime floatValue];
 		[mainPlot addObject:[NSDictionary dictionaryWithObjectsAndKeys:
 		                     [NSNumber numberWithFloat:time], @"time",
-		                     [tempConverter convertToDisplay:startTemp], @"temp",
+		                     [tempConverter convertToDisplay:step.restStartTemp], @"temp",
 		                     nil]];
 
 		previousTime = time;
 		[stepPlot addObject:[NSDictionary dictionaryWithObjectsAndKeys:
 		                     [NSNumber numberWithFloat:time], @"time",
-		                     [tempConverter convertToDisplay:startTemp], @"temp",
+		                     [tempConverter convertToDisplay:step.restStartTemp], @"temp",
 		                     nil]];
 
-		time = time +[restTime floatValue] - [stepTime floatValue];
+		time = time +[step.restTime floatValue] - [stepTime floatValue];
 		[mainPlot addObject:[NSDictionary dictionaryWithObjectsAndKeys:
 		                     [NSNumber numberWithFloat:time], @"time",
-		                     [tempConverter convertToDisplay:stopTemp], @"temp",
+		                     [tempConverter convertToDisplay:step.restStopTemp], @"temp",
 		                     nil]];
 
 		previousStep = step;

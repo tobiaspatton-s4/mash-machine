@@ -17,6 +17,7 @@
 #import "Constants.h"
 #import "UnitConverter.h"
 #import "MashPlotCell.h"
+#import "Entities.h"
 
 @interface DetailViewController ()
 @property (nonatomic, retain) UIPopoverController *popoverController;
@@ -24,7 +25,7 @@
 - (UITableViewCell *) getDetailsCellForRow:(int) row;
 - (UITableViewCell *) getStepCellForRow:(int) row;
 - (UITableViewCell *) getPlotCell;
-- (void) editStep:(NSManagedObject *) step;
+- (void) editStep:(MashStep *) step;
 - (void) createUnitFormatters;
 - (void) userDefaultsDidChange:(NSNotification *) aNotification;
 @end
@@ -72,6 +73,7 @@ enum {
 @synthesize densityFormatter;
 @synthesize tempFormatter;
 @synthesize timeFormatter;
+@synthesize addStepButton;
 
 
 #pragma mark -
@@ -113,10 +115,12 @@ enum {
 /*
    When setting the detail item, update the view and dismiss the popover controller if it's showing.
  */
-- (void)setDetailItem:(NSManagedObject *) managedObject {
-	if (detailItem != managedObject) {
+- (void)setDetailItem:(MashProfile *) value {
+	if (detailItem != value) {
+		[detailItem removeObserver:self forKeyPath:@"name"];
 		[detailItem release];
-		detailItem = [managedObject retain];
+		detailItem = [value retain];
+		[detailItem addObserver:self forKeyPath:@"name" options:0 context:nil];
 
 		// Update the view.
 		[self configureView];
@@ -129,8 +133,8 @@ enum {
 
 - (void)configureView {
 	// Update the user interface for the detail item.
-	self.toolbarTitle.text = [detailItem valueForKey:@"name"];
-	NSSet *steps = [detailItem valueForKey:@"steps"];
+	self.toolbarTitle.text = detailItem.name;
+	NSSet *steps = detailItem.steps;
 	NSSortDescriptor *sortDesc = [NSSortDescriptor sortDescriptorWithKey:@"stepOrder" ascending:YES];
 	NSArray *sortedSteps = [steps sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDesc]];
 	self.mashSteps = sortedSteps;
@@ -257,6 +261,7 @@ enum {
 	self.densityFormatter = nil;
 	self.tempFormatter = nil;
 	self.timeFormatter = nil;
+	self.addStepButton = nil;
 }
 
 #pragma mark -
@@ -287,11 +292,12 @@ enum {
 	[densityFormatter release];
 	[tempFormatter release];
 	[timeFormatter release];
+	[addStepButton release];
 
 	[super dealloc];
 }
 
-- (void) editStep:(NSManagedObject *) step {
+- (void) editStep:(MashStep *) step {
 	EditStepViewController *controller = [[[EditStepViewController alloc] init] autorelease];
 	controller.mashStep = step;
 	controller.delegate = self;
@@ -442,11 +448,11 @@ enum {
 
 - (UITableViewCell *) getStepCellForRow:(int) row {
 	UITableViewCell *result = nil;
-	
+
 	NSString *const kMashStepTableCellId = @"MashStepTableCellId";
 	if (detailItem == nil) {
 		UITableViewCell *cell = [mashStepsTable dequeueReusableCellWithIdentifier:@"MashProfileNoticeCellId"];
-		if(cell == nil) {
+		if (cell == nil) {
 			cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"MashProfileNoticeCellId"] autorelease];
 		}
 		cell.textLabel.text = @"Select a mash profile to continue";
@@ -460,9 +466,9 @@ enum {
 			stepCell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
 			stepCell.selectionStyle = UITableViewCellSelectionStyleNone;
 		}
-		
-		NSManagedObject *step = [mashSteps objectAtIndex:row];
-		stepCell.mashStep = step;		
+
+		MashStep *step = [mashSteps objectAtIndex:row];
+		stepCell.mashStep = step;
 		result = stepCell;
 	}
 
@@ -522,6 +528,7 @@ enum {
 
 	NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"DetailsSectionHeader" owner:self options:nil];
 	[self.editButton setTitle:mashStepsTable.isEditing ? @"Done":@"Edit" forState:UIControlStateNormal];
+	editButton.hidden = self.addStepButton.hidden = detailItem == nil;
 	return [nib objectAtIndex:0];
 }
 
@@ -595,30 +602,30 @@ enum {
 #pragma mark -
 #pragma mark EditStepDelegate methods
 
-- (void) editStepViewController:(EditStepViewController *) controller didFinishEditing:(NSManagedObject *) step {
+- (void) editStepViewController:(EditStepViewController *) controller didFinishEditing:(MashStep *) step {
 	NSManagedObjectContext *context = [(MashMachineAppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
 	if (step == nil) {
 		step = [NSEntityDescription insertNewObjectForEntityForName:@"MashStep" inManagedObjectContext:context];
-		[step setValue:[NSNumber numberWithInt:[mashSteps count]] forKey:@"stepOrder"];
-		[step setValue:detailItem forKey:@"profile"];
+		step.stepOrder = [NSNumber numberWithInt:[mashSteps count]];
+		step.profile = detailItem;
 	}
 
-	[step setValue:controller.stepName forKey:@"name"];
-	[step setValue:[NSNumber numberWithInt:controller.stepType] forKey:@"type"];
-	[step setValue:controller.startTemp forKey:@"restStartTemp"];
-	[step setValue:controller.endTemp forKey:@"restStopTemp"];
-	[step setValue:controller.restTime forKey:@"restTime"];
-	[step setValue:controller.stepTime forKey:@"stepTime"];
+	step.name = controller.stepName;
+	step.type = [NSNumber numberWithInt:controller.stepType];
+	step.restStartTemp = controller.startTemp;
+	step.restStopTemp = controller.endTemp;
+	step.restTime = controller.restTime;
+	step.stepTime = controller.stepTime;
 
 	switch (controller.stepType) {
 	case kMashStepTypeInfusion:
-		[step setValue:controller.additionTemp forKey:@"infuseTemp"];
+		step.infuseTemp = controller.additionTemp;
 		break;
 
 	case kMashStepTypeDecoction:
-		[step setValue:controller.additionTemp forKey:@"decoctTemp"];
-		[step setValue:controller.decoctionThickness forKey:@"decoctThickness"];
-		[step setValue:controller.boilTime forKey:@"boilTime"];
+		step.decoctTemp = controller.additionTemp;
+		step.decoctThickness = controller.decoctionThickness;
+		step.boilTime = controller.boilTime;
 		break;
 
 	default:
@@ -627,6 +634,18 @@ enum {
 
 	[context save:nil];
 	[self configureView];
+}
+
+#pragma mark -
+#pragma mark KVO
+
+- (void)observeValueForKeyPath:(NSString *) keyPath
+       ofObject:(id) object
+       change:(NSDictionary *) change
+       context:(void *) context {
+	if (keyPath == @"name") {
+		self.toolbarTitle.text = detailItem.name;
+	}
 }
 
 @end

@@ -34,6 +34,7 @@
 		F600C6EA13257A31009D00F5 /* DetailsSectionHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = F600C6E913257A31009D00F5 /* DetailsSectionHeader.xib */; };
 		F600C799132583DE009D00F5 /* add_button_bkg.png in Resources */ = {isa = PBXBuildFile; fileRef = F600C798132583DE009D00F5 /* add_button_bkg.png */; };
 		F600CD891325A49F009D00F5 /* MashProfileCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F600CD881325A49F009D00F5 /* MashProfileCell.m */; };
+		F680E05B1332BB2D009D97BA /* Entities.m in Sources */ = {isa = PBXBuildFile; fileRef = F680E05A1332BB2D009D97BA /* Entities.m */; };
 		F6C63F6513144B450028F1C9 /* DatabaseUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = F6C63F6413144B450028F1C9 /* DatabaseUtils.m */; };
 		F6C63F6D13144C080028F1C9 /* MashProfile.plist in Resources */ = {isa = PBXBuildFile; fileRef = F6C63F6C13144C080028F1C9 /* MashProfile.plist */; };
 		F6C63F94131451690028F1C9 /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = F6C63F93131451690028F1C9 /* Constants.m */; };
@@ -86,6 +87,8 @@
 		F600C798132583DE009D00F5 /* add_button_bkg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = add_button_bkg.png; sourceTree = "<group>"; };
 		F600CD871325A49F009D00F5 /* MashProfileCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MashProfileCell.h; sourceTree = "<group>"; };
 		F600CD881325A49F009D00F5 /* MashProfileCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MashProfileCell.m; sourceTree = "<group>"; };
+		F680E0591332BB2D009D97BA /* Entities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Entities.h; sourceTree = "<group>"; };
+		F680E05A1332BB2D009D97BA /* Entities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Entities.m; sourceTree = "<group>"; };
 		F6C63F6313144B450028F1C9 /* DatabaseUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DatabaseUtils.h; sourceTree = "<group>"; };
 		F6C63F6413144B450028F1C9 /* DatabaseUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DatabaseUtils.m; sourceTree = "<group>"; };
 		F6C63F6C13144C080028F1C9 /* MashProfile.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = MashProfile.plist; sourceTree = "<group>"; };
@@ -120,6 +123,8 @@
 				2804200A108E984D000629CD /* DetailViewController.m */,
 				F600B9861320647E009D00F5 /* EditStepViewController.h */,
 				F600B9871320647E009D00F5 /* EditStepViewController.m */,
+				F680E0591332BB2D009D97BA /* Entities.h */,
+				F680E05A1332BB2D009D97BA /* Entities.m */,
 				F6EDAACF1326A8FA0000D24E /* Formatters */,
 				F600B55C131F1911009D00F5 /* MashCalculations.c */,
 				F600B55B131F1911009D00F5 /* MashCalculations.h */,
@@ -343,6 +348,7 @@
 				F600CD891325A49F009D00F5 /* MashProfileCell.m in Sources */,
 				F6EDAAD41326A95E0000D24E /* UnitConverter.m in Sources */,
 				F60059DD132E9A6F0092A4DD /* MashPlotCell.m in Sources */,
+				F680E05B1332BB2D009D97BA /* Entities.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

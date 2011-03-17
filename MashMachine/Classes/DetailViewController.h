@@ -13,6 +13,7 @@
 
 @class RootViewController;
 @class UnitNumberFormater;
+@class MashProfile;
 
 @interface DetailViewController : UIViewController <UIPopoverControllerDelegate, UISplitViewControllerDelegate, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, IMashInfo, EditStepDelegate> {
     
@@ -22,8 +23,9 @@
 	UITableView *mashStepsTable;	
     RootViewController *rootViewController;
 	UIButton *editButton;
+	UIButton *addStepButton;
 	
-    NSManagedObject *detailItem;
+    MashProfile *detailItem;
 	NSArray *mashSteps;
 	
 	UnitNumberFormater *weightFormatter;
@@ -41,11 +43,12 @@
 
 @property (nonatomic, retain) IBOutlet UIToolbar *toolbar;
 @property (nonatomic, retain) IBOutlet UILabel *toolbarTitle;
-@property (nonatomic, retain) NSManagedObject *detailItem;
+@property (nonatomic, retain) MashProfile *detailItem;
 @property (nonatomic, retain) NSArray *mashSteps;
 @property (nonatomic, assign) IBOutlet RootViewController *rootViewController;
 @property (nonatomic, retain) IBOutlet UITableView *mashStepsTable;
 @property (nonatomic, retain) IBOutlet UIButton *editButton;
+@property (nonatomic, retain) IBOutlet UIButton *addStepButton;
 
 @property (nonatomic, retain) UnitNumberFormater *weightFormatter;
 @property (nonatomic, retain) UnitNumberFormater *volumeFormatter;
