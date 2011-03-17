@@ -326,27 +326,35 @@ enum {
 	NSManagedObjectContext *context = [(MashMachineAppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
 	NSManagedObject *stepToDelete = [mashSteps objectAtIndex:indexPath.row];
 	[context deleteObject:stepToDelete];
+
+	for (int i = indexPath.row + 1; i < [tableView numberOfRowsInSection:indexPath.section]; i++) {
+		NSManagedObject *step = [mashSteps objectAtIndex:i];
+		int stepIdx = [(NSNumber *)[step valueForKey:@"stepOrder"] intValue];
+		stepIdx--;
+		[step setValue:[NSNumber numberWithInt:stepIdx] forKey:@"stepOrder"];
+	}
+
 	[context save:nil];
 	[self configureView];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *) tableView {
 	if (detailItem == nil) {
-		return 0;
+		return 2;
 	}
 	return 3;
 }
 
 - (NSInteger)tableView:(UITableView *) tableView numberOfRowsInSection:(NSInteger) section {
-	if (detailItem == nil) {
-		return 0;
-	}
 	switch (section) {
 	case kSectionDetails:
 		return 4;
 		break;
 
 	case kSectionSteps:
+		if (detailItem == nil) {
+			return 1;
+		}
 		return [mashSteps count];
 		break;
 
@@ -433,19 +441,32 @@ enum {
 }
 
 - (UITableViewCell *) getStepCellForRow:(int) row {
+	UITableViewCell *result = nil;
+	
 	NSString *const kMashStepTableCellId = @"MashStepTableCellId";
-	MashStepCell *cell = (MashStepCell *)[mashStepsTable dequeueReusableCellWithIdentifier:kMashStepTableCellId];
-	if (cell == nil) {
-		cell = [TableCellFactory newMashStepCell];
-		cell.mashInfo = self;
-		cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
-		cell.selectionStyle = UITableViewCellSelectionStyleNone;
+	if (detailItem == nil) {
+		UITableViewCell *cell = [mashStepsTable dequeueReusableCellWithIdentifier:@"MashProfileNoticeCellId"];
+		if(cell == nil) {
+			cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"MashProfileNoticeCellId"] autorelease];
+		}
+		cell.textLabel.text = @"Select a mash profile to continue";
+		result = cell;
+	}
+	else {
+		MashStepCell *stepCell = (MashStepCell *)[mashStepsTable dequeueReusableCellWithIdentifier:kMashStepTableCellId];
+		if (stepCell == nil) {
+			stepCell = [TableCellFactory newMashStepCell];
+			stepCell.mashInfo = self;
+			stepCell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
+			stepCell.selectionStyle = UITableViewCellSelectionStyleNone;
+		}
+		
+		NSManagedObject *step = [mashSteps objectAtIndex:row];
+		stepCell.mashStep = step;		
+		result = stepCell;
 	}
 
-	NSManagedObject *step = [mashSteps objectAtIndex:row];
-	cell.mashStep = step;
-
-	return cell;
+	return result;
 }
 
 - (UITableViewCell *) getPlotCell {

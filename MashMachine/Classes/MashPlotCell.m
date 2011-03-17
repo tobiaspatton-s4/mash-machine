@@ -9,6 +9,7 @@
 #import "MashPlotCell.h"
 #import "Constants.h"
 #import "MashCalculations.h"
+#import "UnitConverter.h"
 #import <CoreData/CoreData.h>
 
 @interface MashPlotCell ()
@@ -71,32 +72,40 @@ enum {
 	NSNumber *lastPlotTime = [(NSDictionary *)[mainPlotData lastObject] objectForKey:@"time"];
 
 	// Create graph from theme
-	
+
 	CPXYGraph *graph = [[[CPXYGraph alloc] initWithFrame:CGRectZero] autorelease];
 	CPTheme *theme = [CPTheme themeNamed:kCPPlainWhiteTheme];
 	[graph applyTheme:theme];
 	hostView.hostedGraph = graph;
 	
-    graph.plotAreaFrame.borderLineStyle = nil;
-    graph.plotAreaFrame.cornerRadius = 0.0f;
-    graph.plotAreaFrame.paddingLeft = 30.0;
-	graph.plotAreaFrame.paddingBottom = 20.0;
-	graph.plotAreaFrame.paddingTop = 20.0;
-	graph.plotAreaFrame.paddingRight = 20.0;	
-	
-	graph.plotAreaFrame.plotArea.position = CGPointMake(50.0, 50.0);
+	graph.paddingLeft = 0.0;
+	graph.paddingBottom = 0.0;
+	graph.paddingTop = 0.0;
+	graph.paddingRight = 0.0;
+
+	graph.plotAreaFrame.borderLineStyle = nil;
+	graph.plotAreaFrame.cornerRadius = .0f;
+	graph.plotAreaFrame.paddingLeft = 50.0;
+	graph.plotAreaFrame.paddingBottom = 40.0;
+	graph.plotAreaFrame.paddingTop = 10.0;
+	graph.plotAreaFrame.paddingRight = 10.0;
 
 	// Setup plot space
 	CPXYPlotSpace *plotSpace = (CPXYPlotSpace *)graph.defaultPlotSpace;
 	plotSpace.allowsUserInteraction = NO;
 	
-	float gristTemp = [mashInfo.gristTemp floatValue];
-	
-	plotSpace.xRange = [CPPlotRange plotRangeWithLocation:CPDecimalFromFloat(0.0) 
-												   length:CPDecimalFromFloat([lastPlotTime floatValue])];
-																			 
-	plotSpace.yRange = [CPPlotRange plotRangeWithLocation:CPDecimalFromFloat(gristTemp) 
-												   length:CPDecimalFromFloat(220.0 - gristTemp)];
+	EConversionUnit displayUnit = [(NSNumber *)[[NSUserDefaults standardUserDefaults] 
+												valueForKey:@"prefUnitsTemperature"] intValue];
+	id<IConverter> tempConverter = [Converter converterFromCannonicalUnit:kUnitFahrenheit toDisplayUnit:displayUnit];
+
+	float gristTemp = [[tempConverter convertToDisplay:mashInfo.gristTemp] floatValue];
+	float maxTemp = (displayUnit == kUnitFahrenheit) ? 220 : 110;
+
+	plotSpace.xRange = [CPPlotRange plotRangeWithLocation:CPDecimalFromFloat(0.0)
+	                                               length:CPDecimalFromFloat([lastPlotTime floatValue])];
+
+	plotSpace.yRange = [CPPlotRange plotRangeWithLocation:CPDecimalFromFloat(gristTemp)
+	                                               length:CPDecimalFromFloat(maxTemp - gristTemp)];
 
 	NSNumberFormatter *labelFormatter = [[[NSNumberFormatter alloc] init] autorelease];
 	[labelFormatter setMaximumFractionDigits:0];
@@ -104,21 +113,14 @@ enum {
 	CPLineStyle *majorTickStyle = [CPLineStyle lineStyle];
 	majorTickStyle.lineWidth = 1;
 	majorTickStyle.lineColor = [CPColor lightGrayColor];
-	
+
 	CPLineStyle *minorTickStyle = [CPLineStyle lineStyle];
 	minorTickStyle.lineWidth = 1;
 	minorTickStyle.lineColor = [CPColor lightGrayColor];
 
-	/*
-	CPPlotRange *xAxisPlotRange = [CPPlotRange plotRangeWithLocation:CPDecimalFromFloat(0.0) length:CPDecimalFromFloat([lastPlotTime floatValue])];
-	CPPlotRange *yAxisPlotRange = [CPPlotRange plotRangeWithLocation:CPDecimalFromFloat(gristTemp) 
-															  length:CPDecimalFromFloat(220 - gristTemp)];
-*/
 	// Axes
 	CPXYAxisSet *axisSet = (CPXYAxisSet *)graph.axisSet;
 	CPXYAxis *x = axisSet.xAxis;
-	//x.visibleRange = xAxisPlotRange;
-	//x.gridLinesRange = yAxisPlotRange;
 	x.majorGridLineStyle = majorTickStyle;
 	x.minorGridLineStyle = minorTickStyle;
 	x.orthogonalCoordinateDecimal = CPDecimalFromFloat(gristTemp);
@@ -127,18 +129,30 @@ enum {
 	x.labelFormatter = labelFormatter;
 	x.majorTickLineStyle = majorTickStyle;
 	x.minorTickLineStyle = minorTickStyle;
+	x.title = @"Minutes";
+	x.titleOffset = 22.0;
 
 	CPXYAxis *y = axisSet.yAxis;
-	//y.visibleRange = yAxisPlotRange;
-	//y.gridLinesRange = xAxisPlotRange;
 	y.majorGridLineStyle = majorTickStyle;
 	y.minorGridLineStyle = minorTickStyle;
 	y.orthogonalCoordinateDecimal = CPDecimalFromString(@"0");
-	y.majorIntervalLength = CPDecimalFromString(@"30");
-	y.minorTicksPerInterval = 2;
 	y.labelFormatter = labelFormatter;
 	y.majorTickLineStyle = majorTickStyle;
-	y.minorTickLineStyle = minorTickStyle;
+	y.minorTickLineStyle = minorTickStyle;	
+	y.titleOffset = 30.0;
+	
+	if (displayUnit == kUnitCelsius) {
+		y.majorIntervalLength = CPDecimalFromString(@"20");	
+		y.minorTicksPerInterval = 1;		
+		y.title = @"Deg. C";
+	}
+	else {
+		y.majorIntervalLength = CPDecimalFromString(@"30");		
+		plotSpace.yRange = [CPPlotRange plotRangeWithLocation:CPDecimalFromFloat(gristTemp)
+													   length:CPDecimalFromFloat(220.0 - gristTemp)];
+		y.minorTicksPerInterval = 2;		
+		y.title = @"Deg. F";
+	}
 
 	// Create the temp profile plot
 	CPScatterPlot *mainPlot = [[[CPScatterPlot alloc] init] autorelease];
@@ -169,17 +183,23 @@ enum {
 	}
 }
 
-- (NSArray *) plotDataFromMashInfo {
+- (NSArray *) plotDataFromMashInfo {	
+	EConversionUnit displayUnit = [(NSNumber *)[[NSUserDefaults standardUserDefaults] 
+												valueForKey:@"prefUnitsTemperature"] intValue];
+	id<IConverter> tempConverter = [Converter converterFromCannonicalUnit:kUnitFahrenheit toDisplayUnit:displayUnit];
+	
 	NSMutableArray *result = [NSMutableArray array];
 	NSMutableArray *mainPlot = [NSMutableArray array];
 	[result addObject:mainPlot];
 
 	[mainPlot addObject:[NSDictionary dictionaryWithObjectsAndKeys:
 	                     [NSNumber numberWithFloat:0.0], @"time",
-	                     mashInfo.gristTemp, @"temp",
+	                     [tempConverter convertToDisplay:mashInfo.gristTemp], @"temp",
 	                     nil]];
-	
-	NSNumber *prevRestTemp = mashInfo.gristTemp;
+
+	NSManagedObject *previousStep;
+	float previousTime = 0.0;
+
 	float time = 0.0;
 	for (NSManagedObject *step in mashInfo.mashSteps) {
 		NSMutableArray *stepPlot = [NSMutableArray array];
@@ -194,7 +214,7 @@ enum {
 
 		NSNumber *additionTemp;
 		NSNumber *boilTime;
-		
+
 		float tw;
 
 		switch (stepType) {
@@ -214,31 +234,44 @@ enum {
 
 			[stepPlot addObject:[NSDictionary dictionaryWithObjectsAndKeys:
 			                     [NSNumber numberWithFloat:time], @"time",
-			                     additionTemp, @"temp",
+			                     [tempConverter convertToDisplay:additionTemp], @"temp",
 			                     nil]];
 			break;
 
 		case kMashStepTypeDecoction:
-				additionTemp = (NSNumber *)[step valueForKey:@"decoctTemp"];
-				boilTime = (NSNumber *)[step valueForKey:@"boilTime"];							
-				
-				[stepPlot addObject:[NSDictionary dictionaryWithObjectsAndKeys:
-									 [NSNumber numberWithFloat:time - [stepTime floatValue]], @"time",
-									 prevRestTemp, @"temp",
-									 nil]];
-				
-				[stepPlot addObject:[NSDictionary dictionaryWithObjectsAndKeys:
-									 [NSNumber numberWithFloat:time - [boilTime floatValue]], @"time",
-									 additionTemp, @"temp",
-									 nil]];
-				
-				[stepPlot addObject:[NSDictionary dictionaryWithObjectsAndKeys:
-									 [NSNumber numberWithFloat:time], @"time",
-									 additionTemp, @"temp",
-									 nil]];
-				
-				// stepTime now becomes rise time, which is fixed a 5.0 minutes for decoction steps
-				stepTime = [NSNumber numberWithFloat:5.0];
+			additionTemp = (NSNumber *)[step valueForKey:@"decoctTemp"];
+			boilTime = (NSNumber *)[step valueForKey:@"boilTime"];
+
+			// end temp may differ for start temp. to place the "pull decoction" data
+			// point at the right point (ie. on the line), we must calculate the line's
+			// slope and adjust to y-position accordingly.
+
+			float lineSlope = ([[previousStep valueForKey:@"restStopTemp"] floatValue] -
+			                   [[previousStep valueForKey:@"restStartTemp"] floatValue]) /
+			                  [[previousStep valueForKey:@"restTime"] floatValue];
+
+			NSNumber *pullTime = [NSNumber numberWithFloat:time - [stepTime floatValue]];
+
+			float actualTemp = [[previousStep valueForKey:@"restStartTemp"] floatValue] +
+			                   lineSlope * ([pullTime floatValue] - previousTime);
+
+			[stepPlot addObject:[NSDictionary dictionaryWithObjectsAndKeys:
+			                     pullTime, @"time",
+			                     [tempConverter convertToDisplay:[NSNumber numberWithFloat:actualTemp]], @"temp",
+			                     nil]];
+
+			[stepPlot addObject:[NSDictionary dictionaryWithObjectsAndKeys:
+			                     [NSNumber numberWithFloat:time - [boilTime floatValue]], @"time",
+			                     [tempConverter convertToDisplay:additionTemp], @"temp",
+			                     nil]];
+
+			[stepPlot addObject:[NSDictionary dictionaryWithObjectsAndKeys:
+			                     [NSNumber numberWithFloat:time], @"time",
+			                     [tempConverter convertToDisplay:additionTemp], @"temp",
+			                     nil]];
+
+			// stepTime now becomes rise time, which is fixed a 5.0 minutes for decoction steps
+			stepTime = [NSNumber numberWithFloat:5.0];
 			break;
 
 		default:
@@ -248,21 +281,22 @@ enum {
 		time += [stepTime floatValue];
 		[mainPlot addObject:[NSDictionary dictionaryWithObjectsAndKeys:
 		                     [NSNumber numberWithFloat:time], @"time",
-		                     startTemp, @"temp",
+		                     [tempConverter convertToDisplay:startTemp], @"temp",
 		                     nil]];
 
+		previousTime = time;
 		[stepPlot addObject:[NSDictionary dictionaryWithObjectsAndKeys:
 		                     [NSNumber numberWithFloat:time], @"time",
-		                     startTemp, @"temp",
+		                     [tempConverter convertToDisplay:startTemp], @"temp",
 		                     nil]];
 
 		time = time +[restTime floatValue] - [stepTime floatValue];
 		[mainPlot addObject:[NSDictionary dictionaryWithObjectsAndKeys:
 		                     [NSNumber numberWithFloat:time], @"time",
-		                     stopTemp, @"temp",
+		                     [tempConverter convertToDisplay:stopTemp], @"temp",
 		                     nil]];
-		
-		prevRestTemp = startTemp; // Todo: get actual spot on possible sloped line
+
+		previousStep = step;
 	}
 
 	return result;

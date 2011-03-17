@@ -95,6 +95,8 @@ static NSArray *MashStepTypes;
 		self.stepTime = [mashStep valueForKey:@"stepTime"];
 		if (stepType == kMashStepTypeInfusion) {
 			self.additionTemp = [mashStep valueForKey:@"infuseTemp"];
+			self.decoctionThickness = [NSNumber numberWithFloat:1.3];
+			self.boilTime = [NSNumber numberWithFloat:10.0];
 		}
 		else if (stepType == kMashStepTypeDecoction) {
 			self.additionTemp = [mashStep valueForKey:@"decoctTemp"];
