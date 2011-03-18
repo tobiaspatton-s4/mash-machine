@@ -8,21 +8,24 @@
  */
 
 double strikeWaterTemperature(double ma,	//mass of initial strike water
-                             double tf,	//final temperature desired
-                             double hcm, //heat capacity of malt
-                             double mm,	//mass of malt
-                             double tm); //temperature of malt
+							  double mttm,	// mash tun thermal mass
+                              double tf,	//final temperature desired
+                              double hcm,	//heat capacity of malt
+                              double mm,	//mass of malt
+                              double tm);	//temperature of malt
 
-double infusionWaterMass(double hcm,		//heat capacity of malt
-						double mm,		//mass of malt
-						double mw,		//mass of water already in malt
-						double tf,		//final temperature desired
-						double tmash,	//current temperature of the mash
-						double tw);		//temperature of infusion water
+double infusionWaterMass(double hcm,	//heat capacity of malt
+						 double mttm,	// mash tun thermal mass
+                         double mm,		//mass of malt
+                         double mw,		//mass of water already in malt
+                         double tf,		//final temperature desired
+                         double tmash,	//current temperature of the mash
+                         double tw);	//temperature of infusion water
 
-double decoctionMass(double hcm,		//heat capacity of malt
-					double mm,		//mass of malt
-					double mw,		//mass of water already in mash
-					double tf,		//final temperature desired
-					double td,		//temperature of decoction when added back to mash
-					double tmash);	//current temparature of the mash
+double decoctionMass(double hcm,	//heat capacity of malt
+                     double mttm,	// mash tun thermal mass
+                     double mm,		//mass of malt
+                     double mw,		//mass of water already in mash
+                     double tf,		//final temperature desired
+                     double td,		//temperature of decoction when added back to mash
+                     double tmash);	//current temparature of the mash

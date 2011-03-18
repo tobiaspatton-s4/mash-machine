@@ -225,6 +225,7 @@ enum {
 			if (stepIdx == 0) {
 				// initial strike
 				tw = strikeWaterTemperature([[mashInfo waterVolume] floatValue] * kPoundsPerQuartWater,
+											[[mashInfo mashTunThermalMass] floatValue],
 				                            [step.restStartTemp floatValue],
 				                            kMashHeatCapacity,
 				                            [[mashInfo gristWeight] floatValue],

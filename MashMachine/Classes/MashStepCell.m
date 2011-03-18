@@ -49,6 +49,7 @@ enum {
 		}
 
 		float stepWaterMass = infusionWaterMass(kMashHeatCapacity,
+												[[mashInfo mashTunThermalMass] floatValue],
 		                                        [[mashInfo gristWeight] floatValue],
 		                                        waterVolume * kPoundsPerQuartWater,
 		                                        [step.restStartTemp floatValue],
@@ -69,6 +70,7 @@ enum {
 		[self mashConditionsPriorToStepAtIndex:stepIdx totalWaterVolume:&totalVolume mashTemp:&mashTemp];
 
 		float decoctMass = decoctionMass(kMashHeatCapacity,
+										 [[mashInfo mashTunThermalMass] floatValue],
 		                                 [[mashInfo gristWeight] floatValue],
 		                                 [totalVolume floatValue] * kPoundsPerQuartWater,
 		                                 [mashStep.restStartTemp floatValue],
@@ -96,6 +98,7 @@ enum {
 	if (stepIdx == 0) {
 		// initial strike
 		float tw = strikeWaterTemperature([[mashInfo waterVolume] floatValue] * kPoundsPerQuartWater,
+										  [[mashInfo mashTunThermalMass] floatValue],
 		                                  [mashStep.restStartTemp floatValue],
 		                                  kMashHeatCapacity,
 		                                  [[mashInfo gristWeight] floatValue],
@@ -108,6 +111,7 @@ enum {
 		[self mashConditionsPriorToStepAtIndex:stepIdx totalWaterVolume:&totalVolume mashTemp:&mashTemp];
 
 		float waterMass = infusionWaterMass(kMashHeatCapacity,
+											[[mashInfo mashTunThermalMass] floatValue],
 		                                    [[mashInfo gristWeight] floatValue],
 		                                    [totalVolume floatValue] * kPoundsPerQuartWater,
 		                                    [mashStep.restStartTemp floatValue],

@@ -375,7 +375,7 @@ enum {
 - (NSInteger)tableView:(UITableView *) tableView numberOfRowsInSection:(NSInteger) section {
 	switch (section) {
 		case kSectionDetails:
-			return 4;
+			return 5;
 			break;
 
 		case kSectionSteps:
@@ -615,7 +615,6 @@ enum {
 
 		case kEditableTextCellTagMashTunThermalMass:
 			self.mashTunThermalMass = [weightFormatter numberFromString:textField.text];
-			;
 			break;
 
 		case kEditableTextCellTagGristTemp:
@@ -625,7 +624,7 @@ enum {
 		default:
 			break;
 	}
-	
+	 
 	[mashStepsTable reloadData];
 }
 

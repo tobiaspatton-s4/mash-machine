@@ -9,14 +9,14 @@
 
 #include "MashCalculations.h"
 
-double strikeWaterTemperature(double ma,double tf,	double hcm, double mm, double tm) {
-	return (ma * tf-(hcm*mm)*(tm-tf))/ma;
+double strikeWaterTemperature(double ma, double mttm, double tf,	double hcm, double mm, double tm) {
+	return (ma * tf-(hcm*mm+mttm)*(tm-tf))/ma;
 }
 
-double infusionWaterMass(double hcm, double mm, double mw, double tf, double tmash, double tw) {
-	return (hcm*mm+mw)*(tf-tmash)/(tw-tf);
+double infusionWaterMass(double hcm, double mttm, double mm, double mw, double tf, double tmash, double tw) {
+	return (hcm*mm+mw+mttm)*(tf-tmash)/(tw-tf);
 }
 
-double decoctionMass(double hcm, double mm, double mw, double tf, double td, double tmash) {
-	return (hcm*mm+mw)/(1+((tf-td)/(tmash-tf)));
+double decoctionMass(double hcm, double mttm, double mm, double mw, double tf, double td, double tmash) {
+	return (hcm*mm+mw+mttm)/(1+((tf-td)/(tmash-tf)));
 }
