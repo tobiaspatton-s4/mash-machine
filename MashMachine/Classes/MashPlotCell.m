@@ -78,8 +78,6 @@ enum {
 	// Create graph from theme
 
 	CPXYGraph *graph = [[[CPXYGraph alloc] initWithFrame:CGRectZero] autorelease];
-	CPTheme *theme = [CPTheme themeNamed:kCPPlainWhiteTheme];
-	[graph applyTheme:theme];
 	hostView.hostedGraph = graph;
 	
 	graph.paddingLeft = 0.0;
