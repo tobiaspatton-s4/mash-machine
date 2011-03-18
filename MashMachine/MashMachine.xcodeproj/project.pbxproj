@@ -37,6 +37,7 @@
 		F680E05B1332BB2D009D97BA /* Entities.m in Sources */ = {isa = PBXBuildFile; fileRef = F680E05A1332BB2D009D97BA /* Entities.m */; };
 		F680E39E1333C95C009D97BA /* MainWindow-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = F680E39D1333C95C009D97BA /* MainWindow-iPhone.xib */; };
 		F680E5521333E635009D97BA /* DetailsSectionHeader-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = F680E5511333E635009D97BA /* DetailsSectionHeader-iPhone.xib */; };
+		F680E70A133424C0009D97BA /* MashMachine_default.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = F680E709133424C0009D97BA /* MashMachine_default.sqlite */; };
 		F6C63F6513144B450028F1C9 /* DatabaseUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = F6C63F6413144B450028F1C9 /* DatabaseUtils.m */; };
 		F6C63F6D13144C080028F1C9 /* MashProfile.plist in Resources */ = {isa = PBXBuildFile; fileRef = F6C63F6C13144C080028F1C9 /* MashProfile.plist */; };
 		F6C63F94131451690028F1C9 /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = F6C63F93131451690028F1C9 /* Constants.m */; };
@@ -93,6 +94,7 @@
 		F680E05A1332BB2D009D97BA /* Entities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Entities.m; sourceTree = "<group>"; };
 		F680E39D1333C95C009D97BA /* MainWindow-iPhone.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = "MainWindow-iPhone.xib"; sourceTree = "<group>"; };
 		F680E5511333E635009D97BA /* DetailsSectionHeader-iPhone.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = "DetailsSectionHeader-iPhone.xib"; sourceTree = "<group>"; };
+		F680E709133424C0009D97BA /* MashMachine_default.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = MashMachine_default.sqlite; sourceTree = "<group>"; };
 		F6C63F6313144B450028F1C9 /* DatabaseUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DatabaseUtils.h; sourceTree = "<group>"; };
 		F6C63F6413144B450028F1C9 /* DatabaseUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DatabaseUtils.m; sourceTree = "<group>"; };
 		F6C63F6C13144C080028F1C9 /* MashProfile.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = MashProfile.plist; sourceTree = "<group>"; };
@@ -180,6 +182,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				F680E708133424C0009D97BA /* database */,
 				F680E5511333E635009D97BA /* DetailsSectionHeader-iPhone.xib */,
 				F600C6E913257A31009D00F5 /* DetailsSectionHeader.xib */,
 				2804203B108E9BAB000629CD /* DetailView.xib */,
@@ -240,6 +243,14 @@
 				F600C798132583DE009D00F5 /* add_button_bkg.png */,
 			);
 			name = images;
+			sourceTree = "<group>";
+		};
+		F680E708133424C0009D97BA /* database */ = {
+			isa = PBXGroup;
+			children = (
+				F680E709133424C0009D97BA /* MashMachine_default.sqlite */,
+			);
+			path = database;
 			sourceTree = "<group>";
 		};
 		F6C63F6213144B250028F1C9 /* Utilities */ = {
@@ -326,6 +337,7 @@
 				F6F2799F13284F8600845E67 /* Settings.bundle in Resources */,
 				F680E39E1333C95C009D97BA /* MainWindow-iPhone.xib in Resources */,
 				F680E5521333E635009D97BA /* DetailsSectionHeader-iPhone.xib in Resources */,
+				F680E70A133424C0009D97BA /* MashMachine_default.sqlite in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

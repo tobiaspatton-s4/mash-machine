@@ -406,7 +406,7 @@ enum {
 			break;
 
 		case kSectionVisualization:
-			return @"Plot";
+			return @"";
 			break;
 
 		default:
@@ -562,6 +562,10 @@ enum {
 	switch (section) {			
 		case kSectionSteps:
 			return 45;
+			break;
+			
+		case kSectionVisualization:
+			return 20;
 			break;
 			
 		default:

@@ -127,11 +127,12 @@ enum {
 	x.minorGridLineStyle = minorTickStyle;
 	x.orthogonalCoordinateDecimal = CPDecimalFromFloat(gristTemp);
 	if ([lastPlotTime floatValue] > 120.0) {
-		x.majorIntervalLength = CPDecimalFromString(@"40");
+		x.majorIntervalLength = CPDecimalFromString(@"30");
+		x.minorTicksPerInterval = 1;
 	} else {		
 		x.majorIntervalLength = CPDecimalFromString(@"20");
+		x.minorTicksPerInterval = 3;
 	}
-	x.minorTicksPerInterval = 3;
 	x.labelFormatter = labelFormatter;
 	x.majorTickLineStyle = majorTickStyle;
 	x.minorTickLineStyle = minorTickStyle;
