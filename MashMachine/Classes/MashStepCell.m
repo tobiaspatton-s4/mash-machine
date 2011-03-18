@@ -3,7 +3,7 @@
 //  MashMachine
 //
 //  Created by Tobias Patton on 11-03-02.
-//  Copyright 2011 __MyCompanyName__. All rights reserved.
+//  Copyright 2011 Blue Cedar Creative Inc. All rights reserved.
 //
 
 #import "MashStepCell.h"
@@ -132,6 +132,19 @@ enum {
 	[self updateUserInterface];
 }
 
+- (void)drawRect:(CGRect) rect {
+	[super drawRect:rect];
+	float overlap = (self.textLabel.frame.origin.x + self.textLabel.frame.size.width) -
+	                self.timeAndTempLabel.frame.origin.x;
+
+	if (overlap > 0) {
+		self.textLabel.frame = CGRectMake(self.textLabel.frame.origin.x, 
+										  self.textLabel.frame.origin.y, 
+										  self.textLabel.frame.size.width - overlap - 5.0, 
+										  self.textLabel.frame.size.height);
+	}
+}
+
 - (id)initWithStyle:(UITableViewCellStyle) style reuseIdentifier:(NSString *) reuseIdentifier {
 	self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
 	if (self) {
@@ -171,25 +184,25 @@ enum {
 
 	self.textLabel.text = mashStep.name;
 
-	self.timeAndTempLabel.text = [NSString stringWithFormat:@"%@ for %@", 
-								  [mashInfo.tempFormatter stringFromNumber:mashStep.restStartTemp], 
-								  [mashInfo.timeFormatter stringFromNumber:mashStep.restTime]];
+	self.timeAndTempLabel.text = [NSString stringWithFormat:@"%@ for %@",
+	                              [mashInfo.tempFormatter stringFromNumber:mashStep.restStartTemp],
+	                              [mashInfo.timeFormatter stringFromNumber:mashStep.restTime]];
 
 	switch ([mashStep.type intValue]) {
-	case kMashStepTypeDecoction:
-		self.detailTextLabel.text = [self textForDecoctionStep];
-		break;
+		case kMashStepTypeDecoction:
+			self.detailTextLabel.text = [self textForDecoctionStep];
+			break;
 
-	case kMashStepTypeInfusion:
-		self.detailTextLabel.text = [self textForInfusionStep];
-		break;
+		case kMashStepTypeInfusion:
+			self.detailTextLabel.text = [self textForInfusionStep];
+			break;
 
-	case kMashStepTypeDirectHeat:
-		self.detailTextLabel.text = [self textForHeatingStep];
-		break;
+		case kMashStepTypeDirectHeat:
+			self.detailTextLabel.text = [self textForHeatingStep];
+			break;
 
-	default:
-		break;
+		default:
+			break;
 	}
 }
 

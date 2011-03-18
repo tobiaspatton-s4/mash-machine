@@ -3,7 +3,7 @@
 //  MashMachine
 //
 //  Created by Tobias Patton on 11-02-22.
-//  Copyright 2011 __MyCompanyName__. All rights reserved.
+//  Copyright 2011 Blue Cedar Creative Inc. All rights reserved.
 //
 
 #import "DetailViewController.h"
@@ -28,6 +28,7 @@
 - (void) editStep:(MashStep *) step;
 - (void) createUnitFormatters;
 - (void) userDefaultsDidChange:(NSNotification *) aNotification;
+- (void) baseInit;
 @end
 
 enum {
@@ -133,6 +134,7 @@ enum {
 
 - (void)configureView {
 	// Update the user interface for the detail item.
+	self.navigationItem.title = detailItem.name;
 	self.toolbarTitle.text = detailItem.name;
 	NSSet *steps = detailItem.steps;
 	NSSortDescriptor *sortDesc = [NSSortDescriptor sortDescriptorWithKey:@"stepOrder" ascending:YES];
@@ -181,18 +183,29 @@ enum {
 	[mashStepsTable reloadData];
 }
 
+- (void) baseInit {
+	self.gristWeight = [NSNumber numberWithFloat:10.0];
+	self.mashTunThermalMass = [NSNumber numberWithFloat:2.0];
+	self.waterVolume = [NSNumber numberWithFloat:15.0];
+	self.waterGristRatio = [NSNumber numberWithFloat:1.5];
+	self.gristTemp = [NSNumber numberWithFloat:60];
+
+	[[NSNotificationCenter defaultCenter] addObserver:self
+	                                         selector:@selector(userDefaultsDidChange:)
+	                                             name:NSUserDefaultsDidChangeNotification
+	                                           object:nil];
+}
+
+- (id) initWithNibName:(NSString *) nibNameOrNil bundle:(NSBundle *) nibBundleOrNil {
+	if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+		[self baseInit];
+	}
+	return self;
+}
+
 - (id) initWithCoder:(NSCoder *) aDecoder {
 	if (self = [super initWithCoder:aDecoder]) {
-		self.gristWeight = [NSNumber numberWithFloat:10.0];
-		self.mashTunThermalMass = [NSNumber numberWithFloat:2.0];
-		self.waterVolume = [NSNumber numberWithFloat:15.0];
-		self.waterGristRatio = [NSNumber numberWithFloat:1.5];
-		self.gristTemp = [NSNumber numberWithFloat:60];
-
-		[[NSNotificationCenter defaultCenter] addObserver:self
-		                                         selector:@selector(userDefaultsDidChange:)
-		                                             name:NSUserDefaultsDidChangeNotification
-		                                           object:nil];
+		[self baseInit];
 	}
 	return self;
 }
@@ -246,6 +259,14 @@ enum {
 }
 
 - (void) viewDidLoad {
+	if([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+		float h = toolbar.frame.size.height;
+		[self.toolbar removeFromSuperview];
+		self.mashStepsTable.frame = CGRectMake(0.0, 
+											   0.0,
+											   self.mashStepsTable.frame.size.width, 
+											   self.mashStepsTable.frame.size.height + h);
+	}
 	[self createUnitFormatters];
 }
 
@@ -353,44 +374,44 @@ enum {
 
 - (NSInteger)tableView:(UITableView *) tableView numberOfRowsInSection:(NSInteger) section {
 	switch (section) {
-	case kSectionDetails:
-		return 4;
-		break;
+		case kSectionDetails:
+			return 4;
+			break;
 
-	case kSectionSteps:
-		if (detailItem == nil) {
+		case kSectionSteps:
+			if (detailItem == nil) {
+				return 1;
+			}
+			return [mashSteps count];
+			break;
+
+		case kSectionVisualization:
 			return 1;
-		}
-		return [mashSteps count];
-		break;
+			break;
 
-	case kSectionVisualization:
-		return 1;
-		break;
-
-	default:
-		return 0;
-		break;
+		default:
+			return 0;
+			break;
 	}
 }
 
 - (NSString *)tableView:(UITableView *) tableView titleForHeaderInSection:(NSInteger) section {
 	switch (section) {
-	case kSectionDetails:
-		return @"Details";
-		break;
+		case kSectionDetails:
+			return @"Details";
+			break;
 
-	case kSectionSteps:
-		return @"Steps";
-		break;
+		case kSectionSteps:
+			return @"Steps";
+			break;
 
-	case kSectionVisualization:
-		return @"Plot";
-		break;
+		case kSectionVisualization:
+			return @"Plot";
+			break;
 
-	default:
-		return @"";
-		break;
+		default:
+			return @"";
+			break;
 	}
 }
 
@@ -405,42 +426,42 @@ enum {
 	cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
 	cell.textField.delegate = self;
-	cell.textField.keyboardType = UIKeyboardTypeNumberPad;
+	cell.textField.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
 	cell.textField.autocorrectionType = UITextAutocorrectionTypeNo;
 
 	switch (row) {
-	case kRowGristWeight:
-		cell.textLabel.text = @"Grist weight:";
-		cell.textField.text = [weightFormatter stringFromNumber:gristWeight];
-		cell.tag = kEditableTextCellTagGristWeight;
-		break;
+		case kRowGristWeight:
+			cell.textLabel.text = @"Grist weight:";
+			cell.textField.text = [weightFormatter stringFromNumber:gristWeight];
+			cell.tag = kEditableTextCellTagGristWeight;
+			break;
 
-	case kRowWaterGristRatio:
-		cell.textLabel.text = @"Water/grist ratio:";
-		cell.textField.text = [densityFormatter stringFromNumber:waterGristRatio];
-		cell.tag = kEditableTextCellTagWaterGristRatio;
-		break;
+		case kRowWaterGristRatio:
+			cell.textLabel.text = @"Water/grist ratio:";
+			cell.textField.text = [densityFormatter stringFromNumber:waterGristRatio];
+			cell.tag = kEditableTextCellTagWaterGristRatio;
+			break;
 
-	case kRowWaterVolume:
-		cell.textLabel.text = @"Water volume:";
-		cell.textField.text = [volumeFormatter stringFromNumber:waterVolume];
-		cell.tag = kEditableTextCellTagWaterVolume;
-		break;
+		case kRowWaterVolume:
+			cell.textLabel.text = @"Water volume:";
+			cell.textField.text = [volumeFormatter stringFromNumber:waterVolume];
+			cell.tag = kEditableTextCellTagWaterVolume;
+			break;
 
-	case kRowMashTunThermalMass:
-		cell.textLabel.text = @"Mash tun thermal mass:";
-		cell.textField.text = [weightFormatter stringFromNumber:mashTunThermalMass];
-		cell.tag = kEditableTextCellTagMashTunThermalMass;
-		break;
+		case kRowMashTunThermalMass:
+			cell.textLabel.text = @"Mash tun thermal mass:";
+			cell.textField.text = [weightFormatter stringFromNumber:mashTunThermalMass];
+			cell.tag = kEditableTextCellTagMashTunThermalMass;
+			break;
 
-	case kRowGristTemp:
-		cell.textLabel.text = @"Grist temperature:";
-		cell.textField.text = [tempFormatter stringFromNumber:gristTemp];
-		cell.tag = kEditableTextCellTagGristTemp;
-		break;
+		case kRowGristTemp:
+			cell.textLabel.text = @"Grist temperature:";
+			cell.textField.text = [tempFormatter stringFromNumber:gristTemp];
+			cell.tag = kEditableTextCellTagGristTemp;
+			break;
 
-	default:
-		break;
+		default:
+			break;
 	}
 
 	return cell;
@@ -489,20 +510,20 @@ enum {
 
 - (UITableViewCell *)tableView:(UITableView *) tableView cellForRowAtIndexPath:(NSIndexPath *) indexPath {
 	switch (indexPath.section) {
-	case kSectionDetails:
-		return [self getDetailsCellForRow:indexPath.row];
-		break;
+		case kSectionDetails:
+			return [self getDetailsCellForRow:indexPath.row];
+			break;
 
-	case kSectionSteps:
-		return [self getStepCellForRow:indexPath.row];
+		case kSectionSteps:
+			return [self getStepCellForRow:indexPath.row];
 
-	case kSectionVisualization:
-		return [self getPlotCell];
-		break;
+		case kSectionVisualization:
+			return [self getPlotCell];
+			break;
 
-	default:
-		return nil;
-		break;
+		default:
+			return nil;
+			break;
 	}
 }
 
@@ -511,13 +532,13 @@ enum {
 
 - (UITableViewCellEditingStyle)tableView:(UITableView *) tableView editingStyleForRowAtIndexPath:(NSIndexPath *) indexPath {
 	switch (indexPath.section) {
-	case kSectionSteps:
-		return UITableViewCellEditingStyleDelete;
-		break;
+		case kSectionSteps:
+			return UITableViewCellEditingStyleDelete;
+			break;
 
-	default:
-		return UITableViewCellEditingStyleNone;
-		break;
+		default:
+			return UITableViewCellEditingStyleNone;
+			break;
 	}
 }
 
@@ -525,34 +546,47 @@ enum {
 	if (section != kSectionSteps) {
 		return nil;
 	}
+	
+	NSString *nibName = @"DetailsSectionHeader";
+	if([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+		nibName = @"DetailsSectionHeader-iPhone";
+	}
 
-	NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"DetailsSectionHeader" owner:self options:nil];
+	NSArray *nib = [[NSBundle mainBundle] loadNibNamed:nibName owner:self options:nil];
 	[self.editButton setTitle:mashStepsTable.isEditing ? @"Done":@"Edit" forState:UIControlStateNormal];
 	editButton.hidden = self.addStepButton.hidden = detailItem == nil;
 	return [nib objectAtIndex:0];
 }
 
 - (CGFloat)tableView:(UITableView *) tableView heightForHeaderInSection:(NSInteger) section {
-	return 60;
+	switch (section) {			
+		case kSectionSteps:
+			return 45;
+			break;
+			
+		default:
+			return 40;
+			break;
+	}
 }
 
 - (CGFloat)tableView:(UITableView *) tableView heightForRowAtIndexPath:(NSIndexPath *) indexPath {
 	switch (indexPath.section) {
-	case kSectionDetails :
-		return 44;
-		break;
+		case kSectionDetails :
+			return 44;
+			break;
 
-	case kSectionSteps:
-		return 65;
-		break;
+		case kSectionSteps:
+			return 65;
+			break;
 
-	case kSectionVisualization:
-		return 300;
-		break;
+		case kSectionVisualization:
+			return 300;
+			break;
 
-	default:
-		return 44;
-		break;
+		default:
+			return 44;
+			break;
 	}
 }
 
@@ -567,30 +601,31 @@ enum {
 	UITableViewCell *cell = (UITableViewCell *)[ViewUtils superViewOfView:textField withClass:[UITableViewCell class]];
 
 	switch (cell.tag) {
-	case kEditableTextCellTagGristWeight:
-		self.gristWeight = [weightFormatter numberFromString:textField.text];
-		break;
+		case kEditableTextCellTagGristWeight:
+			self.gristWeight = [weightFormatter numberFromString:textField.text];
+			break;
 
-	case kEditableTextCellTagWaterGristRatio:
-		self.waterGristRatio = [densityFormatter numberFromString:textField.text];
-		break;
+		case kEditableTextCellTagWaterGristRatio:
+			self.waterGristRatio = [densityFormatter numberFromString:textField.text];
+			break;
 
-	case kEditableTextCellTagWaterVolume:
-		self.waterVolume = [volumeFormatter numberFromString:textField.text];
-		break;
+		case kEditableTextCellTagWaterVolume:
+			self.waterVolume = [volumeFormatter numberFromString:textField.text];
+			break;
 
-	case kEditableTextCellTagMashTunThermalMass:
-		self.mashTunThermalMass = [weightFormatter numberFromString:textField.text];
-		;
-		break;
+		case kEditableTextCellTagMashTunThermalMass:
+			self.mashTunThermalMass = [weightFormatter numberFromString:textField.text];
+			;
+			break;
 
-	case kEditableTextCellTagGristTemp:
-		self.gristTemp = [tempFormatter numberFromString:textField.text];
-		break;
+		case kEditableTextCellTagGristTemp:
+			self.gristTemp = [tempFormatter numberFromString:textField.text];
+			break;
 
-	default:
-		break;
+		default:
+			break;
 	}
+	
 	[mashStepsTable reloadData];
 }
 
@@ -618,18 +653,18 @@ enum {
 	step.stepTime = controller.stepTime;
 
 	switch (controller.stepType) {
-	case kMashStepTypeInfusion:
-		step.infuseTemp = controller.additionTemp;
-		break;
+		case kMashStepTypeInfusion:
+			step.infuseTemp = controller.additionTemp;
+			break;
 
-	case kMashStepTypeDecoction:
-		step.decoctTemp = controller.additionTemp;
-		step.decoctThickness = controller.decoctionThickness;
-		step.boilTime = controller.boilTime;
-		break;
+		case kMashStepTypeDecoction:
+			step.decoctTemp = controller.additionTemp;
+			step.decoctThickness = controller.decoctionThickness;
+			step.boilTime = controller.boilTime;
+			break;
 
-	default:
-		break;
+		default:
+			break;
 	}
 
 	[context save:nil];
@@ -643,8 +678,10 @@ enum {
        ofObject:(id) object
        change:(NSDictionary *) change
        context:(void *) context {
-	if (keyPath == @"name") {
-		self.toolbarTitle.text = detailItem.name;
+	if (object == detailItem) {
+		if (keyPath == @"name") {
+			self.toolbarTitle.text = detailItem.name;
+		}
 	}
 }
 

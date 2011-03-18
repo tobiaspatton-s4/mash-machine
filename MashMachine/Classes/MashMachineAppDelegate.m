@@ -3,7 +3,7 @@
 //  MashMachine
 //
 //  Created by Tobias Patton on 11-02-22.
-//  Copyright 2011 __MyCompanyName__. All rights reserved.
+//  Copyright 2011 Blue Cedar Creative Inc. All rights reserved.
 //
 
 #import "MashMachineAppDelegate.h"
@@ -23,7 +23,7 @@
 
 @implementation MashMachineAppDelegate
 
-@synthesize window, splitViewController, rootViewController, detailViewController;
+@synthesize window, splitViewController, rootViewController, detailViewController, navigationController;
 
 
 - (NSManagedObject *) dataBaseInfoManagedObjectForKey: (NSString *) key {
@@ -97,7 +97,12 @@
     [prefs synchronize];
 	
 	// Add the split view controller's view to the window and display.
-	[self.window addSubview:splitViewController.view];
+	if([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+		[self.window addSubview:splitViewController.view];		
+	}
+	else {
+		[self.window addSubview:navigationController.view];
+	}
     [self.window makeKeyAndVisible];
 	
 	return YES;
@@ -249,7 +254,7 @@
     [managedObjectContext_ release];
     [managedObjectModel_ release];
     [persistentStoreCoordinator_ release];
-    
+    [navigationController release];
 	[splitViewController release];
 	[rootViewController release];
 	[detailViewController release];

@@ -71,6 +71,9 @@ enum {
 	self.allPlotData = [self plotDataFromMashInfo];
 	NSArray *mainPlotData = [self.allPlotData objectAtIndex:0];
 	NSNumber *lastPlotTime = [(NSDictionary *)[mainPlotData lastObject] objectForKey:@"time"];
+	if ([lastPlotTime floatValue] == 0.0) {
+		lastPlotTime = [NSNumber numberWithFloat:60.0];
+	}
 
 	// Create graph from theme
 
@@ -125,7 +128,11 @@ enum {
 	x.majorGridLineStyle = majorTickStyle;
 	x.minorGridLineStyle = minorTickStyle;
 	x.orthogonalCoordinateDecimal = CPDecimalFromFloat(gristTemp);
-	x.majorIntervalLength = CPDecimalFromString(@"20");
+	if ([lastPlotTime floatValue] > 120.0) {
+		x.majorIntervalLength = CPDecimalFromString(@"40");
+	} else {		
+		x.majorIntervalLength = CPDecimalFromString(@"20");
+	}
 	x.minorTicksPerInterval = 3;
 	x.labelFormatter = labelFormatter;
 	x.majorTickLineStyle = majorTickStyle;

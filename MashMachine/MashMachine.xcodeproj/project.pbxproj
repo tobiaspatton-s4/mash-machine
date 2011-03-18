@@ -35,6 +35,8 @@
 		F600C799132583DE009D00F5 /* add_button_bkg.png in Resources */ = {isa = PBXBuildFile; fileRef = F600C798132583DE009D00F5 /* add_button_bkg.png */; };
 		F600CD891325A49F009D00F5 /* MashProfileCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F600CD881325A49F009D00F5 /* MashProfileCell.m */; };
 		F680E05B1332BB2D009D97BA /* Entities.m in Sources */ = {isa = PBXBuildFile; fileRef = F680E05A1332BB2D009D97BA /* Entities.m */; };
+		F680E39E1333C95C009D97BA /* MainWindow-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = F680E39D1333C95C009D97BA /* MainWindow-iPhone.xib */; };
+		F680E5521333E635009D97BA /* DetailsSectionHeader-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = F680E5511333E635009D97BA /* DetailsSectionHeader-iPhone.xib */; };
 		F6C63F6513144B450028F1C9 /* DatabaseUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = F6C63F6413144B450028F1C9 /* DatabaseUtils.m */; };
 		F6C63F6D13144C080028F1C9 /* MashProfile.plist in Resources */ = {isa = PBXBuildFile; fileRef = F6C63F6C13144C080028F1C9 /* MashProfile.plist */; };
 		F6C63F94131451690028F1C9 /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = F6C63F93131451690028F1C9 /* Constants.m */; };
@@ -89,6 +91,8 @@
 		F600CD881325A49F009D00F5 /* MashProfileCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MashProfileCell.m; sourceTree = "<group>"; };
 		F680E0591332BB2D009D97BA /* Entities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Entities.h; sourceTree = "<group>"; };
 		F680E05A1332BB2D009D97BA /* Entities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Entities.m; sourceTree = "<group>"; };
+		F680E39D1333C95C009D97BA /* MainWindow-iPhone.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = "MainWindow-iPhone.xib"; sourceTree = "<group>"; };
+		F680E5511333E635009D97BA /* DetailsSectionHeader-iPhone.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = "DetailsSectionHeader-iPhone.xib"; sourceTree = "<group>"; };
 		F6C63F6313144B450028F1C9 /* DatabaseUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DatabaseUtils.h; sourceTree = "<group>"; };
 		F6C63F6413144B450028F1C9 /* DatabaseUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DatabaseUtils.m; sourceTree = "<group>"; };
 		F6C63F6C13144C080028F1C9 /* MashProfile.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = MashProfile.plist; sourceTree = "<group>"; };
@@ -96,7 +100,6 @@
 		F6C63F93131451690028F1C9 /* Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Constants.m; sourceTree = "<group>"; };
 		F6EDAAD21326A95E0000D24E /* UnitConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnitConverter.h; sourceTree = "<group>"; };
 		F6EDAAD31326A95E0000D24E /* UnitConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UnitConverter.m; sourceTree = "<group>"; };
-		F6EDAB5F1326B2D60000D24E /* UnitTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "UnitTests-Info.plist"; sourceTree = "<group>"; };
 		F6F2799E13284F8600845E67 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -159,7 +162,6 @@
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
-				F6EDAB5F1326B2D60000D24E /* UnitTests-Info.plist */,
 			);
 			name = CustomTemplate;
 			sourceTree = "<group>";
@@ -178,17 +180,19 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				F600C78013257FEA009D00F5 /* images */,
+				F680E5511333E635009D97BA /* DetailsSectionHeader-iPhone.xib */,
 				F600C6E913257A31009D00F5 /* DetailsSectionHeader.xib */,
 				2804203B108E9BAB000629CD /* DetailView.xib */,
 				F600B9881320647E009D00F5 /* EditStepViewController.xib */,
+				F600C78013257FEA009D00F5 /* images */,
+				F680E39D1333C95C009D97BA /* MainWindow-iPhone.xib */,
 				28AD735F0D9D9599002E5188 /* MainWindow.xib */,
 				8D1107310486CEB800E47090 /* MashMachine-Info.plist */,
 				2819300D112F7FA900ECF9B4 /* MashMachine.xcdatamodeld */,
 				F6C63F6C13144C080028F1C9 /* MashProfile.plist */,
 				F600BE2913218215009D00F5 /* SelectOneViewController.xib */,
-				F600B12B131E585F009D00F5 /* TableViewCells.xib */,
 				F6F2799E13284F8600845E67 /* Settings.bundle */,
+				F600B12B131E585F009D00F5 /* TableViewCells.xib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -320,6 +324,8 @@
 				F600C6EA13257A31009D00F5 /* DetailsSectionHeader.xib in Resources */,
 				F600C799132583DE009D00F5 /* add_button_bkg.png in Resources */,
 				F6F2799F13284F8600845E67 /* Settings.bundle in Resources */,
+				F680E39E1333C95C009D97BA /* MainWindow-iPhone.xib in Resources */,
+				F680E5521333E635009D97BA /* DetailsSectionHeader-iPhone.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -401,7 +407,7 @@
 				PREBINDING = NO;
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "3E164807-9D08-4BAC-B96B-7F8AD85EA6CF";
 				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = 2;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -423,7 +429,7 @@
 				);
 				PREBINDING = NO;
 				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = 2;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};

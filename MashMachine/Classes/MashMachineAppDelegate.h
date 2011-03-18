@@ -3,7 +3,7 @@
 //  MashMachine
 //
 //  Created by Tobias Patton on 11-02-22.
-//  Copyright 2011 __MyCompanyName__. All rights reserved.
+//  Copyright 2011 Blue Cedar Creative Inc. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
@@ -18,7 +18,7 @@
     UIWindow *window;
 
 	UISplitViewController *splitViewController;
-
+	UINavigationController *navigationController;
 	RootViewController *rootViewController;
 	DetailViewController *detailViewController;
 
@@ -31,6 +31,7 @@
 @property (nonatomic, retain) IBOutlet UIWindow *window;
 
 @property (nonatomic, retain) IBOutlet UISplitViewController *splitViewController;
+@property (nonatomic, retain) IBOutlet UINavigationController *navigationController;
 @property (nonatomic, retain) IBOutlet RootViewController *rootViewController;
 @property (nonatomic, retain) IBOutlet DetailViewController *detailViewController;
 

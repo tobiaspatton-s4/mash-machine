@@ -12,7 +12,6 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="26"/>
 			<integer value="12"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
@@ -310,9 +309,12 @@
 							<object class="IBUILabel" id="683449943">
 								<reference key="NSNextResponder" ref="1030398293"/>
 								<int key="NSvFlags">294</int>
-								<string key="NSFrame">{{7, 12}, {516, 21}}</string>
+								<string key="NSFrame">{{7, 12}, {370, 21}}</string>
 								<reference key="NSSuperview" ref="1030398293"/>
-								<reference key="IBUIBackgroundColor" ref="656906375"/>
+								<object class="NSColor" key="IBUIBackgroundColor">
+									<int key="NSColorSpace">1</int>
+									<bytes key="NSRGB">MCAwIDAgMAA</bytes>
+								</object>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
 								<int key="IBUIContentMode">7</int>
@@ -320,7 +322,11 @@
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 								<string key="IBUIText"/>
-								<reference key="IBUIFont" ref="761886056"/>
+								<object class="NSFont" key="IBUIFont">
+									<string key="NSName">Helvetica-Bold</string>
+									<double key="NSSize">14</double>
+									<int key="NSfFlags">16</int>
+								</object>
 								<reference key="IBUITextColor" ref="229440206"/>
 								<reference key="IBUIHighlightedColor" ref="426194230"/>
 								<int key="IBUIBaselineAdjustment">1</int>
@@ -329,9 +335,12 @@
 							<object class="IBUILabel" id="116152033">
 								<reference key="NSNextResponder" ref="1030398293"/>
 								<int key="NSvFlags">291</int>
-								<string key="NSFrame">{{531, 22}, {217, 21}}</string>
+								<string key="NSFrame">{{385, 12}, {363, 21}}</string>
 								<reference key="NSSuperview" ref="1030398293"/>
-								<reference key="IBUIBackgroundColor" ref="656906375"/>
+								<object class="NSColor" key="IBUIBackgroundColor">
+									<int key="NSColorSpace">1</int>
+									<bytes key="NSRGB">MCAwIDAgMAA</bytes>
+								</object>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
 								<int key="IBUIContentMode">7</int>
@@ -349,7 +358,7 @@
 							<object class="IBUILabel" id="144191163">
 								<reference key="NSNextResponder" ref="1030398293"/>
 								<int key="NSvFlags">290</int>
-								<string key="NSFrame">{{7, 36}, {516, 21}}</string>
+								<string key="NSFrame">{{7, 36}, {741, 21}}</string>
 								<reference key="NSSuperview" ref="1030398293"/>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
@@ -383,6 +392,7 @@
 					<int key="NSColorSpace">3</int>
 					<bytes key="NSWhite">MC45NwA</bytes>
 				</object>
+				<bool key="IBUIAutoresizesSubviews">NO</bool>
 				<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 				<int key="IBUISeparatorStyle">1</int>
 				<reference key="IBUIContentView" ref="1030398293"/>
@@ -393,7 +403,7 @@
 				<string key="IBUIReuseIdentifier">MashStepCell</string>
 			</object>
 			<object class="IBUITableViewCell" id="226420086">
-				<reference key="NSNextResponder"/>
+				<nil key="NSNextResponder"/>
 				<int key="NSvFlags">292</int>
 				<object class="NSMutableArray" key="NSSubviews">
 					<bool key="EncodedWithXMLCoder">YES</bool>
@@ -407,7 +417,10 @@
 								<int key="NSvFlags">274</int>
 								<string key="NSFrame">{{5, 5}, {758, 290}}</string>
 								<reference key="NSSuperview" ref="549097420"/>
-								<reference key="IBUIBackgroundColor" ref="939661497"/>
+								<object class="NSColor" key="IBUIBackgroundColor">
+									<int key="NSColorSpace">1</int>
+									<bytes key="NSRGB">MCAwIDAgMAA</bytes>
+								</object>
 								<int key="IBUITag">1</int>
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 							</object>
@@ -423,10 +436,9 @@
 					</object>
 				</object>
 				<string key="NSFrameSize">{768, 300}</string>
-				<reference key="NSSuperview"/>
 				<object class="NSColor" key="IBUIBackgroundColor">
-					<int key="NSColorSpace">1</int>
-					<bytes key="NSRGB">MSAxIDEAA</bytes>
+					<int key="NSColorSpace">3</int>
+					<bytes key="NSWhite">MC45NwA</bytes>
 				</object>
 				<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 				<int key="IBUISeparatorStyle">1</int>
@@ -670,7 +682,7 @@
 						<bytes key="NSTransformStruct">P4AAAL+AAABEL4AAwfgAAA</bytes>
 					</object>
 					<string>MashStepCell</string>
-					<string>{{304, 848}, {768, 65}}</string>
+					<string>{{412, 789}, {768, 65}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<object class="NSAffineTransform">
 						<bytes key="NSTransformStruct">P4AAAL+AAAAAAAAAwigAAA</bytes>
@@ -682,7 +694,7 @@
 					</object>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<object class="NSAffineTransform">
-						<bytes key="NSTransformStruct">P4AAAL+AAABDvoAAwfgAAA</bytes>
+						<bytes key="NSTransformStruct">P4AAAL+AAABEBMAAwiQAAA</bytes>
 					</object>
 					<string>EditableTextCell</string>
 					<string>{{388, 613}, {768, 44}}</string>
@@ -708,7 +720,7 @@
 					</object>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>MashPlotCell</string>
-					<string>{{550, 605}, {768, 300}}</string>
+					<string>{{487, 605}, {768, 300}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<object class="NSAffineTransform">

@@ -3,7 +3,7 @@
 //  MashMachine
 //
 //  Created by Tobias Patton on 11-03-03.
-//  Copyright 2011 __MyCompanyName__. All rights reserved.
+//  Copyright 2011 Blue Cedar Creative Inc. All rights reserved.
 //
 
 #import <CoreData/CoreData.h>;
@@ -274,7 +274,7 @@ static NSArray *MashStepTypes;
 		cell.textLabel.text = @"Rest time:";
 		cell.tag = kTableCellTagRestTime;
 		cell.textField.text = [mashInfo.timeFormatter stringFromNumber:restTime];
-		cell.textField.keyboardType = UIKeyboardTypeNumberPad;
+		cell.textField.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
 		cell.textField.delegate = self;
 		break;
 
@@ -282,7 +282,7 @@ static NSArray *MashStepTypes;
 		cell.textLabel.text = @"Rise time:";
 		cell.tag = kTableCellTagStepTime;
 		cell.textField.text = [mashInfo.timeFormatter stringFromNumber:stepTime];
-		cell.textField.keyboardType = UIKeyboardTypeNumberPad;
+		cell.textField.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
 		cell.textField.delegate = self;
 		break;
 
@@ -290,7 +290,7 @@ static NSArray *MashStepTypes;
 		cell.textLabel.text = @"Temperature at start:";
 		cell.tag = kTableCellTagStartTemp;
 		cell.textField.text = [mashInfo.tempFormatter stringFromNumber:startTemp];
-		cell.textField.keyboardType = UIKeyboardTypeNumberPad;
+		cell.textField.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
 		cell.textField.delegate = self;
 		break;
 
@@ -298,7 +298,7 @@ static NSArray *MashStepTypes;
 		cell.textLabel.text = @"Temperature at end:";
 		cell.tag = kTableCellTagEndTemp;
 		cell.textField.text = [mashInfo.tempFormatter stringFromNumber:endTemp];
-		cell.textField.keyboardType = UIKeyboardTypeNumberPad;
+		cell.textField.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
 		cell.textField.delegate = self;
 		break;
 
@@ -311,7 +311,7 @@ static NSArray *MashStepTypes;
 		}
 		cell.tag = kTableCellTagAdditionTemp;
 		cell.textField.text = [mashInfo.tempFormatter stringFromNumber:additionTemp];
-		cell.textField.keyboardType = UIKeyboardTypeNumberPad;
+		cell.textField.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
 		cell.textField.delegate = self;
 		break;
 
@@ -319,7 +319,7 @@ static NSArray *MashStepTypes;
 		cell.textLabel.text = @"Boil time:";
 		cell.tag = kTableCellTagBoilTime;
 		cell.textField.text = [mashInfo.timeFormatter stringFromNumber:boilTime];
-		cell.textField.keyboardType = UIKeyboardTypeNumberPad;
+		cell.textField.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
 		cell.textField.delegate = self;
 		break;
 
@@ -335,6 +335,7 @@ static NSArray *MashStepTypes;
 
 	if (cell == nil) {
 		cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:kItemSelectionCell] autorelease];
+		cell.backgroundColor = [UIColor colorWithWhite:0.97 alpha:1.0];
 	}
 
 	switch (row) {
