@@ -16,7 +16,6 @@
 
 @interface MashMachineAppDelegate ()
 
-- (void) installDefaultDataIfNeeded;
 - (NSManagedObject *) dataBaseInfoManagedObjectForKey: (NSString *) key;
 
 @end
@@ -62,16 +61,6 @@
 	[self.managedObjectContext save:nil];
 }
 
-- (void) installDefaultDataIfNeeded {
-	NSNumber *defaultsLoaded = (NSNumber *)[self dataBaseInfoForKey:@"defaultsLoaded"];
-	
-	if (![defaultsLoaded boolValue]) {
-		[DatabaseUtils installDataFromPlist:@"MashProfile" 
-								intoContext:self.managedObjectContext];		
-		[self setDataBaseInfo: [NSNumber numberWithBool:YES] forKey:@"defaultsLoaded"];
-	}
-}
-
 #pragma mark -
 #pragma mark Application lifecycle
 
@@ -82,11 +71,7 @@
 }
 
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {    
-    
-    // Override point for customization after app launch.
-	[self installDefaultDataIfNeeded];
-	
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {        	
 	NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
 	[prefs registerDefaults: [NSDictionary dictionaryWithObjectsAndKeys:
 							  [NSNumber numberWithInt:kUnitQuart], @"prefUnitsVolume",
@@ -214,10 +199,15 @@
 	
     persistentStoreCoordinator_ = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
 	
+	NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
+							 [NSNumber numberWithBool:YES], NSMigratePersistentStoresAutomaticallyOption,
+							 [NSNumber numberWithBool:YES], NSInferMappingModelAutomaticallyOption, 
+							 nil];
+	
     if (![persistentStoreCoordinator_ addPersistentStoreWithType:NSSQLiteStoreType 
 												   configuration:nil 
 															 URL:storeURL 
-														 options:nil 
+														 options:options 
 														   error:&error]) {
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" 

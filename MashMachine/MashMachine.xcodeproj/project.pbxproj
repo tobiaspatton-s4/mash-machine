@@ -95,6 +95,7 @@
 		F680E39D1333C95C009D97BA /* MainWindow-iPhone.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = "MainWindow-iPhone.xib"; sourceTree = "<group>"; };
 		F680E5511333E635009D97BA /* DetailsSectionHeader-iPhone.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = "DetailsSectionHeader-iPhone.xib"; sourceTree = "<group>"; };
 		F680E709133424C0009D97BA /* MashMachine_default.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = MashMachine_default.sqlite; sourceTree = "<group>"; };
+		F680E8361337EC8A009D97BA /* MashMachine 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MashMachine 2.xcdatamodel"; sourceTree = "<group>"; };
 		F6C63F6313144B450028F1C9 /* DatabaseUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DatabaseUtils.h; sourceTree = "<group>"; };
 		F6C63F6413144B450028F1C9 /* DatabaseUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DatabaseUtils.m; sourceTree = "<group>"; };
 		F6C63F6C13144C080028F1C9 /* MashProfile.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = MashProfile.plist; sourceTree = "<group>"; };
@@ -473,8 +474,9 @@
 			isa = XCVersionGroup;
 			children = (
 				280420B3108E9F58000629CD /* MashMachine.xcdatamodel */,
+				F680E8361337EC8A009D97BA /* MashMachine 2.xcdatamodel */,
 			);
-			currentVersion = 280420B3108E9F58000629CD /* MashMachine.xcdatamodel */;
+			currentVersion = F680E8361337EC8A009D97BA /* MashMachine 2.xcdatamodel */;
 			path = MashMachine.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
