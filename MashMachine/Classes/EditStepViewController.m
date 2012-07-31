@@ -6,7 +6,7 @@
 //  Copyright 2011 Blue Cedar Creative Inc. All rights reserved.
 //
 
-#import <CoreData/CoreData.h>;
+#import <CoreData/CoreData.h>
 
 #import "EditStepViewController.h"
 #import "EditableTextAndUnitsCell.h"
